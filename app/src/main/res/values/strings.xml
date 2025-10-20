@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">AppRecordatorio</string>
+
+    <!--Dias de la semana alarma -->
+    <string name="domAlarma">D</string>
+    <string name="luAlarma">L</string>
+    <string name="marAlarma">M</string>
+    <string name="mieAlarma">X</string>
+    <string name="jueAlarma">J</string>
+    <string name="vieAlarma">V</string>
+    <string name="saAlarma">S</string>
+
+    <!--Btns -->
+    <string name="btnCancelar">Cancelar</string>
+    <string name="btnCrear">Crear</string>
 </resources>
