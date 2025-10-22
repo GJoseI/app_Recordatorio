@@ -16,7 +16,6 @@
         android:layout_marginTop="44dp"
         android:background="#37474F"
         android:headerBackground="@color/material_dynamic_neutral50"
-        android:is24HourView="true"
         android:numbersTextColor="@color/white"
         android:theme="@style/Widget.MaterialComponents.TimePicker"
         android:timePickerMode="spinner"
