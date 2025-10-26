@@ -1,14 +1,14 @@
 package com.example.apprecordatorio.entidades;
 
-public class imagen {
+public class Imagen {
     private int ID;
     private int recordatorioID;
     private String imgURL;
 
-    public imagen() {
+    public Imagen() {
     }
 
-    public imagen(int recordatorioID, String imgURL, int ID) {
+    public Imagen(int recordatorioID, String imgURL, int ID) {
         this.recordatorioID = recordatorioID;
         this.imgURL = imgURL;
         this.ID = ID;

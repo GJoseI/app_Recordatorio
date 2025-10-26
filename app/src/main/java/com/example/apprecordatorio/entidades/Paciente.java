@@ -1,14 +1,14 @@
 package com.example.apprecordatorio.entidades;
 
-public class paciente {
+public class Paciente {
     private int DNI;
     private String nombre;
     private String apellido;
 
-    public paciente() {
+    public Paciente() {
     }
 
-    public paciente(String nombre, int DNI, String apellido) {
+    public Paciente(String nombre, int DNI, String apellido) {
         this.nombre = nombre;
         this.DNI = DNI;
         this.apellido = apellido;

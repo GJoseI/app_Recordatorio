@@ -2,7 +2,7 @@ package com.example.apprecordatorio.entidades;
 
 import java.time.LocalDate;
 
-public class recordatorio {
+public class Recordatorio {
     private int ID;
     private int tutorDNI;
     private int imgID;
@@ -13,9 +13,9 @@ public class recordatorio {
     private String hora;
     private boolean estado;
 
-    public recordatorio() {}
+    public Recordatorio() {}
 
-    public recordatorio(int alarmaID, boolean estado, String descripcion, LocalDate fecha, String hora,
+    public Recordatorio(int alarmaID, boolean estado, String descripcion, LocalDate fecha, String hora,
                         int ID, int imgID, int pacienteDNI, int tutorDNI) {
         this.alarmaID = alarmaID;
         this.estado = estado;

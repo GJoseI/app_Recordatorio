@@ -1,6 +1,6 @@
 package com.example.apprecordatorio.entidades;
 
-public class tutor {
+public class Tutor {
     private int DNI;
     private String nombre;
     private String apellido;
@@ -10,9 +10,9 @@ public class tutor {
     private String password;
     private boolean estado;
 
-    public tutor() {}
+    public Tutor() {}
 
-    public tutor(String password, String nombre, String telefono, boolean estado,
+    public Tutor(String password, String nombre, String telefono, boolean estado,
                  String email, int dniPaciente, int DNI, String apellido) {
         this.password = password;
         this.nombre = nombre;

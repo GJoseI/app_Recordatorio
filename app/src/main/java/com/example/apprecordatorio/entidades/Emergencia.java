@@ -1,16 +1,16 @@
 package com.example.apprecordatorio.entidades;
 
-public class emergencia {
+public class Emergencia {
     private int ID;
     private String descripcion;
     private String numero;
     private int recordatorioID;
     private boolean estado;
 
-    public emergencia() {
+    public Emergencia() {
     }
 
-    public emergencia(String descripcion, boolean estado, int ID, String numero, int recordatorioID) {
+    public Emergencia(String descripcion, boolean estado, int ID, String numero, int recordatorioID) {
         this.descripcion = descripcion;
         this.estado = estado;
         this.ID = ID;
