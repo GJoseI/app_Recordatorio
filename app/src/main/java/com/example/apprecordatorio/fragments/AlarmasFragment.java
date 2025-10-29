@@ -49,6 +49,8 @@ public class AlarmasFragment extends Fragment {
         listaRecordatorios = new ArrayList<>();
 
         // ejemplo de datos, dsp cambiamos la funcion
+        //Aca cargamos la lista desde la bd segun el usuario, si no encuentra nada
+        //no mostrara recordatorios y dira "no hay recs"
         /*
         listaRecordatorios.add(new Recordatorio(101,true,"Tomar medicación",LocalDate.now(),
                 "08:30",1,1,12345678,87654321))
@@ -61,10 +63,10 @@ public class AlarmasFragment extends Fragment {
         adapter = new RecordatorioAdapter(listaRecordatorios);
         recyclerView.setAdapter(adapter);
 
-        // 🔹 Acción del botón flotante
+        //Acción del botón flotante
         fabAgregar.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Agregar nuevo recordatorio", Toast.LENGTH_SHORT).show();
-            // Aquí podrías abrir un fragmento o diálogo para crear uno nuevo
+            //aca va todo el codigo que hace agregar otro recordatorio
         });
     }
 
