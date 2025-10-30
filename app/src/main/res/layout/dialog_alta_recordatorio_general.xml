@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/fondoOscuro">
+
+    <EditText
+        android:padding="2dp"
+        android:backgroundTint="@color/fondoElementoOscuro"
+        android:background="@drawable/bg_edittext_redondeado"
+        android:id="@+id/etTituloDialogRg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Título"
+        android:inputType="text"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:padding="2dp"
+        android:backgroundTint="@color/fondoElementoOscuro"
+        android:background="@drawable/bg_edittext_redondeado"
+        android:id="@+id/etContenidoDialogRg"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:hint="Contenido"
+        android:gravity="top|start"
+        android:inputType="textMultiLine"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+
+        android:id="@+id/btnImagenDialogRg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/design_default_color_secondary_variant"
+        android:text="Agregar imagen (opcional)" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+
+            android:id="@+id/btnCancelarDialogRg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/material_dynamic_neutral30"
+            android:text="Cancelar"
+           />
+
+        <Button
+            android:id="@+id/btnGuardarDialogRg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:text="Guardar" />
+    </LinearLayout>
+</LinearLayout>

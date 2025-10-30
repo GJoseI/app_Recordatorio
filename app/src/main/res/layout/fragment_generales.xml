@@ -1,14 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.GeneralesFragment">
 
+
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/tvTitulo"
+        android:layout_width="244dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="80dp"
+        android:background="@drawable/bg_edittext_redondeado"
+        android:layout_marginTop="16dp"
+
+        android:backgroundTint="@color/fondoTituloOscuro"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="@string/tituloGenerales"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- contenido -->
+            <LinearLayout
+                android:id="@+id/containerRecordatoriosGenerales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal" >
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAgregarRecGral"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generales"
-        android:layout_centerInParent="true"/>
-</RelativeLayout>
+        android:layout_margin="24dp"
+        android:padding="12dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="#EC9A29"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:tint="@color/letraBlanca" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
