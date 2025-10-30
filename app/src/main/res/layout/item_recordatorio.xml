@@ -45,8 +45,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="08:30"
-                android:textSize="14sp"
-                android:textColor="#555" />
+                android:layout_marginStart="20dp"
+                android:textColor="#555"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Estado y botón -->
@@ -71,8 +72,9 @@
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Editar"
+                android:layout_marginStart="300dp"
                 android:src="@android:drawable/ic_menu_edit"
-                android:tint="@color/black" />
+                card_view:tint="@color/black" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

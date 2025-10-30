@@ -1,6 +1,8 @@
 package com.example.apprecordatorio.activities;
 
 import android.os.Bundle;
+import android.widget.TimePicker;
+import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.apprecordatorio.R;
 
 public class CrearAlarmaActivity extends AppCompatActivity {
+    private TimePicker tpHora;
+    private ToggleButton btDom;
+    private ToggleButton btLu;
+    private ToggleButton btMar;
+    private ToggleButton btMie;
+    private ToggleButton btJue;
+    private ToggleButton btVie;
+    private ToggleButton btSa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,4 +7,5 @@
     <color name="fondoElementoOscuro">#254753</color>
     <color name="letraGris">#A5A2A2</color>
     <color name="letraBlanca">#FFFFFF</color>
+    <color name="light_gray">#8B8B8B</color>
 </resources>
