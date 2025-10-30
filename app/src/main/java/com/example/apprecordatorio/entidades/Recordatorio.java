@@ -1,5 +1,7 @@
 package com.example.apprecordatorio.entidades;
 
+import com.example.apprecordatorio.enums.TipoRecordatorio;
+
 import java.time.LocalDate;
 
 public class Recordatorio {
@@ -13,10 +15,30 @@ public class Recordatorio {
     private String hora;
     private boolean estado;
 
+    private TipoRecordatorio tipo;
+
+    private String titulo;
+
     public Recordatorio() {}
 
+    public TipoRecordatorio getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoRecordatorio tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
     public Recordatorio(int alarmaID, boolean estado, String descripcion, LocalDate fecha, String hora,
-                        int ID, int imgID, int pacienteDNI, int tutorDNI) {
+                        int ID, int imgID, int pacienteDNI, int tutorDNI, String titulo, TipoRecordatorio tipo) {
         this.alarmaID = alarmaID;
         this.estado = estado;
         this.descripcion = descripcion;
