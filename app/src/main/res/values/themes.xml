@@ -6,4 +6,32 @@
     </style>
 
     <style name="Theme.AppRecordatorio" parent="Base.Theme.AppRecordatorio" />
+
+    <style name="Theme.Oscuro" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Colores principales -->
+        <item name="android:colorBackground">@color/fondoOscuro</item>
+        <item name="colorSurface">@color/fondoElementoOscuro</item>
+        <item name="colorPrimary">@color/fondoTituloOscuro</item>
+        <item name="colorOnPrimary">@color/letraBlanca</item>
+
+        <!-- Texto -->
+        <item name="android:textColor">@color/letraGris</item>
+        <item name="android:editTextColor">@color/letraBlanca</item>
+        <item name="android:textColorHint">@color/letraGris</item>
+
+    </style>
+
+
+    <style name="Theme.Oscuro.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorSurface">@color/fondoElementoOscuro</item>
+        <item name="colorOnSurface">@color/letraBlanca</item>
+        <item name="android:background">@color/fondoElementoOscuro</item>
+        <item name="android:textColor">@color/letraBlanca</item>
+        <item name="android:windowBackground">@color/fondoElementoOscuro</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/BotonDialogOscuro</item>
+    </style>
+
+    <style name="BotonDialogOscuro" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/letraBlanca</item>
+    </style>
 </resources>
