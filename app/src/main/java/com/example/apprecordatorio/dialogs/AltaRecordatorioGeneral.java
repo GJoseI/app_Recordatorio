@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.apprecordatorio.R;
+import com.example.apprecordatorio.dao.RecordatorioGralDao;
+import com.example.apprecordatorio.entidades.Recordatorio;
 
 import java.util.zip.Inflater;
 
@@ -44,7 +47,15 @@ public class AltaRecordatorioGeneral extends DialogFragment {
             String titulo = editTitulo.getText().toString().trim();
             String contenido = editContenido.getText().toString().trim();
             if (!titulo.isEmpty()) {
-                //listener.onRecordatorioGuardado(titulo, contenido);
+                RecordatorioGralDao dao = new RecordatorioGralDao(getContext());
+                Recordatorio r = new Recordatorio();
+                r.setTitulo(titulo);
+                r.setDescripcion(contenido);
+
+                if(dao.add(r)>0)
+                {
+                    Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                }
                 dialog.dismiss();
             } else {
                 editTitulo.setError("Ingrese un título");
@@ -54,5 +65,4 @@ public class AltaRecordatorioGeneral extends DialogFragment {
         return dialog;
     }
 
-    public static String TAG = "PurchaseConfirmationDialog";
 }

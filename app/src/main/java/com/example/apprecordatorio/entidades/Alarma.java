@@ -1,16 +1,33 @@
 package com.example.apprecordatorio.entidades;
 
-public class Alarma {
+import java.time.LocalDate;
+
+public class Alarma extends Recordatorio{
     private int ID;
     private int recordatiorioID;
     private boolean estado;
     private String tono;
     private String hora;
 
+    private LocalDate fecha;
+
+
+    @Override
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    @Override
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
     public Alarma() {
+        super();
     }
 
     public Alarma(boolean estado, String hora, int ID, int recordatiorioID, String tono) {
+        super();
         this.estado = estado;
         this.hora = hora;
         this.ID = ID;

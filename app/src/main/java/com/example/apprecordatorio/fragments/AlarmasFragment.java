@@ -56,8 +56,8 @@ public class AlarmasFragment extends Fragment {
         // ejemplo de datos, dsp cambiamos la funcion
         //Aca cargamos la lista desde la bd segun el usuario, si no encuentra nada
         //no mostrara recordatorios y dira "no hay recs"
-        listaRecordatorios.add(new Recordatorio(101,true,"Tomar medicación",LocalDate.now(),
-                "08:30",1,1,12345678,87654321));
+       /* listaRecordatorios.add(new Recordatorio(101,true,"Tomar medicación",LocalDate.now(),
+                "08:30",1,1,12345678,87654321));*/
         /*
         o
 
