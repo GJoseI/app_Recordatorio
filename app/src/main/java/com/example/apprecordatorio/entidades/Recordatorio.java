@@ -1,6 +1,6 @@
 package com.example.apprecordatorio.entidades;
 
-import com.example.apprecordatorio.enums.TipoRecordatorio;
+
 
 import java.time.LocalDate;
 
@@ -19,7 +19,7 @@ public class Recordatorio {
 
     public Recordatorio() {}
 
-    
+
 
     public String getTitulo() {
         return titulo;
