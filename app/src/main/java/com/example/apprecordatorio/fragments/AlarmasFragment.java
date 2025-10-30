@@ -1,5 +1,6 @@
 package com.example.apprecordatorio.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.RecordatorioAdapter;
+import com.example.apprecordatorio.activities.CrearAlarmaActivity;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -70,11 +72,15 @@ public class AlarmasFragment extends Fragment {
         fabAgregar.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Agregar nuevo recordatorio", Toast.LENGTH_SHORT).show();
             //aca va todo el codigo que hace agregar otro recordatorio
+            Intent crear = new Intent(AlarmasFragment.this.getActivity(), CrearAlarmaActivity.class);
+            startActivity(crear);
         });
 
+        /*
         btnEditar.setOnClickListener(v -> {
            //codigo editar rec
         });
+         */
     }
 
     //  funcion aux para actualizar la lista

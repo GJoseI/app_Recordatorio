@@ -8,96 +8,110 @@
     tools:context=".activities.CrearAlarmaActivity">
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/tpHora"
         android:layout_width="273dp"
         android:layout_height="159dp"
         android:layout_gravity="center"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="44dp"
         android:background="#37474F"
         android:headerBackground="@color/material_dynamic_neutral50"
         android:numbersTextColor="@color/white"
         android:theme="@style/Widget.MaterialComponents.TimePicker"
         android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btDom"
-        android:layout_width="40dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="50dp"
+        android:layout_width="48dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="@string/domAlarma"
+        android:background="@drawable/btn_dia"
+        android:textOff="@string/domAlarma"
+        android:textOn="@string/domAlarma"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/tpHora" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btLu"
-        android:layout_width="40dp"
-        android:layout_height="65dp"
+        android:layout_width="48dp"
+        android:layout_height="55dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:text="@string/luAlarma"
+        android:background="@drawable/btn_dia"
+        android:textOff="@string/luAlarma"
+        android:textOn="@string/luAlarma"
         app:layout_constraintStart_toEndOf="@+id/btDom"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/tpHora" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btMar"
-        android:layout_width="40dp"
-        android:layout_height="65dp"
+        android:layout_width="48dp"
+        android:layout_height="55dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:text="@string/marAlarma"
+        android:background="@drawable/btn_dia"
+        android:textOff="@string/marAlarma"
+        android:textOn="@string/marAlarma"
         app:layout_constraintStart_toEndOf="@+id/btLu"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/tpHora" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btMie"
-        android:layout_width="40dp"
-        android:layout_height="65dp"
+        android:layout_width="48dp"
+        android:layout_height="55dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:text="@string/mieAlarma"
+        android:background="@drawable/btn_dia"
+        android:textOff="@string/mieAlarma"
+        android:textOn="@string/mieAlarma"
         app:layout_constraintStart_toEndOf="@+id/btMar"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/tpHora" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btJue"
-        android:layout_width="40dp"
-        android:layout_height="65dp"
+        android:layout_width="48dp"
+        android:layout_height="55dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:text="@string/jueAlarma"
+        android:background="@drawable/btn_dia"
+        android:textOff="@string/jueAlarma"
+        android:textOn="@string/jueAlarma"
         app:layout_constraintStart_toEndOf="@+id/btMie"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/tpHora" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btVie"
-        android:layout_width="40dp"
-        android:layout_height="65dp"
+        android:layout_width="48dp"
+        android:layout_height="55dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:text="@string/saAlarma"
+        android:background="@drawable/btn_dia"
+        android:textOff="@string/vieAlarma"
+        android:textOn="@string/vieAlarma"
         app:layout_constraintStart_toEndOf="@+id/btJue"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/tpHora" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btSa"
-        android:layout_width="40dp"
-        android:layout_height="65dp"
+        android:layout_width="48dp"
+        android:layout_height="55dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:text="Button"
+        android:background="@drawable/btn_dia"
+        android:textOff="@string/saAlarma"
+        android:textOn="@string/saAlarma"
         app:layout_constraintStart_toEndOf="@+id/btVie"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintTop_toBottomOf="@+id/tpHora" />
 
     <Spinner
         android:id="@+id/spAlarmaTono"
         android:layout_width="315dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btMie" />
 
@@ -105,9 +119,9 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
         android:layout_marginTop="28dp"
-        android:text="selecto de imagen despues lo cambio"
+        android:text="selector de imagen despues lo cambio"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spAlarmaTono" />
 
@@ -115,10 +129,11 @@
         android:id="@+id/etDesc"
         android:layout_width="343dp"
         android:layout_height="207dp"
-        android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
         android:ems="10"
+        android:hint="Tomar Pastilla"
         android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -139,6 +154,9 @@
         android:layout_marginStart="92dp"
         android:layout_marginTop="44dp"
         android:text="@string/btnCrear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.323"
         app:layout_constraintStart_toEndOf="@+id/button"
         app:layout_constraintTop_toBottomOf="@+id/etDesc" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
