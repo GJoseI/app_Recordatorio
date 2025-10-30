@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.apprecordatorio.R;
@@ -28,6 +29,7 @@ public class AlarmasFragment extends Fragment {
     private RecyclerView recyclerView;
     private FloatingActionButton fabAgregar;
     private RecordatorioAdapter adapter;
+    private ImageButton btnEditar;
     private List<Recordatorio> listaRecordatorios;
 
     @Override
@@ -42,6 +44,7 @@ public class AlarmasFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerRecordatorios);
         fabAgregar = view.findViewById(R.id.fabAgregar);
+        btnEditar = view.findViewById(R.id.btnEditar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
@@ -51,9 +54,9 @@ public class AlarmasFragment extends Fragment {
         // ejemplo de datos, dsp cambiamos la funcion
         //Aca cargamos la lista desde la bd segun el usuario, si no encuentra nada
         //no mostrara recordatorios y dira "no hay recs"
-        /*
         listaRecordatorios.add(new Recordatorio(101,true,"Tomar medicación",LocalDate.now(),
-                "08:30",1,1,12345678,87654321))
+                "08:30",1,1,12345678,87654321));
+        /*
         o
 
         cargarRecordatorios();
@@ -63,10 +66,14 @@ public class AlarmasFragment extends Fragment {
         adapter = new RecordatorioAdapter(listaRecordatorios);
         recyclerView.setAdapter(adapter);
 
-        //Acción del botón flotante
+        //Acción del botón flotante agregar
         fabAgregar.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Agregar nuevo recordatorio", Toast.LENGTH_SHORT).show();
             //aca va todo el codigo que hace agregar otro recordatorio
+        });
+
+        btnEditar.setOnClickListener(v -> {
+           //codigo editar rec
         });
     }
 
