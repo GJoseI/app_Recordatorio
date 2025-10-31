@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,13 +18,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.apprecordatorio.R;
+import com.example.apprecordatorio.dao.RecordatorioGralDao;
+import com.example.apprecordatorio.entidades.Recordatorio;
+import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
+import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
 
+import java.util.List;
 import java.util.zip.Inflater;
 
 public class AltaRecordatorioGeneral extends DialogFragment {
 
     private TextView titulo;
     private TextView texto;
+
+    private OnRecordatorioGuardadoListener listener;
 
     @NonNull
     @Override
@@ -44,7 +53,17 @@ public class AltaRecordatorioGeneral extends DialogFragment {
             String titulo = editTitulo.getText().toString().trim();
             String contenido = editContenido.getText().toString().trim();
             if (!titulo.isEmpty()) {
-                //listener.onRecordatorioGuardado(titulo, contenido);
+                RecordatorioGralDao dao = new RecordatorioGralDao(getContext());
+                Recordatorio r = new Recordatorio();
+                r.setTitulo(titulo);
+                r.setDescripcion(contenido);
+
+                if(dao.add(r)>0)
+                {
+                    //Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                    //cargarRecordatorios(inflater,view);
+                    if (listener != null) listener.onRecordatorioGuardado(); //  Avisamos al fragment
+                }
                 dialog.dismiss();
             } else {
                 editTitulo.setError("Ingrese un título");
@@ -54,5 +73,33 @@ public class AltaRecordatorioGeneral extends DialogFragment {
         return dialog;
     }
 
-    public static String TAG = "PurchaseConfirmationDialog";
+
+    public void setOnRecordatorioGuardadoListener(OnRecordatorioGuardadoListener listener) {
+        this.listener = listener;
+    }
+
+    private void cargarRecordatorios(LayoutInflater inflater, View view)
+    {
+
+
+        LinearLayout containerRecordatorios = view.findViewById(R.id.containerRecordatoriosGenerales);
+        containerRecordatorios.removeAllViews();
+        RecordatorioGralNegocio neg = new RecordatorioGralNegocio(requireContext());
+        List<Recordatorio> lista = neg.readAll();
+
+        if(lista!=null)
+        {
+            for (Recordatorio r : lista)
+            {
+                View cardView = inflater.inflate(R.layout.item_recordatorio_general, containerRecordatorios, false);
+
+                TextView txtTitulo = cardView.findViewById(R.id.txtTituloRecGral);
+
+                txtTitulo.setText(r.getTitulo());
+
+                containerRecordatorios.addView(cardView);
+            }
+        }
+    }
+
 }

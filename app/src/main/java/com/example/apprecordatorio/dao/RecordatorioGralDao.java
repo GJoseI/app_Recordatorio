@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.apprecordatorio.entidades.Recordatorio;
-import com.example.apprecordatorio.enums.TipoRecordatorio;
+
 import com.example.apprecordatorio.openhelper.SQLite_OpenHelper;
 
 import java.util.ArrayList;
@@ -20,33 +20,33 @@ public class RecordatorioGralDao {
         dbHelper = new SQLite_OpenHelper(context, "DBRecordatorios", null, 1);
     }
 
-    public long add(String titulo, String contenido, String imagen) {
+    public long add(Recordatorio rec) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put("titulo", titulo);
-        valores.put("contenido", contenido);
-        valores.put("imagen", imagen);
+        valores.put("titulo", rec.getTitulo());
+        valores.put("contenido", rec.getDescripcion());
+        valores.put("imagen", rec.getimagenUrl());
 
-        long resultado = db.insert("recordatorios", null, valores);
+        long resultado = db.insert("recordatoriosGenerales", null, valores);
         db.close();
         return resultado;
     }
 
-    public int update(int id, String titulo, String contenido, String imagen) {
+    public int update(Recordatorio rec) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues valores = new ContentValues();
-        valores.put("titulo", titulo);
-        valores.put("contenido", contenido);
-        valores.put("imagen", imagen);
+        valores.put("titulo", rec.getTitulo());
+        valores.put("contenido", rec.getDescripcion());
+        valores.put("imagen", rec.getimagenUrl());
 
-        int resultado = db.update("recordatorios", valores, "id = ?", new String[]{String.valueOf(id)});
+        int resultado = db.update("recordatoriosGenerales", valores, "id = ?", new String[]{String.valueOf(rec.getId())});
         db.close();
         return resultado;
     }
 
-    public int delete(int id) {
+    public int delete(Recordatorio rec) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int resultado = db.delete("recordatorios", "id = ?", new String[]{String.valueOf(id)});
+        int resultado = db.delete("recordatoriosGenerales", "id = ?", new String[]{String.valueOf(rec.getId())});
         db.close();
         return resultado;
     }
@@ -55,17 +55,24 @@ public class RecordatorioGralDao {
         List<Recordatorio> lista = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM recordatorios ORDER BY id DESC", "general");
+        Cursor cursor = db.rawQuery("SELECT * FROM recordatoriosGenerales ORDER BY id DESC", null);
+
+
+        while (cursor.moveToNext())
+        {
+            Recordatorio r = new Recordatorio();
+            r.setId(cursor.getInt(0));
+            r.setTitulo(cursor.getString(1));
+            r.setDescripcion(cursor.getString(2));
+            r.setimagenUrl(cursor.getString(3));
+            lista.add(r);
+        }
+        /*
         if (cursor.moveToFirst()) {
             do {
-                Recordatorio r = new Recordatorio();
-                r.setId(cursor.getInt(0));
-                r.setTitulo(cursor.getString(1));
-                r.setContenido(cursor.getString(2));
-                r.setImagen(cursor.getString(3));
-                lista.add(r);
+
             } while (cursor.moveToNext());
-        }
+        }*/
 
         cursor.close();
         db.close();

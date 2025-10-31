@@ -38,7 +38,7 @@ public class RecordatorioAdapter extends RecyclerView.Adapter<RecordatorioAdapte
         Recordatorio rec = listaRecordatorios.get(position);
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+/*
         holder.tvDescripcion.setText(rec.getDescripcion());
         holder.tvFecha.setText(rec.getFecha().format(formato));
         holder.tvHora.setText(rec.getHora());
@@ -46,7 +46,7 @@ public class RecordatorioAdapter extends RecyclerView.Adapter<RecordatorioAdapte
 
         holder.btnEditar.setOnClickListener(v -> {
             // cambiar despues
-        });
+        });*/
     }
 
     // cuantos elementos hay en la lista

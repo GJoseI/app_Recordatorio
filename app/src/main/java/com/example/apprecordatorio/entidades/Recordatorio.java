@@ -5,14 +5,11 @@ package com.example.apprecordatorio.entidades;
 import java.time.LocalDate;
 
 public class Recordatorio {
-    private int ID;
+    private int id;
     private int tutorDNI;
-    private int imgID;
-    private int alarmaID;
+    private String imagenUrl;
     private int pacienteDNI;
     private String descripcion;
-    private LocalDate fecha;
-    private String hora;
     private boolean estado;
 
     private String titulo;
@@ -29,17 +26,15 @@ public class Recordatorio {
         this.titulo = titulo;
     }
 
-    public Recordatorio(int alarmaID, boolean estado, String descripcion, LocalDate fecha, String hora,
-                        int ID, int imgID, int pacienteDNI, int tutorDNI, String titulo ) {
-        this.alarmaID = alarmaID;
+    public Recordatorio(boolean estado, String descripcion,
+                        int id, String imagenUrl, int pacienteDNI, int tutorDNI, String titulo ) {
         this.estado = estado;
         this.descripcion = descripcion;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.ID = ID;
-        this.imgID = imgID;
+        this.id = id;
+        this.imagenUrl = imagenUrl;
         this.pacienteDNI = pacienteDNI;
         this.tutorDNI = tutorDNI;
+        this.titulo = titulo;
     }
 
     public int getTutorDNI() {
@@ -58,36 +53,20 @@ public class Recordatorio {
         this.pacienteDNI = pacienteDNI;
     }
 
-    public int getImgID() {
-        return imgID;
+    public String getimagenUrl() {
+        return imagenUrl;
     }
 
-    public void setImgID(int imgID) {
-        this.imgID = imgID;
+    public void setimagenUrl(String imgID) {
+        this.imagenUrl = imagenUrl;
     }
 
-    public int getID() {
-        return ID;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isEstado() {
@@ -106,11 +85,5 @@ public class Recordatorio {
         this.descripcion = descripcion;
     }
 
-    public int getAlarmaID() {
-        return alarmaID;
-    }
 
-    public void setAlarmaID(int alarmaID) {
-        this.alarmaID = alarmaID;
-    }
 }
