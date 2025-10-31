@@ -71,7 +71,6 @@ public class AlarmasFragment extends Fragment {
         //Acción del botón flotante agregar
         fabAgregar.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Agregar nuevo recordatorio", Toast.LENGTH_SHORT).show();
-            //aca va todo el codigo que hace agregar otro recordatorio
             Intent crear = new Intent(AlarmasFragment.this.getActivity(), CrearAlarmaActivity.class);
             startActivity(crear);
         });
