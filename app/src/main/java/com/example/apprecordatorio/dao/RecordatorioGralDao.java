@@ -21,61 +21,95 @@ public class RecordatorioGralDao {
     }
 
     public long add(Recordatorio rec) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues valores = new ContentValues();
-        valores.put("titulo", rec.getTitulo());
-        valores.put("contenido", rec.getDescripcion());
-        valores.put("imagen", rec.getimagenUrl());
+        SQLiteDatabase db = null;
+        long resultado = -1;
+        try {
+             db = dbHelper.getWritableDatabase();
+            ContentValues valores = new ContentValues();
+            valores.put("titulo", rec.getTitulo());
+            valores.put("contenido", rec.getDescripcion());
+            valores.put("imagen", rec.getimagenUrl());
 
-        long resultado = db.insert("recordatoriosGenerales", null, valores);
-        db.close();
+             resultado = db.insert("recordatoriosGenerales", null, valores);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            if(db!=null) {
+                db.close();
+            }
+        }
         return resultado;
     }
 
     public int update(Recordatorio rec) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues valores = new ContentValues();
-        valores.put("titulo", rec.getTitulo());
-        valores.put("contenido", rec.getDescripcion());
-        valores.put("imagen", rec.getimagenUrl());
+        SQLiteDatabase db = null;
+        int resultado = 0;
 
-        int resultado = db.update("recordatoriosGenerales", valores, "id = ?", new String[]{String.valueOf(rec.getId())});
-        db.close();
+        try
+        {
+            db = dbHelper.getWritableDatabase();
+            ContentValues valores = new ContentValues();
+            valores.put("titulo", rec.getTitulo());
+            valores.put("contenido", rec.getDescripcion());
+            valores.put("imagen", rec.getimagenUrl());
+
+             resultado = db.update("recordatoriosGenerales", valores, "id = ?", new String[]{String.valueOf(rec.getId())});
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            if(db!=null) {
+                db.close();
+            }
+        }
         return resultado;
     }
 
     public int delete(Recordatorio rec) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int resultado = db.delete("recordatoriosGenerales", "id = ?", new String[]{String.valueOf(rec.getId())});
-        db.close();
+        SQLiteDatabase db = null;
+        int resultado = 0;
+        try
+        {
+            db = dbHelper.getWritableDatabase();
+            resultado = db.delete("recordatoriosGenerales", "id = ?", new String[]{String.valueOf(rec.getId())});
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            if(db!=null) {
+                db.close();
+            }
+        }
         return resultado;
     }
 
     public List<Recordatorio> readAll() {
         List<Recordatorio> lista = new ArrayList<>();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
 
-        Cursor cursor = db.rawQuery("SELECT * FROM recordatoriosGenerales ORDER BY id DESC", null);
+        try {
+            db = dbHelper.getReadableDatabase();
 
-
-        while (cursor.moveToNext())
+            cursor = db.rawQuery("SELECT * FROM recordatoriosGenerales ORDER BY id DESC", null);
+            while (cursor.moveToNext()) {
+                Recordatorio r = new Recordatorio();
+                r.setId(cursor.getInt(0));
+                r.setTitulo(cursor.getString(1));
+                r.setDescripcion(cursor.getString(2));
+                r.setimagenUrl(cursor.getString(3));
+                lista.add(r);
+            }
+            cursor.close();
+        }catch (Exception e)
         {
-            Recordatorio r = new Recordatorio();
-            r.setId(cursor.getInt(0));
-            r.setTitulo(cursor.getString(1));
-            r.setDescripcion(cursor.getString(2));
-            r.setimagenUrl(cursor.getString(3));
-            lista.add(r);
+            e.printStackTrace();
+        }finally {
+            if(db!=null) {
+                db.close();
+            }
         }
-        /*
-        if (cursor.moveToFirst()) {
-            do {
-
-            } while (cursor.moveToNext());
-        }*/
-
-        cursor.close();
-        db.close();
         return lista;
     }
 }

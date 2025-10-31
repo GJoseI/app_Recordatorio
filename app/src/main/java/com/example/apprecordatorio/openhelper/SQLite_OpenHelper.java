@@ -23,12 +23,4 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
 
     }
 
-    public SQLiteDatabase abrir()
-    {
-       return this.getWritableDatabase();
-    }
-    public void cerrar()
-    {
-        this.close();
-    }
 }

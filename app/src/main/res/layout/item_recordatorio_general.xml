@@ -7,21 +7,82 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="2dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:weightSum="1"
         android:padding="16dp">
 
         <TextView
             android:id="@+id/txtTituloRecGral"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/letraGris"
             android:text="Nuevo Recordatorio"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black" />
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/ibtnEditarRecGral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            app:tint="@color/letraGris"
+            app:srcCompat="@drawable/edit_24px"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            />
+        <ImageButton
+            android:id="@+id/ibtnDeleteRegGral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            app:tint="@color/letraGris"
+            app:srcCompat="@drawable/delete_24px"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            />
 
     </LinearLayout>
+
+    <!-- Contenido expandible -->
+    <LinearLayout
+        android:id="@+id/layoutExpandibleRecGral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/txtDescripcionRecGral"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/letraGris"
+            android:textSize="15sp"
+            android:lineSpacingExtra="2dp"
+            android:text="Descripción del recordatorio"
+            android:paddingBottom="8dp"/>
+
+        <ImageView
+            android:id="@+id/imgRecGral"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/edit_24px"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
+    </LinearLayout>
+</LinearLayout>
 </com.google.android.material.card.MaterialCardView>
