@@ -13,7 +13,7 @@
         android:layout_height="159dp"
         android:layout_gravity="center"
         android:layout_marginTop="44dp"
-        android:background="#37474F"
+        android:background="@color/white"
         android:headerBackground="@color/material_dynamic_neutral50"
         android:numbersTextColor="@color/white"
         android:theme="@style/Widget.MaterialComponents.TimePicker"
@@ -138,7 +138,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnCancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
@@ -148,7 +148,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etDesc" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
@@ -156,7 +156,7 @@
         android:text="@string/btnCrear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.323"
-        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintStart_toEndOf="@+id/btnCancelar"
         app:layout_constraintTop_toBottomOf="@+id/etDesc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
