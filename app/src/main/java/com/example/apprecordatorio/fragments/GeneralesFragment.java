@@ -3,12 +3,15 @@ package com.example.apprecordatorio.fragments;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,6 +20,7 @@ import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -66,12 +70,64 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
 
                 TextView txtTitulo = cardView.findViewById(R.id.txtTituloRecGral);
                 ImageButton btnBorrar = cardView.findViewById(R.id.ibtnDeleteRegGral);
+                ImageButton btnEditar = cardView.findViewById(R.id.ibtnEditarRecGral);
+                TextView txtDescripcion = cardView.findViewById(R.id.txtDescripcionRecGral);
+                LinearLayout layoutExpandible = cardView.findViewById(R.id.layoutExpandibleRecGral);
+                ImageView imgRec = cardView.findViewById(R.id.imgRecGral);
 
                 btnBorrar.setOnClickListener(v ->{
-                    borrarRecordatorio(r,neg,inflater);
+                    confirmarBorrado(r,neg,inflater);
                 });
 
                 txtTitulo.setText(r.getTitulo());
+                txtDescripcion.setText(r.getDescripcion());
+
+                /* PARA MOSTRAR IMG
+                if (r.getimagenUrl() != null) {
+                    imgRec.setVisibility(View.VISIBLE);
+                    imgRec.setImageURI(Uri.parse(r.getRutaImagen()));
+                }*/
+                /* PARA EXPANDIR
+                cardView.setOnClickListener(v -> {
+                    if (layoutExpandible.getVisibility() == View.GONE) {
+                        layoutExpandible.setVisibility(View.VISIBLE);
+                    } else {
+                        layoutExpandible.setVisibility(View.GONE);
+                    }
+                });
+                */
+                cardView.setOnClickListener(v -> {
+
+
+
+                    if (layoutExpandible.getVisibility() != View.VISIBLE) {
+                        // Expandir
+                        layoutExpandible.setVisibility(View.VISIBLE);
+
+                        // Cambiar colores a modo expandido
+                        cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
+                        txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                        txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+
+
+
+                        btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                        btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                    } else {
+                        // Colapsar
+                        layoutExpandible.setVisibility(View.GONE);
+
+                        // Restaurar colores originales
+                        cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
+                        txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                        txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
+
+
+                        btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                        btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                    }
+                });
+
 
                 containerRecordatorios.addView(cardView);
             }
@@ -89,5 +145,23 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
     {
         neg.delete(r);
         cargarRecordatorios(inflater);
+    }
+
+    private void confirmarBorrado(Recordatorio recordatorio, RecordatorioGralNegocio neg, LayoutInflater inflater) {
+       /* new AlertDialog.Builder(requireContext())
+                .setTitle("Eliminar recordatorio")
+                .setMessage("¿Seguro que deseas eliminar \"" + recordatorio.getTitulo() + "\"?")
+                .setPositiveButton("Eliminar", (dialog, which) -> {
+                    borrarRecordatorio(recordatorio,neg,inflater);
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                .show();*/
+
+        new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
+                .setTitle("Eliminar recordatorio")
+                .setMessage("¿Seguro que deseas eliminar este recordatorio?")
+                .setPositiveButton("Eliminar", (dialog, which) -> borrarRecordatorio(recordatorio,neg,inflater))
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 }

@@ -5,7 +5,9 @@
     <color name="fondoOscuro">#143642</color>
     <color name="fondoTituloOscuro">#102B34</color>
     <color name="fondoElementoOscuro">#254753</color>
+    <color name="fondoElementoSeleccionado">#336273</color>
     <color name="letraGris">#A5A2A2</color>
     <color name="letraBlanca">#FFFFFF</color>
     <color name="light_gray">#8B8B8B</color>
+    <color name="rojoBorrar">#9F1C1C</color>
 </resources>
