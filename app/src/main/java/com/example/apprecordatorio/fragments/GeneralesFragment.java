@@ -133,7 +133,7 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
 
         new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
                 .setTitle("Eliminar recordatorio")
-                .setMessage("¿Seguro que deseas eliminar este recordatorio?")
+                .setMessage("¿Seguro que deseas eliminar "+ recordatorio.getTitulo()+"?")
                 .setPositiveButton("Eliminar", (dialog, which) -> borrarRecordatorio(recordatorio,neg,inflater))
                 .setNegativeButton("Cancelar", null)
                 .show();
