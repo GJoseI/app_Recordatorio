@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.apprecordatorio.R;
-import com.example.apprecordatorio.dao.RecordatorioGralDao;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
@@ -25,7 +25,7 @@ import java.util.List;
 public class GeneralesFragment extends Fragment implements OnRecordatorioGuardadoListener {
 
     private LinearLayout containerRecordatorios;
-    private FloatingActionButton btnAgregar;
+
 
     private List<Recordatorio> lista;
 
@@ -35,7 +35,7 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
         View view = inflater.inflate(R.layout.fragment_generales, container, false);
 
         containerRecordatorios = view.findViewById(R.id.containerRecordatoriosGenerales);
-        btnAgregar = view.findViewById(R.id.btnAgregarRecGral);
+        FloatingActionButton  btnAgregar = view.findViewById(R.id.btnAgregarRecGral);
 
         btnAgregar.setOnClickListener(v -> agregarRecordatorio(inflater));
 
@@ -65,6 +65,11 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
                 View cardView = inflater.inflate(R.layout.item_recordatorio_general, containerRecordatorios, false);
 
                 TextView txtTitulo = cardView.findViewById(R.id.txtTituloRecGral);
+                ImageButton btnBorrar = cardView.findViewById(R.id.ibtnDeleteRegGral);
+
+                btnBorrar.setOnClickListener(v ->{
+                    borrarRecordatorio(r,neg,inflater);
+                });
 
                 txtTitulo.setText(r.getTitulo());
 
@@ -76,5 +81,13 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
     @Override
     public void onRecordatorioGuardado() {
         cargarRecordatorios(LayoutInflater.from(requireContext()));
+    }
+
+    public void editarRecordatorio(Recordatorio r)
+    {}
+    public void borrarRecordatorio(Recordatorio r, RecordatorioGralNegocio neg, LayoutInflater inflater)
+    {
+        neg.delete(r);
+        cargarRecordatorios(inflater);
     }
 }
