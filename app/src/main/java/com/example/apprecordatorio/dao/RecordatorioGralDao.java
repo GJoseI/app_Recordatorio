@@ -27,7 +27,7 @@ public class RecordatorioGralDao {
         valores.put("contenido", rec.getDescripcion());
         valores.put("imagen", rec.getimagenUrl());
 
-        long resultado = db.insert("recordatorios", null, valores);
+        long resultado = db.insert("recordatoriosGenerales", null, valores);
         db.close();
         return resultado;
     }
@@ -39,14 +39,14 @@ public class RecordatorioGralDao {
         valores.put("contenido", rec.getDescripcion());
         valores.put("imagen", rec.getimagenUrl());
 
-        int resultado = db.update("recordatorios", valores, "id = ?", new String[]{String.valueOf(rec.getId())});
+        int resultado = db.update("recordatoriosGenerales", valores, "id = ?", new String[]{String.valueOf(rec.getId())});
         db.close();
         return resultado;
     }
 
     public int delete(Recordatorio rec) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int resultado = db.delete("recordatorios", "id = ?", new String[]{String.valueOf(rec.getId())});
+        int resultado = db.delete("recordatoriosGenerales", "id = ?", new String[]{String.valueOf(rec.getId())});
         db.close();
         return resultado;
     }
@@ -55,7 +55,7 @@ public class RecordatorioGralDao {
         List<Recordatorio> lista = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM recordatorios ORDER BY id DESC", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM recordatoriosGenerales ORDER BY id DESC", null);
 
 
         while (cursor.moveToNext())

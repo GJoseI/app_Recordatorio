@@ -12,12 +12,12 @@ public class Alarma extends Recordatorio{
     private LocalDate fecha;
 
 
-    @Override
+
     public LocalDate getFecha() {
         return fecha;
     }
 
-    @Override
+
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
