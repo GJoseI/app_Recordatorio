@@ -28,10 +28,14 @@
         <item name="android:background">@color/fondoElementoOscuro</item>
         <item name="android:textColor">@color/letraBlanca</item>
         <item name="android:windowBackground">@color/fondoElementoOscuro</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/BotonDialogOscuro</item>
+        <item name="buttonBarPositiveButtonStyle">@style/BotonDialogOscuro</item>
+        <item name="buttonBarNegativeButtonStyle">@style/BotonDialogOscuro</item>
+        <item name="buttonBarNeutralButtonStyle">@style/BotonDialogOscuro</item>
     </style>
 
     <style name="BotonDialogOscuro" parent="@style/Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/letraBlanca</item>
     </style>
+
+
 </resources>
