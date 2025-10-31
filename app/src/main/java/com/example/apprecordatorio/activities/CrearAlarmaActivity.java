@@ -36,36 +36,43 @@ public class CrearAlarmaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_crear_alarma);
+        innitVars();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        innitVars();
 
         btGuardar.setOnClickListener(view -> guardarAlarma());
         btCancelar.setOnClickListener(view -> volverAtras());
     }
 
     public void volverAtras(){
-        Intent i = new Intent(this, AlarmasFragment.class);
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }
 
     public void guardarAlarma(){
-
+        //Codigo para guardar alarma
+        //probablemente un get para la hora elegida
+        //otro para los dias
+        //otro para el tono
+        //agregar de alguna manera la imagen
+        //y agregar el texto
     }
 
     public void innitVars(){
-        tpHora.findViewById(R.id.tpHora);
-        btDom.findViewById(R.id.btDom);
-        btLu.findViewById(R.id.btLu);
-        btMar.findViewById(R.id.btMar);
-        btMie.findViewById(R.id.btMie);
-        btJue.findViewById(R.id.btJue);
-        btVie.findViewById(R.id.btVie);
-        btSa.findViewById(R.id.btSa);
-        spAlarmaTono.findViewById(R.id.spAlarmaTono);
-        etDesc.findViewById(R.id.etDesc);
+        tpHora = findViewById(R.id.tpHora);
+        btDom = findViewById(R.id.btDom);
+        btLu = findViewById(R.id.btLu);
+        btMar = findViewById(R.id.btMar);
+        btMie = findViewById(R.id.btMie);
+        btJue = findViewById(R.id.btJue);
+        btVie = findViewById(R.id.btVie);
+        btSa = findViewById(R.id.btSa);
+        spAlarmaTono = findViewById(R.id.spAlarmaTono);
+        etDesc = findViewById(R.id.etDesc);
+        btCancelar = findViewById(R.id.btnCancelar);
+        btGuardar = findViewById(R.id.btnGuardar);
     }
 }
