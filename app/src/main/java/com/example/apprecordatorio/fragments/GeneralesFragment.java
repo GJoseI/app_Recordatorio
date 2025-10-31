@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
@@ -82,52 +83,30 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
                 txtTitulo.setText(r.getTitulo());
                 txtDescripcion.setText(r.getDescripcion());
 
-                /* PARA MOSTRAR IMG
-                if (r.getimagenUrl() != null) {
-                    imgRec.setVisibility(View.VISIBLE);
-                    imgRec.setImageURI(Uri.parse(r.getRutaImagen()));
-                }*/
-                /* PARA EXPANDIR
                 cardView.setOnClickListener(v -> {
-                    if (layoutExpandible.getVisibility() == View.GONE) {
-                        layoutExpandible.setVisibility(View.VISIBLE);
-                    } else {
-                        layoutExpandible.setVisibility(View.GONE);
-                    }
-                });
-                */
-                cardView.setOnClickListener(v -> {
-
-
 
                     if (layoutExpandible.getVisibility() != View.VISIBLE) {
-                        // Expandir
+
                         layoutExpandible.setVisibility(View.VISIBLE);
 
-                        // Cambiar colores a modo expandido
                         cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
                         txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                         txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
 
-
-
                         btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                         btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                     } else {
-                        // Colapsar
+
                         layoutExpandible.setVisibility(View.GONE);
 
-                        // Restaurar colores originales
                         cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
                         txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
                         txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
-
 
                         btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
                         btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
                     }
                 });
-
 
                 containerRecordatorios.addView(cardView);
             }
@@ -143,19 +122,14 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
     {}
     public void borrarRecordatorio(Recordatorio r, RecordatorioGralNegocio neg, LayoutInflater inflater)
     {
-        neg.delete(r);
+        if(neg.delete(r)>0)
+        {
+            Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
+        }
         cargarRecordatorios(inflater);
     }
 
     private void confirmarBorrado(Recordatorio recordatorio, RecordatorioGralNegocio neg, LayoutInflater inflater) {
-       /* new AlertDialog.Builder(requireContext())
-                .setTitle("Eliminar recordatorio")
-                .setMessage("¿Seguro que deseas eliminar \"" + recordatorio.getTitulo() + "\"?")
-                .setPositiveButton("Eliminar", (dialog, which) -> {
-                    borrarRecordatorio(recordatorio,neg,inflater);
-                })
-                .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
-                .show();*/
 
         new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
                 .setTitle("Eliminar recordatorio")
