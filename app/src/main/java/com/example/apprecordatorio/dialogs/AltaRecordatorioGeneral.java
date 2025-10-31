@@ -60,9 +60,8 @@ public class AltaRecordatorioGeneral extends DialogFragment {
 
                 if(dao.add(r)>0)
                 {
-                    //Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
-                    //cargarRecordatorios(inflater,view);
-                    if (listener != null) listener.onRecordatorioGuardado(); //  Avisamos al fragment
+                    Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                    if (listener != null) listener.onRecordatorioGuardado();
                 }
                 dialog.dismiss();
             } else {
@@ -78,28 +77,6 @@ public class AltaRecordatorioGeneral extends DialogFragment {
         this.listener = listener;
     }
 
-    private void cargarRecordatorios(LayoutInflater inflater, View view)
-    {
 
-
-        LinearLayout containerRecordatorios = view.findViewById(R.id.containerRecordatoriosGenerales);
-        containerRecordatorios.removeAllViews();
-        RecordatorioGralNegocio neg = new RecordatorioGralNegocio(requireContext());
-        List<Recordatorio> lista = neg.readAll();
-
-        if(lista!=null)
-        {
-            for (Recordatorio r : lista)
-            {
-                View cardView = inflater.inflate(R.layout.item_recordatorio_general, containerRecordatorios, false);
-
-                TextView txtTitulo = cardView.findViewById(R.id.txtTituloRecGral);
-
-                txtTitulo.setText(r.getTitulo());
-
-                containerRecordatorios.addView(cardView);
-            }
-        }
-    }
 
 }

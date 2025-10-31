@@ -47,16 +47,8 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
 
     private void agregarRecordatorio(LayoutInflater inflater) {
 
-       // View cardView = inflater.inflate(R.layout.item_recordatorio_general, containerRecordatorios, false);
-
-        // Cambiar el título dinámicamente (puedes luego pedirlo con un diálogo)
-       //
-        //txtTitulo.setText( (containerRecordatorios.getChildCount() + 1));
-
-        // Agregar la card al contenedor
-
         AltaRecordatorioGeneral dialog = new AltaRecordatorioGeneral();
-        dialog.setOnRecordatorioGuardadoListener(this); //  registramos este fragment como "oyente"
+        dialog.setOnRecordatorioGuardadoListener(this);
         dialog.show(getChildFragmentManager(), "hola");
     }
 
