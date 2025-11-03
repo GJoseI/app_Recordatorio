@@ -2,16 +2,24 @@ package com.example.apprecordatorio.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -28,10 +36,33 @@ import java.util.zip.Inflater;
 
 public class AltaRecordatorioGeneral extends DialogFragment {
 
-    private TextView titulo;
-    private TextView texto;
+    private Uri imagenSeleccionadaUri;
+    private ImageView imgPreview;
 
     private OnRecordatorioGuardadoListener listener;
+
+    // Registramos el nuevo picker (debe ser variable de clase)
+   // private ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher=null;
+
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                Log.e("URI:",uri.toString());
+                if (uri != null) {
+                    // 🔒 Guardar permiso persistente AQUÍ
+                    final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                    try {
+                        requireContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    }
+
+
+                        Log.e("DEBUG_PICKER", "Imagen seleccionada: " + uri);
+                        setImagenSeleccionada(uri);
+
+                    //currentDialog.setImagenSeleccionada(uri);
+                }
+            });
 
     @NonNull
     @Override
@@ -44,21 +75,30 @@ public class AltaRecordatorioGeneral extends DialogFragment {
         EditText editContenido = view.findViewById(R.id.etContenidoDialogRg);
         Button btnCancelar = view.findViewById(R.id.btnCancelarDialogRg);
         Button btnGuardar = view.findViewById(R.id.btnGuardarDialogRg);
+        Button btnImg = view.findViewById(R.id.btnImagenDialogRg);
+        imgPreview = view.findViewById(R.id.ivDialogRg);
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
+
+        btnImg.setOnClickListener(v -> agregarImg());
 
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
         btnGuardar.setOnClickListener(v -> {
             String titulo = editTitulo.getText().toString().trim();
             String contenido = editContenido.getText().toString().trim();
             if (!titulo.isEmpty()) {
-                RecordatorioGralDao dao = new RecordatorioGralDao(getContext());
+                RecordatorioGralNegocio neg = new RecordatorioGralNegocio(getContext());
                 Recordatorio r = new Recordatorio();
                 r.setTitulo(titulo);
                 r.setDescripcion(contenido);
+                if (imagenSeleccionadaUri != null) {
+                    r.setImagenUrl(imagenSeleccionadaUri.toString());
+                    Log.e("URI EN R:","ruta: "+r.getImagenUrl());
+                }
 
-                if(dao.add(r)>0)
+
+                if(neg.add(r)>0)
                 {
                     Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
                     if (listener != null) listener.onRecordatorioGuardado();
@@ -76,6 +116,28 @@ public class AltaRecordatorioGeneral extends DialogFragment {
     public void setOnRecordatorioGuardadoListener(OnRecordatorioGuardadoListener listener) {
         this.listener = listener;
     }
+
+    public void agregarImg()
+    {
+            pickImageLauncher.launch(
+                    new PickVisualMediaRequest.Builder()
+                            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                            .build()
+            );
+
+    }
+
+
+    public void setImagenSeleccionada(Uri uri) {
+        imagenSeleccionadaUri = uri;
+        Log.e("URI en SET:",imagenSeleccionadaUri.toString());
+        imgPreview.setVisibility(View.VISIBLE);
+        imgPreview.setImageURI(uri);
+    }
+
+    /*public void setPickImageLauncher(ActivityResultLauncher<PickVisualMediaRequest> launcher) {
+        this.pickImageLauncher = launcher;
+    }*/
 
 
 

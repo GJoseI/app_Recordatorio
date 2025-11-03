@@ -28,7 +28,7 @@ public class RecordatorioGralDao {
             ContentValues valores = new ContentValues();
             valores.put("titulo", rec.getTitulo());
             valores.put("contenido", rec.getDescripcion());
-            valores.put("imagen", rec.getimagenUrl());
+            valores.put("imagen", rec.getImagenUrl());
 
              resultado = db.insert("recordatoriosGenerales", null, valores);
         }catch (Exception e)
@@ -52,7 +52,7 @@ public class RecordatorioGralDao {
             ContentValues valores = new ContentValues();
             valores.put("titulo", rec.getTitulo());
             valores.put("contenido", rec.getDescripcion());
-            valores.put("imagen", rec.getimagenUrl());
+            valores.put("imagen", rec.getImagenUrl());
 
              resultado = db.update("recordatoriosGenerales", valores, "id = ?", new String[]{String.valueOf(rec.getId())});
         }catch (Exception e)
@@ -98,7 +98,7 @@ public class RecordatorioGralDao {
                 r.setId(cursor.getInt(0));
                 r.setTitulo(cursor.getString(1));
                 r.setDescripcion(cursor.getString(2));
-                r.setimagenUrl(cursor.getString(3));
+                r.setImagenUrl(cursor.getString(3));
                 lista.add(r);
             }
             cursor.close();

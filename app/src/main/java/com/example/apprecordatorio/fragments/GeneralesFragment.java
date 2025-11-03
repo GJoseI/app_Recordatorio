@@ -1,12 +1,18 @@
 package com.example.apprecordatorio.fragments;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +40,10 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
 
     private List<Recordatorio> lista;
 
+    private AltaRecordatorioGeneral currentDialog = null;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,6 +64,7 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
 
         AltaRecordatorioGeneral dialog = new AltaRecordatorioGeneral();
         dialog.setOnRecordatorioGuardadoListener(this);
+        currentDialog = dialog; // guarda una referencia
         dialog.show(getChildFragmentManager(), "hola");
     }
 
@@ -82,12 +93,30 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
 
                 txtTitulo.setText(r.getTitulo());
                 txtDescripcion.setText(r.getDescripcion());
+                String imgUri = r.getImagenUrl();
+
+                if(imgUri!=null)
+                {
+                    Log.e("URI:",imgUri);
+                    imgRec.setImageURI(Uri.parse(imgUri));
+                }
+
 
                 cardView.setOnClickListener(v -> {
 
                     if (layoutExpandible.getVisibility() != View.VISIBLE) {
 
+
                         layoutExpandible.setVisibility(View.VISIBLE);
+
+
+                        if(r.getImagenUrl()!=null)
+                        {
+                            imgRec.setVisibility(View.VISIBLE);
+                        }
+
+
+
 
                         cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
                         txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));

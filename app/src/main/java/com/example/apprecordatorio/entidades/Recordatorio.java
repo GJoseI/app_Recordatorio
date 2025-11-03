@@ -53,11 +53,11 @@ public class Recordatorio {
         this.pacienteDNI = pacienteDNI;
     }
 
-    public String getimagenUrl() {
+    public String getImagenUrl() {
         return imagenUrl;
     }
 
-    public void setimagenUrl(String imgID) {
+    public void setImagenUrl(String imagenUrl) {
         this.imagenUrl = imagenUrl;
     }
 
