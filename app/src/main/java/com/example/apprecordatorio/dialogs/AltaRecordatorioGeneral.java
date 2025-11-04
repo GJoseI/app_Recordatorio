@@ -41,24 +41,20 @@ public class AltaRecordatorioGeneral extends DialogFragment {
 
     private OnRecordatorioGuardadoListener listener;
 
-    // Registramos el nuevo picker (debe ser variable de clase)
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 Log.e("URI:",uri.toString());
-                if (uri != null) {
-                    // Guardar permiso persistente AQUÍ
+
+                    // Guardar permiso persistente
                     final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
                     try {
                         requireContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
                     } catch (SecurityException e) {
                         e.printStackTrace();
                     }
-
-
-                        Log.e("DEBUG_PICKER", "Imagen seleccionada: " + uri);
                         setImagenSeleccionada(uri);
 
-                }
+
             });
 
     @NonNull
