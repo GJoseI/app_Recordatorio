@@ -45,11 +45,8 @@ public class CrearAlarmaActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        List<ToggleButton> botonesDias = new ArrayList<>();
-        botonesDias = agregarDias(botonesDias);
 
-        List<ToggleButton> finalBotonesDias = botonesDias;
-        btGuardar.setOnClickListener(view -> guardarAlarma(finalBotonesDias));
+        btGuardar.setOnClickListener(view -> guardarAlarma(agregarDias()));
         btCancelar.setOnClickListener(view -> volverAtras());
     }
 
@@ -64,7 +61,7 @@ public class CrearAlarmaActivity extends AppCompatActivity {
         ///tpHora.getHour();
         //otro para los dias
         ///obtenerDiasSeleccionados(botonesDias);
-        //otro para el tono
+        
         //agregar de alguna manera la imagen
         //y agregar el texto
     }
@@ -84,16 +81,22 @@ public class CrearAlarmaActivity extends AppCompatActivity {
         btGuardar = findViewById(R.id.btnGuardar);
     }
 
-    public void obtenerDiasSeleccionados(List<ToggleButton> botonesDias){
+    public List<String> obtenerDiasSeleccionados(List<ToggleButton> botonesDias){
+        List<String> diasSeleccionados = new ArrayList<>();
         for (ToggleButton btn : botonesDias){
-            if(btn.isChecked()){
+            if(btn.isChecked()) {
                 //hace algo, prob los pone en una lista y la devuelve
                 //asi que seguro cambio la funcion y no va a ser void
+
+                //hace una lista de string, y añade el gettext del btn.
+                diasSeleccionados.add(btn.getTextOn().toString());
             }
         }
+        return diasSeleccionados;
     }
 
-    public List<ToggleButton> agregarDias(List<ToggleButton> botonesDias){
+    public List<ToggleButton> agregarDias(){
+        List<ToggleButton> botonesDias = new ArrayList<>();
         botonesDias.add(btDom);
         botonesDias.add(btLu);
         botonesDias.add(btMar);
