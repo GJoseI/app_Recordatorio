@@ -17,6 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.fragments.AlarmasFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CrearAlarmaActivity extends AppCompatActivity {
     private TimePicker tpHora;
     private ToggleButton btDom;
@@ -43,7 +46,7 @@ public class CrearAlarmaActivity extends AppCompatActivity {
             return insets;
         });
 
-        btGuardar.setOnClickListener(view -> guardarAlarma());
+        btGuardar.setOnClickListener(view -> guardarAlarma(agregarDias()));
         btCancelar.setOnClickListener(view -> volverAtras());
     }
 
@@ -52,11 +55,13 @@ public class CrearAlarmaActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void guardarAlarma(){
+    public void guardarAlarma(List<ToggleButton> botonesDias){
         //Codigo para guardar alarma
         //probablemente un get para la hora elegida
+        ///tpHora.getHour();
         //otro para los dias
-        //otro para el tono
+        ///obtenerDiasSeleccionados(botonesDias);
+        
         //agregar de alguna manera la imagen
         //y agregar el texto
     }
@@ -74,5 +79,32 @@ public class CrearAlarmaActivity extends AppCompatActivity {
         etDesc = findViewById(R.id.etDesc);
         btCancelar = findViewById(R.id.btnCancelar);
         btGuardar = findViewById(R.id.btnGuardar);
+    }
+
+    public List<String> obtenerDiasSeleccionados(List<ToggleButton> botonesDias){
+        List<String> diasSeleccionados = new ArrayList<>();
+        for (ToggleButton btn : botonesDias){
+            if(btn.isChecked()) {
+                //hace algo, prob los pone en una lista y la devuelve
+                //asi que seguro cambio la funcion y no va a ser void
+
+                //hace una lista de string, y añade el gettext del btn.
+                diasSeleccionados.add(btn.getTextOn().toString());
+            }
+        }
+        return diasSeleccionados;
+    }
+
+    public List<ToggleButton> agregarDias(){
+        List<ToggleButton> botonesDias = new ArrayList<>();
+        botonesDias.add(btDom);
+        botonesDias.add(btLu);
+        botonesDias.add(btMar);
+        botonesDias.add(btMie);
+        botonesDias.add(btJue);
+        botonesDias.add(btVie);
+        botonesDias.add(btSa);
+
+        return botonesDias;
     }
 }

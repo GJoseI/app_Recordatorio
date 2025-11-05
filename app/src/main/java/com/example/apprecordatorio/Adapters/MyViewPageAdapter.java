@@ -1,4 +1,4 @@
-package com.example.apprecordatorio;
+package com.example.apprecordatorio.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

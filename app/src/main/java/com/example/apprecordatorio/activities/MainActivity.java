@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.apprecordatorio.MyViewPageAdapter;
+import com.example.apprecordatorio.Adapters.MyViewPageAdapter;
 import com.example.apprecordatorio.R;
 import com.google.android.material.tabs.TabLayout;
 
