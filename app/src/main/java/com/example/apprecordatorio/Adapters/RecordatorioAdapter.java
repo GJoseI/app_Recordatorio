@@ -63,9 +63,9 @@ public class RecordatorioAdapter extends RecyclerView.Adapter<RecordatorioAdapte
         public RecordatorioViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDescripcion = itemView.findViewById(R.id.tvDescripcion);
-            tvFecha = itemView.findViewById(R.id.tvFecha);
+           // tvFecha = itemView.findViewById(R.id.tvFecha);
             tvHora = itemView.findViewById(R.id.tvHora);
-            tvEstado = itemView.findViewById(R.id.tvEstado);
+            //tvEstado = itemView.findViewById(R.id.tvEstado);
             btnEditar = itemView.findViewById(R.id.btnEditar);
         }
     }

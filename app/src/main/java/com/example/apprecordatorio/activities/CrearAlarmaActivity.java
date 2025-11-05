@@ -2,6 +2,7 @@ package com.example.apprecordatorio.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -48,6 +49,14 @@ public class CrearAlarmaActivity extends AppCompatActivity {
 
         btGuardar.setOnClickListener(view -> guardarAlarma(agregarDias()));
         btCancelar.setOnClickListener(view -> volverAtras());
+
+
+        Spinner spinner = findViewById(R.id.spAlarmaTono);
+        String tonos[] = {"tono 1: ejemplo","tono 2: ejemplo"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.spinner_item,tonos);
+        //adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
     }
 
     public void volverAtras(){

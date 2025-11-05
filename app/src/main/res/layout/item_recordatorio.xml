@@ -77,23 +77,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="6dp">
+            android:layout_marginTop="6dp"
+            android:weightSum="1">
 
             <Switch
                 android:id="@+id/sEstado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="alarmaSwitch"/>
-
+                android:onClick="alarmaSwitch"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1" />
             <ImageButton
                 android:id="@+id/btnEditar"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Editar"
-                android:layout_marginStart="300dp"
-                android:src="@android:drawable/ic_menu_edit"
-                card_view:tint="@color/black" />
+                android:src="@drawable/edit_24px"
+                android:scaleType="fitCenter"
+                card_view:tint="@color/letraGris" />
+            <ImageButton
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Eliminar"
+                android:src="@drawable/delete_24px"
+                android:scaleType="fitCenter"
+                card_view:tint="@color/letraGris"
+                />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

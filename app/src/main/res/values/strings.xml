@@ -11,9 +11,11 @@
     <string name="saAlarma">S</string>
 
     <!--Btns -->
-    <string name="btnCancelar">Cancelar</string>
-    <string name="btnCrear">Crear</string>
+    <string name="btnCancelar">CANCELAR</string>
+    <string name="btnCrear">CREAR</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tituloGenerales">Recordatorios Generales</string>
+    <string name="tituloAlarmas">Alarmas</string>
+    <string name="tituloNuevaAlarma">Nueva Alarma</string>
 </resources>

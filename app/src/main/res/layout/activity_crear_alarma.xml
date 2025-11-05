@@ -3,24 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:backgroundTint="@color/fondoOscuro"
+    android:background="@color/fondoOscuro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.CrearAlarmaActivity">
 
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="244dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edittext_redondeado"
+
+        android:backgroundTint="@color/fondoTituloOscuro"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="@string/tituloNuevaAlarma"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:id="@+id/svNuevaAlarma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
     <TimePicker
         android:id="@+id/tpHora"
         android:layout_width="273dp"
         android:layout_height="159dp"
         android:layout_gravity="center"
         android:layout_marginTop="44dp"
-        android:background="@color/white"
+        android:amPmTextColor="@color/letraBlanca"
+        android:background="@color/fondoElementoOscuro"
         android:headerBackground="@color/material_dynamic_neutral50"
+        android:numbersInnerTextColor="@color/letraBlanca"
+        android:textColor="@color/letraBlanca"
         android:numbersTextColor="@color/white"
-        android:theme="@style/Widget.MaterialComponents.TimePicker"
+        android:theme="@style/Theme.Oscuro"
         android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+
+
+        />
 
     <ToggleButton
         android:id="@+id/btDom"
@@ -29,6 +65,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_dia"
+        android:textColor="@color/toggle_color"
         android:textOff="@string/domAlarma"
         android:textOn="@string/domAlarma"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +78,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_dia"
+        android:textColor="@color/toggle_color"
         android:textOff="@string/luAlarma"
         android:textOn="@string/luAlarma"
         app:layout_constraintStart_toEndOf="@+id/btDom"
@@ -53,6 +91,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_dia"
+        android:textColor="@color/toggle_color"
         android:textOff="@string/marAlarma"
         android:textOn="@string/marAlarma"
         app:layout_constraintStart_toEndOf="@+id/btLu"
@@ -65,6 +104,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_dia"
+        android:textColor="@color/toggle_color"
         android:textOff="@string/mieAlarma"
         android:textOn="@string/mieAlarma"
         app:layout_constraintStart_toEndOf="@+id/btMar"
@@ -77,6 +117,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_dia"
+        android:textColor="@color/toggle_color"
         android:textOff="@string/jueAlarma"
         android:textOn="@string/jueAlarma"
         app:layout_constraintStart_toEndOf="@+id/btMie"
@@ -89,6 +130,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_dia"
+        android:textColor="@color/toggle_color"
         android:textOff="@string/vieAlarma"
         android:textOn="@string/vieAlarma"
         app:layout_constraintStart_toEndOf="@+id/btJue"
@@ -101,6 +143,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_dia"
+        android:textColor="@color/toggle_color"
         android:textOff="@string/saAlarma"
         android:textOn="@string/saAlarma"
         app:layout_constraintStart_toEndOf="@+id/btVie"
@@ -111,16 +154,18 @@
         android:layout_width="315dp"
         android:layout_height="48dp"
         android:layout_marginTop="28dp"
+        android:background="@drawable/spinner_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btMie" />
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/btnSeleccionarImagenAlarma"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="selector de imagen despues lo cambio"
+        android:backgroundTint="@color/design_default_color_secondary_variant"
+        android:text="AGREGAR IMAGEN (OPCIONAL)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spAlarmaTono" />
@@ -130,33 +175,47 @@
         android:layout_width="343dp"
         android:layout_height="207dp"
         android:layout_marginTop="12dp"
+        android:background="@drawable/bg_edittext_redondeado"
+        android:backgroundTint="@color/fondoElementoOscuro"
         android:ems="10"
-        android:hint="Tomar Pastilla"
-        android:inputType="text"
+        android:gravity="start"
+        android:hint="Contenido"
+        android:inputType="textMultiLine"
+        android:textAlignment="textStart"
+        android:textColor="@color/letraBlanca"
+        android:textColorHint="@color/letraGris"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSeleccionarImagenAlarma"
+        android:padding="4dp"/>
 
-    <Button
-        android:id="@+id/btnCancelar"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="44dp"
-        android:text="@string/btnCancelar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDesc" />
-
-    <Button
-        android:id="@+id/btnGuardar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="44dp"
-        android:text="@string/btnCrear"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.323"
-        app:layout_constraintStart_toEndOf="@+id/btnCancelar"
-        app:layout_constraintTop_toBottomOf="@+id/etDesc" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/etDesc">
 
+        <Button
+
+            android:id="@+id/btnCancelar"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/material_dynamic_neutral30"
+            android:text="@string/btnCancelar"
+            />
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="40dp"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:text="@string/btnCrear" />
+    </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
