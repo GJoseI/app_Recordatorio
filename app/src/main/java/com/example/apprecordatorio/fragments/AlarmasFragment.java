@@ -110,7 +110,7 @@ public class AlarmasFragment extends Fragment {
         });
          */
 
-        ///  ACA CARGO UNA CARD PARA EL EJEMPLO DE LAS ALARMAS
+
 
 
 

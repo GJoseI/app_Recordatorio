@@ -18,4 +18,5 @@
     <string name="tituloGenerales">Recordatorios Generales</string>
     <string name="tituloAlarmas">Alarmas</string>
     <string name="tituloNuevaAlarma">Nueva Alarma</string>
+    <string name="tituloTutor">Tutor</string>
 </resources>

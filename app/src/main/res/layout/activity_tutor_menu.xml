@@ -7,4 +7,75 @@
     android:layout_height="match_parent"
     tools:context=".activities.TutorMenuActivity">
 
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="244dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edittext_redondeado"
+
+        android:backgroundTint="@color/fondoTituloOscuro"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="Menu Tutor"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnVincular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="96dp"
+        android:backgroundTint="@color/naranjita"
+        android:text="Vincular dispositivos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnVincular">
+
+        <Button
+            android:id="@+id/btnAgregarRec"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="4dp"
+            android:layout_marginTop="116dp"
+            android:backgroundTint="@color/fondoElementoSeleccionado"
+            android:text="Agregar Recordatorio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnVincular" />
+
+        <Button
+            android:id="@+id/btnSeguimiento"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="4dp"
+            android:layout_marginBottom="88dp"
+            android:backgroundTint="@color/fondoElementoSeleccionado"
+            android:text="Seguimiento"
+            app:layout_constraintBottom_toTopOf="@+id/btnCodSeguimiento"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAgregarRec" />
+    </LinearLayout>
+
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

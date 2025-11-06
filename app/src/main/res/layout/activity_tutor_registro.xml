@@ -5,6 +5,126 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.TutorRegistroActivity">
+    tools:context=".fragments.TutorFragment">
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="244dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edittext_redondeado"
+        android:backgroundTint="@color/fondoTituloOscuro"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="Registro"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/espaciadorTutorLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complete con sus datos"
+        android:textColor="@color/letraBlanca"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/espaciadorTutorLogin" />
+
+    <EditText
+        android:id="@+id/et_userTRegistro"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="56dp"
+        android:background="@color/cardview_dark_background"
+        android:backgroundTint="@color/fondoElementoOscuro"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="text"
+        android:textColor="@color/letraBlanca"
+        android:textColorHint="@color/letraGris"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:padding="2dp" />
+    <EditText
+        android:id="@+id/et_mailTRegistro"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="56dp"
+        android:background="@color/cardview_dark_background"
+        android:backgroundTint="@color/fondoElementoOscuro"
+        android:ems="10"
+        android:hint="Nombre de usuario"
+        android:inputType="text"
+        android:textColor="@color/letraBlanca"
+        android:textColorHint="@color/letraGris"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_userTRegistro"
+        android:padding="2dp" />
+
+    <EditText
+        android:id="@+id/et_passTRegistro"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/cardview_dark_background"
+        android:backgroundTint="@color/fondoElementoOscuro"
+        android:ems="10"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:textColor="@color/letraBlanca"
+        android:textColorHint="@color/letraGris"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_mailTRegistro"
+        android:padding="2dp" />
+
+    <EditText
+        android:id="@+id/et_passTRegistro2"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="64dp"
+        android:background="@color/cardview_dark_background"
+        android:backgroundTint="@color/fondoElementoOscuro"
+        android:ems="10"
+        android:hint="Repetir Contraseña"
+        android:inputType="textPassword"
+        android:textColor="@color/letraBlanca"
+        android:textColorHint="@color/letraGris"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_passTRegistro"
+        android:padding="2dp" />
+
+    <Button
+        android:id="@+id/btnRegistrarse"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="56dp"
+        android:backgroundTint="@color/naranjita"
+        android:text="Registrarse"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_passTRegistro2" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

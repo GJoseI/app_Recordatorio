@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/fondoElementoOscuro">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:weightSum="1"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txtTituloRecSeg"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/letraGris"
+                android:text="Nuevo Recordatorio"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/txtEstadoRecSeg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/letraGris"
+                android:text="Atendida"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:weightSum="1"
+                android:layout_margin="2dp">
+
+                <TextView
+                    android:padding="2dp"
+                    android:id="@+id/tvFechaSeguimiento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5/11/2025"
+                    android:textColor="@color/letraGris"
+                    android:textSize="16sp" />
+                <TextView
+                    android:padding="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/tvHoraSeguimiento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="19:00 pm"
+                    android:textColor="@color/letraGris"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
