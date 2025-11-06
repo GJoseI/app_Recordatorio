@@ -7,6 +7,7 @@
     android:layout_marginHorizontal="4dp"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="4dp"
+    android:backgroundTint="@color/fondoElementoOscuro"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
@@ -23,7 +24,7 @@
             android:text="Descripción del recordatorio"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#222" />
+            android:textColor="@color/letraGris" />
 
         <!-- Fecha y hora -->
         <LinearLayout
@@ -37,39 +38,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="L, M, X"
-                android:textColor="#555"
+                android:textColor="@color/letraGris"
                 android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvHora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8"
                 android:layout_marginStart="20dp"
-                android:textColor="#555"
+                android:text="8"
+                android:textColor="@color/letraGris"
                 android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/tvDosPuntos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=":"
-                android:textColor="#555"
-                android:textSize="14sp"/>
+                android:textColor="@color/letraGris"
+                android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/tvMinutos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="15"
-                android:textColor="#555"
-                android:textSize="14sp"/>
+                android:textColor="@color/letraGris"
+                android:textSize="14sp" />
+
             <TextView
                 android:id="@+id/tvMeridiem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:text="AM"
-                android:textColor="#555"
-                android:textSize="14sp"
-                android:layout_marginStart="5dp"/>
+                android:textColor="@color/letraGris"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Estado y botón -->
@@ -77,23 +81,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="6dp">
+            android:layout_marginTop="6dp"
+            android:weightSum="1">
 
             <Switch
                 android:id="@+id/sEstado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="alarmaSwitch"/>
-
+                android:onClick="alarmaSwitch"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1" />
             <ImageButton
                 android:id="@+id/btnEditar"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Editar"
-                android:layout_marginStart="300dp"
-                android:src="@android:drawable/ic_menu_edit"
-                card_view:tint="@color/black" />
+                android:src="@drawable/edit_24px"
+                android:scaleType="fitCenter"
+                card_view:tint="@color/letraGris" />
+            <ImageButton
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Eliminar"
+                android:src="@drawable/delete_24px"
+                android:scaleType="fitCenter"
+                card_view:tint="@color/letraGris"
+                />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

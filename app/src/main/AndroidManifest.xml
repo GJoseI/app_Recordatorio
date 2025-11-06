@@ -23,19 +23,23 @@
             android:exported="false" />
         <activity
             android:name=".activities.SeguimientoActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Oscuro"/>
         <activity
             android:name=".activities.VincularActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Oscuro"/>
         <activity
             android:name=".activities.TutorRegistroActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Oscuro"/>
         <activity
             android:name=".activities.TutorLogInActivity"
             android:exported="false" />
         <activity
             android:name=".activities.TutorMenuActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Oscuro"/>
         <activity
             android:name=".activities.RecordatoriosActivity"
             android:exported="false" />
@@ -44,7 +48,8 @@
             android:exported="false" />
         <activity
             android:name=".activities.CrearAlarmaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Oscuro"/>
         <activity
             android:name=".activities.MainActivity"
             android:exported="true"
