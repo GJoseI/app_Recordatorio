@@ -183,6 +183,13 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
 
 
     public void setImagenSeleccionada(Uri uri) {
+
+        FileUtil fu = new FileUtil();
+        if(imagenSeleccionadaUri!=null)
+        {
+            fu.borrarImagenAnterior(imagenSeleccionadaUri.toString());
+        }
+
         imagenSeleccionadaUri = uri;
         Log.e("URI en SET:",imagenSeleccionadaUri.toString());
         imgPreview.setVisibility(View.VISIBLE);
