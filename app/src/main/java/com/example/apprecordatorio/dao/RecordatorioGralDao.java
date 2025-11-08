@@ -101,15 +101,50 @@ public class RecordatorioGralDao {
                 r.setImagenUrl(cursor.getString(3));
                 lista.add(r);
             }
-            cursor.close();
+
         }catch (Exception e)
         {
             e.printStackTrace();
         }finally {
+            if (cursor != null) {
+                cursor.close();
+            }
             if(db!=null) {
                 db.close();
             }
         }
         return lista;
+    }
+
+    public Recordatorio readOne(int id) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        Recordatorio r = null;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+
+            cursor = db.rawQuery("SELECT * FROM recordatoriosGenerales WHERE id = ?", new String[]{String.valueOf(id)});
+
+
+            if (cursor.moveToFirst()) {
+                r = new Recordatorio();
+                r.setId(cursor.getInt(0));
+                r.setTitulo(cursor.getString(1));
+                r.setDescripcion(cursor.getString(2));
+                r.setImagenUrl(cursor.getString(3));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return r;
     }
 }

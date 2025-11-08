@@ -1,23 +1,18 @@
 package com.example.apprecordatorio.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,7 +24,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.apprecordatorio.R;
-import com.example.apprecordatorio.dao.RecordatorioGralDao;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
@@ -39,24 +33,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.zip.Inflater;
 
-public class AltaRecordatorioGeneral extends DialogFragment {
+public class ModificacionRecordatorioGeneral extends DialogFragment {
+
 
     private Uri imagenSeleccionadaUri;
     private ImageView imgPreview;
 
     private OnRecordatorioGuardadoListener listener;
 
-    private boolean imagenGuardada = false;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                Log.e("URI:",uri.toString());
 
+
+
+                Log.e("URI:",uri.toString());
                 try {
                     FileUtil fu = new FileUtil();
                     ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -94,34 +88,76 @@ public class AltaRecordatorioGeneral extends DialogFragment {
         Button btnGuardar = view.findViewById(R.id.btnGuardarDialogRg);
         Button btnImg = view.findViewById(R.id.btnImagenDialogRg);
         imgPreview = view.findViewById(R.id.ivDialogRg);
+        String viejaImagen;
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
 
+
+        ///  cargar los datos del recordatorio en la card
+        Bundle args = getArguments();
+        if (args != null) {
+            editTitulo.setText(args.getString("titulo"));
+            editContenido.setText(args.getString("descripcion"));
+
+             viejaImagen = args.getString("imagen");
+            if (viejaImagen != null && !viejaImagen.isEmpty()) {
+                Log.e("EN IF",viejaImagen);
+                imgPreview.setImageURI(Uri.parse(viejaImagen));
+                imgPreview.setVisibility(View.VISIBLE);
+            }
+
+        } else {
+            viejaImagen = null;
+        }
+
+
         btnImg.setOnClickListener(v -> agregarImg());
 
-        btnCancelar.setOnClickListener(v -> dialog.dismiss());
+        btnCancelar.setOnClickListener(v -> {
+
+            dialog.dismiss();
+        });
+
         btnGuardar.setOnClickListener(v -> {
+
             String titulo = editTitulo.getText().toString().trim();
             String contenido = editContenido.getText().toString().trim();
-            if (!titulo.isEmpty()) {
+
+            if (!titulo.isEmpty())
+            {
                 RecordatorioGralNegocio neg = new RecordatorioGralNegocio(getContext());
                 Recordatorio r = new Recordatorio();
+
+                if(args!=null)
+                {
+                    r.setId(args.getInt("id"));
+                }
                 r.setTitulo(titulo);
                 r.setDescripcion(contenido);
+
+
                 if (imagenSeleccionadaUri != null) {
+
+                    if (viejaImagen != null && !viejaImagen.equals(imagenSeleccionadaUri.toString())) {
+                        FileUtil fu = new FileUtil();
+                        fu.borrarImagenAnterior(viejaImagen);
+                    }
                     r.setImagenUrl(imagenSeleccionadaUri.toString());
                     Log.e("URI EN R:","ruta: "+r.getImagenUrl());
+                }else {
+                    r.setImagenUrl(viejaImagen);
                 }
 
 
-                if(neg.add(r)>0)
+                if(neg.update(r)>0)
                 {
-                    imagenGuardada = true;
-                    Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(),"Actualizado con exito!",Toast.LENGTH_SHORT).show();
                     if (listener != null) listener.onRecordatorioGuardado();
-                }
+                }else {Log.e("UPDATE FALLO","NO SE MODIFICARON REGISTROS.");}
+
                 dialog.dismiss();
+
             } else {
                 editTitulo.setError("Ingrese un título");
             }
@@ -137,11 +173,11 @@ public class AltaRecordatorioGeneral extends DialogFragment {
 
     public void agregarImg()
     {
-            pickImageLauncher.launch(
-                    new PickVisualMediaRequest.Builder()
-                            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                            .build()
-            );
+        pickImageLauncher.launch(
+                new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build()
+        );
 
     }
 
@@ -157,16 +193,11 @@ public class AltaRecordatorioGeneral extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         FileUtil fu = new FileUtil();
-        if(imagenSeleccionadaUri!=null && !imagenGuardada)
+        if(imagenSeleccionadaUri!=null)
         {
             fu.borrarImagenAnterior(imagenSeleccionadaUri.toString());
         }
 
-        Log.d("EN DISMIS","SE EJECUTO");
-
     }
-
-
-
 
 }
