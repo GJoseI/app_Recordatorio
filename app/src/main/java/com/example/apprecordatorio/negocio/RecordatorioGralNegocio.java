@@ -32,5 +32,7 @@ public class RecordatorioGralNegocio {
     {
         return dao.delete(r);
     }
+
+    public Recordatorio readOne(int id){return dao.readOne(id);}
 }
 

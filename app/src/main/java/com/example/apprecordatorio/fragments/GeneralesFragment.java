@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
+import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
@@ -91,6 +93,10 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
                     confirmarBorrado(r,neg,inflater);
                 });
 
+                btnEditar.setOnClickListener(v->{
+                    editarRecordatorio(r);
+                });
+
                 txtTitulo.setText(r.getTitulo());
                 txtDescripcion.setText(r.getDescripcion());
                 String imgUri = r.getImagenUrl();
@@ -148,7 +154,20 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
     }
 
     public void editarRecordatorio(Recordatorio r)
-    {}
+    {
+        ModificacionRecordatorioGeneral dialog = new ModificacionRecordatorioGeneral();
+        dialog.setOnRecordatorioGuardadoListener(this);
+
+        Bundle args = new Bundle();
+        args.putInt("id", r.getId());
+        args.putString("titulo", r.getTitulo());
+        args.putString("descripcion", r.getDescripcion());
+        args.putString("imagen", r.getImagenUrl());
+        dialog.setArguments(args);
+
+
+        dialog.show(getChildFragmentManager(), "Editar Recordatorio");
+    }
     public void borrarRecordatorio(Recordatorio r, RecordatorioGralNegocio neg, LayoutInflater inflater)
     {
         if(neg.delete(r)>0)
