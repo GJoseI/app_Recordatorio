@@ -47,9 +47,6 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-
-
-
                 Log.e("URI:",uri.toString());
                 try {
                     FileUtil fu = new FileUtil();
@@ -71,8 +68,6 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             });
 
     @NonNull
