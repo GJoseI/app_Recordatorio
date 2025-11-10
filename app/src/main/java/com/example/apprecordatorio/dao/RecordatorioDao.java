@@ -35,6 +35,7 @@ public class RecordatorioDao {
             valores.put("tono",a.getTono());
             valores.put("fecha",a.getFecha().toString());
             valores.put("hora",a.getHora());
+            valores.put("estado",true);
 
             resultado = db.insert("recordatorios", null, valores);
         }catch (Exception e)
@@ -112,6 +113,7 @@ public class RecordatorioDao {
                 a.setTono(cursor.getString(4));
                 a.setFecha(LocalDate.parse(cursor.getString(5)));
                 a.setHora(cursor.getString(6));
+                a.setEstado( cursor.getInt(7)==1);
                 lista.add(a);
             }
 

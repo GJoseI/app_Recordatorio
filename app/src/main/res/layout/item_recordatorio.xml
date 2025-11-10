@@ -7,7 +7,6 @@
     android:layout_marginHorizontal="4dp"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="4dp"
-    android:backgroundTint="@color/fondoElementoOscuro"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
@@ -88,7 +87,6 @@
                 android:id="@+id/sEstado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="alarmaSwitch"
                 />
             <View
                 android:layout_width="0dp"
@@ -114,32 +112,5 @@
                 card_view:tint="@color/letraGris"
                 />
         </LinearLayout>
-    </LinearLayout>
-    <!-- Contenido expandible -->
-    <LinearLayout
-        android:id="@+id/layoutExpandibleRec"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/txtDescripcionRec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/letraGris"
-            android:textSize="15sp"
-            android:lineSpacingExtra="2dp"
-            android:text="Descripción del recordatorio"
-            android:paddingBottom="8dp"/>
-
-        <ImageView
-            android:id="@+id/imgRec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:visibility="gone"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

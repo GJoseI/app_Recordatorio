@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -34,6 +35,7 @@ import com.example.apprecordatorio.Receivers.AlarmReceiver;
 import com.example.apprecordatorio.activities.CrearAlarmaActivity;
 import com.example.apprecordatorio.dialogs.AltaRecordatorio;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
+import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
@@ -63,16 +65,10 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_alarmas, container, false);
 
-
-        ///  cargando ejemplo de card
          containerRecordatorios = view.findViewById(R.id.containerRecordatoriosAlarmas);
-
-       View card =  inflater.inflate(R.layout.item_recordatorio,containerRecordatorios,false);
-        containerRecordatorios.addView(card);
 
         cargarRecordatorios();
         return view;
@@ -255,64 +251,28 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 TextView txtTitulo = cardView.findViewById(R.id.tvTitulo);
                 ImageButton btnBorrar = cardView.findViewById(R.id.btnBorrar);
                 ImageButton btnEditar = cardView.findViewById(R.id.btnEditar);
-                TextView txtDescripcion = cardView.findViewById(R.id.txtDescripcionRec);
-                LinearLayout layoutExpandible = cardView.findViewById(R.id.layoutExpandibleRec);
-                ImageView imgRec = cardView.findViewById(R.id.imgRec);
+                Switch sw = cardView.findViewById(R.id.sEstado);
 
                 btnBorrar.setOnClickListener(v ->{
                     confirmarBorrado(r,neg);
                 });
 
-                /*
+
                 btnEditar.setOnClickListener(v->{
                     editarRecordatorio(r);
-                });*/
+                });
 
                 txtTitulo.setText(r.getTitulo());
-                txtDescripcion.setText(r.getDescripcion());
-                String imgUri = r.getImagenUrl();
 
-                if(imgUri!=null)
+                if(r.isEstado())
                 {
-                    Log.e("URI:",imgUri);
-                    imgRec.setImageURI(Uri.parse(imgUri));
+                    Log.d("ACTIVADO","EL ESTADO ES TRUE");
+                    sw.setActivated(true);
+                    cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
+                    txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                    btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                    btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                 }
-
-
-                cardView.setOnClickListener(v -> {
-
-                    if (layoutExpandible.getVisibility() != View.VISIBLE) {
-
-
-                        layoutExpandible.setVisibility(View.VISIBLE);
-
-
-                        if(r.getImagenUrl()!=null)
-                        {
-                            imgRec.setVisibility(View.VISIBLE);
-                        }
-
-
-
-
-                        cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
-                        txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                        txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-
-                        btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                        btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                    } else {
-
-                        layoutExpandible.setVisibility(View.GONE);
-
-                        cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
-                        txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
-                        txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
-
-                        btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
-                        btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
-                    }
-                });
 
                 containerRecordatorios.addView(cardView);
             }
@@ -336,5 +296,24 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 .setPositiveButton("Eliminar", (dialog, which) -> borrarRecordatorio(recordatorio,neg))
                 .setNegativeButton("Cancelar", null)
                 .show();
+    }
+
+    public void editarRecordatorio(Alarma r)
+    {
+        ModificacionRecordatorioGeneral dialog = new ModificacionRecordatorioGeneral();
+        dialog.setOnRecordatorioGuardadoListener(this);
+
+        Bundle args = new Bundle();
+        args.putInt("id", r.getId());
+        args.putString("titulo", r.getTitulo());
+        args.putString("descripcion", r.getDescripcion());
+        args.putString("imagen", r.getImagenUrl());
+        args.putString("fecha",r.getFecha().toString());
+        args.putString("hora",r.getHora());
+        args.putString("tono",r.getTono());
+        dialog.setArguments(args);
+
+
+        dialog.show(getChildFragmentManager(), "Editar Alarma");
     }
 }
