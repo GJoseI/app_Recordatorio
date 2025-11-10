@@ -15,7 +15,13 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
             String query = "create table recordatoriosGenerales(id integer primary key autoincrement, titulo text, contenido text, " +
                     "imagen text)";
+
+            String query2 = "create table recordatorios(id integer primary key autoincrement, titulo text, contenido text," +
+                   "imagen text, tono text, fecha date,  hora text)";
+
+            db.execSQL(query2);
             db.execSQL(query);
+
     }
 
     @Override

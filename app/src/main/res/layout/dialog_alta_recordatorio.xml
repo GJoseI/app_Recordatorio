@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@color/fondoOscuro"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CrearAlarmaActivity">
+
+    <!-- Título superior -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="244dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_edittext_redondeado"
+        android:backgroundTint="@color/fondoTituloOscuro"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="@string/tituloNuevaAlarma"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Contenido scrollable -->
+    <ScrollView
+        android:id="@+id/svNuevaAlarma"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Layout interno -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingBottom="30dp">
+
+            <!-- Picker de hora -->
+            <TimePicker
+                android:id="@+id/tpHora"
+                android:layout_width="273dp"
+                android:layout_height="159dp"
+                android:layout_marginTop="44dp"
+                android:amPmTextColor="@color/letraBlanca"
+                android:background="@color/fondoElementoOscuro"
+                android:headerBackground="@color/material_dynamic_neutral50"
+                android:textColor="@color/letraBlanca"
+                android:theme="@style/Theme.Oscuro"
+                android:timePickerMode="spinner" />
+
+            <!-- Días -->
+            <LinearLayout
+                android:id="@+id/layoutDias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ToggleButton
+                    android:id="@+id/btDom"
+                    android:layout_width="48dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/btn_dia"
+                    android:textColor="@color/toggle_color"
+                    android:textOff="@string/domAlarma"
+                    android:textOn="@string/domAlarma" />
+
+                <ToggleButton
+                    android:id="@+id/btLu"
+                    android:layout_width="48dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/btn_dia"
+                    android:textColor="@color/toggle_color"
+                    android:textOff="@string/luAlarma"
+                    android:textOn="@string/luAlarma" />
+
+                <ToggleButton
+                    android:id="@+id/btMar"
+                    android:layout_width="48dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/btn_dia"
+                    android:textColor="@color/toggle_color"
+                    android:textOff="@string/marAlarma"
+                    android:textOn="@string/marAlarma" />
+
+                <ToggleButton
+                    android:id="@+id/btMie"
+                    android:layout_width="48dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/btn_dia"
+                    android:textColor="@color/toggle_color"
+                    android:textOff="@string/mieAlarma"
+                    android:textOn="@string/mieAlarma" />
+
+                <ToggleButton
+                    android:id="@+id/btJue"
+                    android:layout_width="48dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/btn_dia"
+                    android:textColor="@color/toggle_color"
+                    android:textOff="@string/jueAlarma"
+                    android:textOn="@string/jueAlarma" />
+
+                <ToggleButton
+                    android:id="@+id/btVie"
+                    android:layout_width="48dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/btn_dia"
+                    android:textColor="@color/toggle_color"
+                    android:textOff="@string/vieAlarma"
+                    android:textOn="@string/vieAlarma" />
+
+                <ToggleButton
+                    android:id="@+id/btSa"
+                    android:layout_width="48dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/btn_dia"
+                    android:textColor="@color/toggle_color"
+                    android:textOff="@string/saAlarma"
+                    android:textOn="@string/saAlarma" />
+            </LinearLayout>
+
+            <!-- Selector de tono -->
+            <Spinner
+                android:id="@+id/spAlarmaTono"
+                android:layout_width="315dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/spinner_background" />
+
+            <!-- Botón para imagen -->
+            <Button
+                android:id="@+id/btnSeleccionarImagenAlarma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:backgroundTint="@color/design_default_color_secondary_variant"
+                android:text="AGREGAR IMAGEN (OPCIONAL)" />
+
+            <!-- Imagen opcional -->
+            <ImageView
+                android:id="@+id/ivDialog"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
+
+            <!-- Título -->
+            <EditText
+                android:id="@+id/etTitulo"
+                android:layout_width="289dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_edittext_redondeado"
+                android:backgroundTint="@color/fondoElementoOscuro"
+                android:hint="Titulo"
+                android:inputType="text"
+                android:padding="4dp"
+                android:textColor="@color/letraBlanca"
+                android:textColorHint="@color/letraGris" />
+
+            <!-- Descripción -->
+            <EditText
+                android:id="@+id/etDesc"
+                android:layout_width="289dp"
+                android:layout_height="103dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_edittext_redondeado"
+                android:backgroundTint="@color/fondoElementoOscuro"
+                android:gravity="start"
+                android:hint="Contenido"
+                android:inputType="textMultiLine"
+                android:padding="4dp"
+                android:textColor="@color/letraBlanca"
+                android:textColorHint="@color/letraGris" />
+
+            <!-- Botones finales -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCancelar"
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="@color/material_dynamic_neutral30"
+                    android:text="@string/btnCancelar" />
+
+                <Button
+                    android:id="@+id/btnGuardar"
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="40dp"
+                    android:backgroundTint="@android:color/holo_green_dark"
+                    android:text="@string/btnCrear" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

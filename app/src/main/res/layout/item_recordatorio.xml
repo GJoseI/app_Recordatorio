@@ -18,7 +18,7 @@
 
         <!-- Descripción -->
         <TextView
-            android:id="@+id/tvDescripcion"
+            android:id="@+id/tvTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Descripción del recordatorio"
@@ -104,6 +104,7 @@
                 android:scaleType="fitCenter"
                 card_view:tint="@color/letraGris" />
             <ImageButton
+                android:id="@+id/btnBorrar"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -113,5 +114,32 @@
                 card_view:tint="@color/letraGris"
                 />
         </LinearLayout>
+    </LinearLayout>
+    <!-- Contenido expandible -->
+    <LinearLayout
+        android:id="@+id/layoutExpandibleRec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/txtDescripcionRec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/letraGris"
+            android:textSize="15sp"
+            android:lineSpacingExtra="2dp"
+            android:text="Descripción del recordatorio"
+            android:paddingBottom="8dp"/>
+
+        <ImageView
+            android:id="@+id/imgRec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
