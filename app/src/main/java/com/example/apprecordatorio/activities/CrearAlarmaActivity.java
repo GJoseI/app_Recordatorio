@@ -1,16 +1,21 @@
 package com.example.apprecordatorio.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -34,27 +39,52 @@ public class CrearAlarmaActivity extends AppCompatActivity {
     private EditText etDesc;
     private Button btCancelar;
     private Button btGuardar;
+    private Switch swModo;
+    private View layoutPrincipal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences prefs = getSharedPreferences("config", MODE_PRIVATE);
+        boolean modoClaro = prefs.getBoolean("modo_claro", true);
+        AppCompatDelegate.setDefaultNightMode(
+                modoClaro ? AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES
+        );
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_crear_alarma);
+
         innitVars();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // 🟢 Inicializar el switch de modo claro/oscuro
+        swModo = findViewById(R.id.swModo);
+        swModo.setChecked(modoClaro);
+
+        swModo.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Guardar preferencia
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("modo_claro", isChecked);
+            editor.apply();
+
+            // Cambiar el modo visual
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES
+            );
+        });
+
         btGuardar.setOnClickListener(view -> guardarAlarma(agregarDias()));
         btCancelar.setOnClickListener(view -> volverAtras());
 
-
         Spinner spinner = findViewById(R.id.spAlarmaTono);
-        String tonos[] = {"tono 1: ejemplo","tono 2: ejemplo"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.spinner_item,tonos);
-        //adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        String tonos[] = {"tono 1: ejemplo", "tono 2: ejemplo"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, tonos);
         spinner.setAdapter(adapter);
 
     }
@@ -65,14 +95,18 @@ public class CrearAlarmaActivity extends AppCompatActivity {
     }
 
     public void guardarAlarma(List<ToggleButton> botonesDias){
-        //Codigo para guardar alarma
-        //probablemente un get para la hora elegida
-        ///tpHora.getHour();
-        //otro para los dias
-        ///obtenerDiasSeleccionados(botonesDias);
-        
-        //agregar de alguna manera la imagen
-        //y agregar el texto
+        int hora = tpHora.getHour();
+        int minuto = tpHora.getMinute();
+        String descripcion = etDesc.getText() != null ? etDesc.getText().toString() : "";
+        String tono = spAlarmaTono.getSelectedItem() != null ? spAlarmaTono.getSelectedItem().toString() : "";
+        List<String> dias = obtenerDiasSeleccionados(botonesDias);
+
+        String mensaje = "Alarma guardada a las " + hora + ":" + String.format("%02d", minuto)
+                + "\nDías: " + dias
+                + "\nTono: " + tono
+                + "\nDescripción: " + descripcion;
+
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
 
     public void innitVars(){

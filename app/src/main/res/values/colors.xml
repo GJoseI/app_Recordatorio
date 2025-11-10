@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="fondoOscuro">#143642</color>
+    <color name ="fondoClaro">#B3B3B3</color>
     <color name="fondoTituloOscuro">#102B34</color>
     <color name="fondoElementoOscuro">#254753</color>
     <color name="fondoElementoSeleccionado">#336273</color>
