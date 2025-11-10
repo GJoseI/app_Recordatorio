@@ -10,7 +10,7 @@ public class Recordatorio {
     private String imagenUrl;
     private int pacienteDNI;
     private String descripcion;
-    private boolean estado;
+
 
     private String titulo;
 
@@ -28,7 +28,6 @@ public class Recordatorio {
 
     public Recordatorio(boolean estado, String descripcion,
                         int id, String imagenUrl, int pacienteDNI, int tutorDNI, String titulo ) {
-        this.estado = estado;
         this.descripcion = descripcion;
         this.id = id;
         this.imagenUrl = imagenUrl;
@@ -69,13 +68,6 @@ public class Recordatorio {
         this.id = id;
     }
 
-    public boolean isEstado() {
-        return estado;
-    }
-
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
 
     public String getDescripcion() {
         return descripcion;
