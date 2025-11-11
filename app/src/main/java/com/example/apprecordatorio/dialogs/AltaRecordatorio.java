@@ -13,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -84,6 +87,16 @@ public class AltaRecordatorio extends DialogFragment {
         Button btnGuardar = view.findViewById(R.id.btnGuardar);
         Button btnImg = view.findViewById(R.id.btnSeleccionarImagenAlarma);
         imgPreview = view.findViewById(R.id.ivDialog);
+        TimePicker timePicker = view.findViewById(R.id.tpHora);
+
+        ToggleButton domingo = view.findViewById(R.id.btDom);
+        ToggleButton lunes = view.findViewById(R.id.btLu);
+        ToggleButton martes = view.findViewById(R.id.btMar);
+        ToggleButton miercoles = view.findViewById(R.id.btMie);
+        ToggleButton jueves = view.findViewById(R.id.btJue);
+        ToggleButton viernes = view.findViewById(R.id.btVie);
+        ToggleButton sabado = view.findViewById(R.id.btSa);
+
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
@@ -97,17 +110,29 @@ public class AltaRecordatorio extends DialogFragment {
             if (!titulo.isEmpty()) {
                 RecordatorioNegocio neg = new RecordatorioNegocio(getContext());
                 Alarma r = new Alarma();
+
                 r.setTitulo(titulo);
                 r.setDescripcion(contenido);
                 r.setFecha(LocalDate.now());
-                r.setHora("11");
+                r.setHora(timePicker.getHour());
+                r.setMinuto(timePicker.getMinute());
+
+                if(domingo.isChecked())r.setDomingo(true);
+                if(lunes.isChecked())r.setLunes(true);
+                if(martes.isChecked())r.setMartes(true);
+                if(miercoles.isChecked())r.setMiercoles(true);
+                if(jueves.isChecked())r.setJueves(true);
+                if(viernes.isChecked())r.setViernes(true);
+                if(sabado.isChecked())r.setSabado(true);
+
+
                 if (imagenSeleccionadaUri != null) {
                     r.setImagenUrl(imagenSeleccionadaUri.toString());
                     Log.e("URI EN R:","ruta: "+r.getImagenUrl());
                 }
 
 
-                if(neg.add(r)>0)
+                if(neg.add(r, requireContext())>0)
                 {
                     imagenGuardada = true;
                     Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();

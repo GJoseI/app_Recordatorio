@@ -35,6 +35,14 @@ public class RecordatorioDao {
             valores.put("tono",a.getTono());
             valores.put("fecha",a.getFecha().toString());
             valores.put("hora",a.getHora());
+            valores.put("minuto",a.getMinuto());
+            valores.put("domingo",a.isDomingo());
+            valores.put("lunes",a.isLunes());
+            valores.put("martes",a.isMartes());
+            valores.put("miercoles",a.isMiercoles());
+            valores.put("jueves",a.isJueves());
+            valores.put("viernes",a.isViernes());
+            valores.put("sabado",a.isSabado());
             valores.put("estado",true);
 
             resultado = db.insert("recordatorios", null, valores);
@@ -64,6 +72,16 @@ public class RecordatorioDao {
             valores.put("tono",a.getTono());
             valores.put("fecha",a.getFecha().toString());
             valores.put("hora",a.getHora());
+            valores.put("minuto",a.getMinuto());
+            valores.put("domingo",a.isDomingo());
+            valores.put("lunes",a.isLunes());
+            valores.put("martes",a.isMartes());
+            valores.put("miercoles",a.isMiercoles());
+            valores.put("jueves",a.isJueves());
+            valores.put("viernes",a.isViernes());
+            valores.put("sabado",a.isSabado());
+            valores.put("estado",a.isEstado());
+
 
             resultado = db.update("recordatorios", valores, "id = ?", new String[]{String.valueOf(a.getId())});
         }catch (Exception e)
@@ -112,8 +130,16 @@ public class RecordatorioDao {
                 a.setImagenUrl(cursor.getString(3));
                 a.setTono(cursor.getString(4));
                 a.setFecha(LocalDate.parse(cursor.getString(5)));
-                a.setHora(cursor.getString(6));
-                a.setEstado( cursor.getInt(7)==1);
+                a.setHora(cursor.getInt(6));
+                a.setMinuto(cursor.getInt(7));
+                a.setDomingo(cursor.getInt(8)==1);
+                a.setLunes(cursor.getInt(9)==1);
+                a.setMartes(cursor.getInt(10)==1);
+                a.setMiercoles(cursor.getInt(11)==1);
+                a.setJueves(cursor.getInt(12)==1);
+                a.setViernes(cursor.getInt(13)==1);
+                a.setSabado(cursor.getInt(14)==1);
+                a.setEstado( cursor.getInt(15)==1);
                 lista.add(a);
             }
 

@@ -17,7 +17,9 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
                     "imagen text)";
 
             String query2 = "create table recordatorios(id integer primary key autoincrement, titulo text, contenido text," +
-                   "imagen text, tono text, fecha date,  hora text, estado integer)";
+                   "imagen text, tono text, fecha date,  hora int, minuto int," +
+                    "domingo int, lunes int, martes int, miercoles int," +
+                    "jueves int, viernes int, sabado int, estado integer)";
 
             db.execSQL(query2);
             db.execSQL(query);

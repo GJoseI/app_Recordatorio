@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondoTituloOscuro"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_margin="20dp"
+        android:id="@+id/txtMensaje"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp"/>
+    <ImageView
+        android:id="@+id/ivAlarmaDisparada"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btnDetener"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:backgroundTint="@color/naranjita"
+        android:padding="12dp"
+        android:text="Detener" />
+</LinearLayout>

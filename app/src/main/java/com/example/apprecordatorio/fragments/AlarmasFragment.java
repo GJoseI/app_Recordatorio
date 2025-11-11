@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.Adapters.RecordatorioAdapter;
@@ -267,13 +268,12 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 if(r.isEstado())
                 {
                     Log.d("ACTIVADO","EL ESTADO ES TRUE");
-                    sw.setActivated(true);
+                    sw.setChecked(true);
                     cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
                     txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                     btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                     btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                 }
-
                 containerRecordatorios.addView(cardView);
             }
         }
@@ -309,7 +309,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         args.putString("descripcion", r.getDescripcion());
         args.putString("imagen", r.getImagenUrl());
         args.putString("fecha",r.getFecha().toString());
-        args.putString("hora",r.getHora());
+        args.putInt("hora",r.getHora());
         args.putString("tono",r.getTono());
         dialog.setArguments(args);
 
