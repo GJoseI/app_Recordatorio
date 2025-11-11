@@ -28,7 +28,7 @@ public class AlarmaUtil {
 
     private void programarAlarma(Context context, Alarma r, int diaSemana) {
 
-        // 🧩 Paso 5 — Chequear permiso antes de programar
+        // Chequear permiso antes de programar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (!am.canScheduleExactAlarms()) {
@@ -40,7 +40,7 @@ public class AlarmaUtil {
             }
         }
 
-        Log.d("PROG ALARM","ALARMA PROGRAMANDO PARA DIA:"+diaSemana+" "+r.getHora()+" "+r.getMinuto());
+        Log.d("PROG ALARM","PROGRAMANDO ALARMA PARA DIA:"+diaSemana+" "+r.getHora()+" "+r.getMinuto());
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, diaSemana);
         calendar.set(Calendar.HOUR_OF_DAY, r.getHora());
@@ -67,12 +67,6 @@ public class AlarmaUtil {
         );
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-       /* alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY * 7, // semanal
-                pendingIntent
-        );*/
 
         alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,

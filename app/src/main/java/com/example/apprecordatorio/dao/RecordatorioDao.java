@@ -117,7 +117,6 @@ public class RecordatorioDao {
         List<Alarma> lista = new ArrayList<>();
         SQLiteDatabase db = null;
         Cursor cursor = null;
-
         try {
             db = dbHelper.getReadableDatabase();
 
@@ -142,7 +141,6 @@ public class RecordatorioDao {
                 a.setEstado( cursor.getInt(15)==1);
                 lista.add(a);
             }
-
         }catch (Exception e)
         {
             e.printStackTrace();

@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ import com.example.apprecordatorio.Receivers.AlarmReceiver;
 import com.example.apprecordatorio.activities.CrearAlarmaActivity;
 import com.example.apprecordatorio.dialogs.AltaRecordatorio;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
+import com.example.apprecordatorio.dialogs.ModificacionRecordatorio;
 import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Recordatorio;
@@ -184,7 +186,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
                 PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), dia, intent, PendingIntent.FLAG_IMMUTABLE);
 
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi);
+                //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi);
             }
         }
     }
@@ -257,6 +259,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 TextView tvHora = cardView.findViewById(R.id.tvHora);
                 TextView tvMinuto = cardView.findViewById(R.id.tvMinutos);
                 TextView dosPuntos = cardView.findViewById(R.id.tvDosPuntos);
+
 
                 tvHora.setText(String.valueOf(r.getHora()));
                 tvMinuto.setText(String.valueOf(r.getMinuto()));
@@ -359,7 +362,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
     public void editarRecordatorio(Alarma r)
     {
-        ModificacionRecordatorioGeneral dialog = new ModificacionRecordatorioGeneral();
+        ModificacionRecordatorio dialog = new ModificacionRecordatorio();
         dialog.setOnRecordatorioGuardadoListener(this);
 
         Bundle args = new Bundle();
@@ -369,7 +372,15 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         args.putString("imagen", r.getImagenUrl());
         args.putString("fecha",r.getFecha().toString());
         args.putInt("hora",r.getHora());
+        args.putInt("minuto",r.getMinuto());
         args.putString("tono",r.getTono());
+        args.putBoolean("domingo",r.isDomingo());
+        args.putBoolean("lunes",r.isLunes());
+        args.putBoolean("martes",r.isMartes());
+        args.putBoolean("miercoles",r.isMiercoles());
+        args.putBoolean("jueves",r.isJueves());
+        args.putBoolean("viernes",r.isViernes());
+        args.putBoolean("sabado",r.isSabado());
         dialog.setArguments(args);
 
 

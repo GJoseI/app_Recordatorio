@@ -19,7 +19,6 @@ public class RecordatorioNegocio {
         dao = new RecordatorioDao(context);
         au = new AlarmaUtil();
     }
-
     public List<Alarma> readAll()
     {
         return dao.readAll();
@@ -30,9 +29,17 @@ public class RecordatorioNegocio {
         if(resultado>0) au.programarAlarmas(context, r);
         return resultado;
     }
-    public int update(Alarma r)
+    public int update(Alarma r,Context context)
     {
-        return dao.update(r);
+        au.cancelarAlarmas(context,r);
+
+        int resultado =  dao.update(r);
+
+        if (resultado>0)
+        {
+            au.programarAlarmas(context,r);
+        }
+        return resultado;
     }
     public int delete(Alarma r)
     {

@@ -10,14 +10,12 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -33,7 +31,6 @@ import androidx.fragment.app.DialogFragment;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
-import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
 import com.example.apprecordatorio.negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.util.FileUtil;
 
@@ -41,7 +38,7 @@ import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AltaRecordatorio extends DialogFragment {
+public class ModificacionRecordatorio extends DialogFragment {
 
     private Uri imagenSeleccionadaUri;
     private ImageView imgPreview;
@@ -100,6 +97,7 @@ public class AltaRecordatorio extends DialogFragment {
         ToggleButton jueves = view.findViewById(R.id.btJue);
         ToggleButton viernes = view.findViewById(R.id.btVie);
         ToggleButton sabado = view.findViewById(R.id.btSa);
+        String viejaImagen;
 
         Spinner spTono = view.findViewById(R.id.spAlarmaTono);
         String[] nombresTonos = {"Terraria", "Age of Empires"};
@@ -110,10 +108,49 @@ public class AltaRecordatorio extends DialogFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spTono.setAdapter(adapter);
 
+
+        /// cargar alarma
+
+        Bundle args = getArguments();
+        if (args != null) {
+            editTitulo.setText(args.getString("titulo"));
+
+            domingo.setChecked(args.getBoolean("domingo"));
+            lunes.setChecked(args.getBoolean("lunes"));
+            martes.setChecked(args.getBoolean("martes"));
+            miercoles.setChecked(args.getBoolean("miercoles"));
+            jueves.setChecked(args.getBoolean("jueves"));
+            viernes.setChecked(args.getBoolean("viernes"));
+            sabado.setChecked(args.getBoolean("sabado"));
+
+            String desc = args.getString("descripcion");
+            if(desc!=null)editContenido.setText(desc);
+
+            timePicker.setHour(args.getInt("hora"));
+            timePicker.setMinute(args.getInt("minuto"));
+
+            for (int i = 0; i < recursosTonos.length; i++) {
+                String tonoArmado = "android.resource://" + requireContext().getPackageName() + "/" + recursosTonos[i];
+                if (tonoArmado.equals(args.getString("tono"))) {
+                    spTono.setSelection(i);  //
+                    break;
+                }
+            }
+
+            viejaImagen = args.getString("imagen");
+            if (viejaImagen != null && !viejaImagen.isEmpty()) {
+                Log.e("EN IF",viejaImagen);
+                imgPreview.setImageURI(Uri.parse(viejaImagen));
+                imgPreview.setVisibility(View.VISIBLE);
+            }
+        }else
+        {
+            viejaImagen = null;
+        }
+
+
         builder.setView(view);
         AlertDialog dialog = builder.create();
-
-        btnImg.setOnClickListener(v -> agregarImg());
 
         spTono.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             MediaPlayer mediaPlayer;
@@ -128,6 +165,7 @@ public class AltaRecordatorio extends DialogFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+        btnImg.setOnClickListener(v -> agregarImg());
 
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
         btnGuardar.setOnClickListener(v -> {
@@ -137,11 +175,17 @@ public class AltaRecordatorio extends DialogFragment {
                 RecordatorioNegocio neg = new RecordatorioNegocio(getContext());
                 Alarma r = new Alarma();
 
+                if(args!=null)
+                {
+                    r.setId(args.getInt("id"));
+                }
+
                 r.setTitulo(titulo);
                 r.setDescripcion(contenido);
                 r.setFecha(LocalDate.now());
                 r.setHora(timePicker.getHour());
                 r.setMinuto(timePicker.getMinute());
+                r.setEstado(true);
 
                 if(domingo.isChecked())r.setDomingo(true);
                 if(lunes.isChecked())r.setLunes(true);
@@ -159,15 +203,22 @@ public class AltaRecordatorio extends DialogFragment {
                 r.setTono(tonoUri.toString());
 
                 if (imagenSeleccionadaUri != null) {
+
+                    if (viejaImagen != null && !viejaImagen.equals(imagenSeleccionadaUri.toString())) {
+                        FileUtil fu = new FileUtil();
+                        fu.borrarImagenAnterior(viejaImagen);
+                    }
                     r.setImagenUrl(imagenSeleccionadaUri.toString());
                     Log.e("URI EN R:","ruta: "+r.getImagenUrl());
+                }else {
+                    r.setImagenUrl(viejaImagen);
                 }
 
 
-                if(neg.add(r, requireContext())>0)
+                if(neg.update(r, requireContext())>0)
                 {
                     imagenGuardada = true;
-                    Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(),"Modificado con exito!",Toast.LENGTH_SHORT).show();
                     if (listener != null) listener.onRecordatorioGuardado();
                 }
                 dialog.dismiss();
@@ -221,29 +272,4 @@ public class AltaRecordatorio extends DialogFragment {
         Log.d("EN DISMIS","SE EJECUTO");
 
     }
-/*
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            // Ocupa casi toda la pantalla (por ejemplo, 90% del ancho y 85% del alto)
-            int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.98);
-            int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
-            getDialog().getWindow().setLayout(width, height);
-        }
-    }*/
-/*
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            getDialog().getWindow().setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-            );
-            getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
-    }
-*/
-
 }

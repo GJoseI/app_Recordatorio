@@ -41,6 +41,7 @@ public class AlarmaActivity extends AppCompatActivity {
         String imagenUri = getIntent().getStringExtra("imagen");
 
 
+        String tono = getIntent().getStringExtra("tono");
 
         if(imagenUri!=null)
         {
@@ -54,7 +55,7 @@ public class AlarmaActivity extends AppCompatActivity {
         btnDetener.setOnClickListener(v -> detenerAlarma());
 
         // Reproducir sonido
-        mediaPlayer = MediaPlayer.create(this, R.raw.terrariasounds);
+        mediaPlayer = MediaPlayer.create(this, Uri.parse(tono));
         //mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
