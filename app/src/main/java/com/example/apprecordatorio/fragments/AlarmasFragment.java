@@ -121,109 +121,8 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
            //codigo editar rec
         });
          */
-
-
-
-
-
-
     }
 
-
-    private void alarmaSwitch(View view){
-        if (!(view instanceof Switch)) return;
-
-        Switch sw = (Switch) view;
-        if(sw.isChecked()){
-            Toast.makeText(this.getContext(), "ALARMA ENCENDIDA", Toast.LENGTH_SHORT).show();
-            crearAlarmas(obtenerDias(), Integer.parseInt(tvHora.getText().toString()), Integer.parseInt(tvMinuto.getText().toString()));
-
-        }
-        else {
-            Toast.makeText(this.getContext(), "ALARMA APAGADA", Toast.LENGTH_SHORT).show();
-            cancelarAlarma((int) view.getTag());
-        }
-    }
-
-    private void crearAlarmas(List<Integer> diasObtenidos, int hora, int minutos){
-        if(diasObtenidos.size() == 7){
-            Calendar calendar = Calendar.getInstance();
-
-            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(tvHora.getText().toString()));
-            calendar.set(Calendar.MINUTE, Integer.parseInt(tvMinuto.getText().toString()));
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-
-            long time = calendar.getTimeInMillis();
-
-            if (System.currentTimeMillis() > time) {
-                time += 24*60*60*1000;
-            }
-
-            Intent intent = new Intent(AlarmasFragment.this.getActivity(), AlarmReceiver.class);
-            intent.putExtra("modo", "diario");
-
-            PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pi);
-        } else {
-            for (int dia : diasObtenidos){
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.DAY_OF_WEEK, dia);
-                calendar.set(Calendar.HOUR_OF_DAY, hora);
-                calendar.set(Calendar.MINUTE, minutos);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-
-                long time = calendar.getTimeInMillis();
-                if(System.currentTimeMillis() > time){
-                    calendar.add(Calendar.WEEK_OF_YEAR,1);
-                }
-
-                Intent intent = new Intent(AlarmasFragment.this.getActivity(), AlarmReceiver.class);
-                intent.putExtra("modo", "semanal");
-                intent.putExtra("dia", dia);
-
-                PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), dia, intent, PendingIntent.FLAG_IMMUTABLE);
-
-                //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi);
-            }
-        }
-    }
-
-    public void cancelarAlarma(int aTag){
-        Intent intent = new Intent(AlarmasFragment.this.getActivity(), AlarmReceiver.class);
-        PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), aTag, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        alarmManager.cancel(pi);
-    }
-
-    public List<Integer> obtenerDias(){
-        List<Integer> diasSeleccionados = new ArrayList<>();
-        String txt = tvDias.getText().toString().trim();
-
-        String[] dias = txt.replace(" ", "").split(",");
-
-        for (String dia : dias){
-            switch (dia){
-                case "D": diasSeleccionados.add(Calendar.SUNDAY);
-                    break;
-                case "L": diasSeleccionados.add(Calendar.MONDAY);
-                    break;
-                case "M": diasSeleccionados.add(Calendar.TUESDAY);
-                    break;
-                case "X": diasSeleccionados.add(Calendar.WEDNESDAY);
-                    break;
-                case "J": diasSeleccionados.add(Calendar.THURSDAY);
-                    break;
-                case "V": diasSeleccionados.add(Calendar.FRIDAY);
-                    break;
-                case "S": diasSeleccionados.add(Calendar.SATURDAY);
-                    break;
-            }
-        }
-        return diasSeleccionados;
-    }
 
     private void agregarRecordatorio() {
 
@@ -386,3 +285,104 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         dialog.show(getChildFragmentManager(), "Editar Alarma");
     }
 }
+
+    /*
+    private void crearAlarmas(List<Integer> diasObtenidos, int hora, int minutos){
+        if(diasObtenidos.size() == 7){
+
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(tvHora.getText().toString()));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(tvMinuto.getText().toString()));
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            long time = calendar.getTimeInMillis();
+
+            if (System.currentTimeMillis() > time) {
+                time += 24*60*60*1000;
+            }
+
+            Intent intent = new Intent(AlarmasFragment.this.getActivity(), AlarmReceiver.class);
+            intent.putExtra("modo", "diario");
+
+            PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pi);
+
+        } else {
+            for (int dia : diasObtenidos){
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_WEEK, dia);
+                calendar.set(Calendar.HOUR_OF_DAY, hora);
+                calendar.set(Calendar.MINUTE, minutos);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+
+                long time = calendar.getTimeInMillis();
+                if(System.currentTimeMillis() > time){
+                    calendar.add(Calendar.WEEK_OF_YEAR,1);
+                }
+
+                Intent intent = new Intent(AlarmasFragment.this.getActivity(), AlarmReceiver.class);
+                intent.putExtra("modo", "semanal");
+                intent.putExtra("dia", dia);
+
+                PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), dia, intent, PendingIntent.FLAG_IMMUTABLE);
+
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi);
+            }
+        }
+    }
+
+    private void alarmaSwitchOnClick(View view){
+        if (!(view instanceof Switch)) return;
+
+        Switch sw = (Switch) view;
+        if(sw.isChecked()){
+            Toast.makeText(this.getContext(), "ALARMA ENCENDIDA", Toast.LENGTH_SHORT).show();
+            crearAlarmas(obtenerDias(), Integer.parseInt(tvHora.getText().toString()), Integer.parseInt(tvMinuto.getText().toString()));
+
+        }
+        else {
+            Toast.makeText(this.getContext(), "ALARMA APAGADA", Toast.LENGTH_SHORT).show();
+            cancelarAlarma((int) view.getTag());
+        }
+    }
+
+
+    public void cancelarAlarma(int aTag){
+        Intent intent = new Intent(AlarmasFragment.this.getActivity(), AlarmReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), aTag, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.cancel(pi);
+    }
+
+    public List<Integer> obtenerDias(){
+        List<Integer> diasSeleccionados = new ArrayList<>();
+        String txt = tvDias.getText().toString().trim();
+
+        String[] dias = txt.replace(" ", "").split(",");
+
+        for (String dia : dias){
+            switch (dia){
+                case "D": diasSeleccionados.add(Calendar.SUNDAY);
+                    break;
+                case "L": diasSeleccionados.add(Calendar.MONDAY);
+                    break;
+                case "M": diasSeleccionados.add(Calendar.TUESDAY);
+                    break;
+                case "X": diasSeleccionados.add(Calendar.WEDNESDAY);
+                    break;
+                case "J": diasSeleccionados.add(Calendar.THURSDAY);
+                    break;
+                case "V": diasSeleccionados.add(Calendar.FRIDAY);
+                    break;
+                case "S": diasSeleccionados.add(Calendar.SATURDAY);
+                    break;
+            }
+        }
+        return diasSeleccionados;
+    }
+     */
