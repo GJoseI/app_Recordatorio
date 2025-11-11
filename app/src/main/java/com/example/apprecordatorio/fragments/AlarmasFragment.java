@@ -342,9 +342,8 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
     public void borrarRecordatorio(Alarma r, RecordatorioNegocio neg)
     {
-        if(neg.delete(r)>0)
+        if(neg.delete(r,requireContext())>0)
         {
-            neg.desactivarAlarma(r,requireContext());
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
         }
         cargarRecordatorios();

@@ -154,7 +154,8 @@ public class AltaRecordatorio extends DialogFragment {
                 int seleccion = spTono.getSelectedItemPosition();
                 int recursoSeleccionado = recursosTonos[seleccion];
 
-                Uri tonoUri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/" + recursoSeleccionado);
+                Uri tonoUri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/"
+                        + recursoSeleccionado);
 
                 r.setTono(tonoUri.toString());
 

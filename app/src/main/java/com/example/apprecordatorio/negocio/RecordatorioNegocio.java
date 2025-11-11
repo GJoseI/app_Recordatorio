@@ -41,8 +41,9 @@ public class RecordatorioNegocio {
         }
         return resultado;
     }
-    public int delete(Alarma r)
+    public int delete(Alarma r,Context context)
     {
+        au.cancelarAlarmas(context,r);
         return dao.delete(r);
     }
 
