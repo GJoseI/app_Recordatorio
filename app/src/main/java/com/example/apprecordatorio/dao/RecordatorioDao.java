@@ -35,6 +35,14 @@ public class RecordatorioDao {
             valores.put("tono",a.getTono());
             valores.put("fecha",a.getFecha().toString());
             valores.put("hora",a.getHora());
+            valores.put("minuto",a.getMinuto());
+            valores.put("domingo",a.isDomingo());
+            valores.put("lunes",a.isLunes());
+            valores.put("martes",a.isMartes());
+            valores.put("miercoles",a.isMiercoles());
+            valores.put("jueves",a.isJueves());
+            valores.put("viernes",a.isViernes());
+            valores.put("sabado",a.isSabado());
             valores.put("estado",true);
 
             resultado = db.insert("recordatorios", null, valores);
@@ -64,6 +72,16 @@ public class RecordatorioDao {
             valores.put("tono",a.getTono());
             valores.put("fecha",a.getFecha().toString());
             valores.put("hora",a.getHora());
+            valores.put("minuto",a.getMinuto());
+            valores.put("domingo",a.isDomingo());
+            valores.put("lunes",a.isLunes());
+            valores.put("martes",a.isMartes());
+            valores.put("miercoles",a.isMiercoles());
+            valores.put("jueves",a.isJueves());
+            valores.put("viernes",a.isViernes());
+            valores.put("sabado",a.isSabado());
+            valores.put("estado",a.isEstado());
+
 
             resultado = db.update("recordatorios", valores, "id = ?", new String[]{String.valueOf(a.getId())});
         }catch (Exception e)
@@ -99,7 +117,6 @@ public class RecordatorioDao {
         List<Alarma> lista = new ArrayList<>();
         SQLiteDatabase db = null;
         Cursor cursor = null;
-
         try {
             db = dbHelper.getReadableDatabase();
 
@@ -112,11 +129,18 @@ public class RecordatorioDao {
                 a.setImagenUrl(cursor.getString(3));
                 a.setTono(cursor.getString(4));
                 a.setFecha(LocalDate.parse(cursor.getString(5)));
-                a.setHora(cursor.getString(6));
-                a.setEstado( cursor.getInt(7)==1);
+                a.setHora(cursor.getInt(6));
+                a.setMinuto(cursor.getInt(7));
+                a.setDomingo(cursor.getInt(8)==1);
+                a.setLunes(cursor.getInt(9)==1);
+                a.setMartes(cursor.getInt(10)==1);
+                a.setMiercoles(cursor.getInt(11)==1);
+                a.setJueves(cursor.getInt(12)==1);
+                a.setViernes(cursor.getInt(13)==1);
+                a.setSabado(cursor.getInt(14)==1);
+                a.setEstado( cursor.getInt(15)==1);
                 lista.add(a);
             }
-
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -131,5 +155,40 @@ public class RecordatorioDao {
         return lista;
     }
 
+    public void cambiarEstado (Alarma a) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        if (a.isEstado())
+        {
+            values.put("estado", 0);
+            db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+        }else
+        {
+            values.put("estado", 1);
+            db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+        }
+    }
+
+    public Boolean desactivarAlarma(Alarma a)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+            values.put("estado", 0);
+            int r =db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+
+        return ( r > 0);
+    }
+
+    public Boolean activarAlarma(Alarma a)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("estado", 1);
+        int r =db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+
+        return ( r > 0);
+    }
 
 }

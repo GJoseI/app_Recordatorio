@@ -25,9 +25,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.Adapters.RecordatorioAdapter;
@@ -35,6 +37,7 @@ import com.example.apprecordatorio.Receivers.AlarmReceiver;
 import com.example.apprecordatorio.activities.CrearAlarmaActivity;
 import com.example.apprecordatorio.dialogs.AltaRecordatorio;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
+import com.example.apprecordatorio.dialogs.ModificacionRecordatorio;
 import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Recordatorio;
@@ -183,7 +186,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
                 PendingIntent pi = PendingIntent.getBroadcast(this.getContext(), dia, intent, PendingIntent.FLAG_IMMUTABLE);
 
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi);
+                //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi);
             }
         }
     }
@@ -252,6 +255,52 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 ImageButton btnBorrar = cardView.findViewById(R.id.btnBorrar);
                 ImageButton btnEditar = cardView.findViewById(R.id.btnEditar);
                 Switch sw = cardView.findViewById(R.id.sEstado);
+                TextView tvDias = cardView.findViewById(R.id.tvDias);
+                TextView tvHora = cardView.findViewById(R.id.tvHora);
+                TextView tvMinuto = cardView.findViewById(R.id.tvMinutos);
+                TextView dosPuntos = cardView.findViewById(R.id.tvDosPuntos);
+
+
+                tvHora.setText(String.valueOf(r.getHora()));
+                tvMinuto.setText(String.valueOf(r.getMinuto()));
+
+                String dias = "";
+
+
+                    if(r.isDomingo()) dias+="D";
+                    if(r.isLunes()) dias+=" L";
+                    if(r.isMartes())dias+=" Ma";
+                    if(r.isMiercoles())dias+=" Mi";
+                    if(r.isJueves())dias+=" J";
+                    if(r.isViernes())dias+=" V";
+                    if(r.isSabado())dias+=" S";
+
+                    tvDias.setText(dias);
+
+
+                    sw.setOnClickListener(v->{
+                        if(sw.isChecked()){
+                            neg.activarAlarma(r,requireContext());
+                            cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
+                            txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                            btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                            tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                        }else{
+                            neg.desactivarAlarma(r,requireContext());
+                            cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
+                            txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                            btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                            tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                        }
+                    });
 
                 btnBorrar.setOnClickListener(v ->{
                     confirmarBorrado(r,neg);
@@ -266,14 +315,26 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
                 if(r.isEstado())
                 {
-                    Log.d("ACTIVADO","EL ESTADO ES TRUE");
-                    sw.setActivated(true);
+                    sw.setChecked(true);
                     cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
                     txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                     btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                     btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                    tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                    tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                    tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                    dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                }else
+                {
+                    cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
+                    txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                    btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                    tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
                 }
-
                 containerRecordatorios.addView(cardView);
             }
         }
@@ -281,7 +342,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
     public void borrarRecordatorio(Alarma r, RecordatorioNegocio neg)
     {
-        if(neg.delete(r)>0)
+        if(neg.delete(r,requireContext())>0)
         {
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
         }
@@ -300,7 +361,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
     public void editarRecordatorio(Alarma r)
     {
-        ModificacionRecordatorioGeneral dialog = new ModificacionRecordatorioGeneral();
+        ModificacionRecordatorio dialog = new ModificacionRecordatorio();
         dialog.setOnRecordatorioGuardadoListener(this);
 
         Bundle args = new Bundle();
@@ -309,8 +370,16 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         args.putString("descripcion", r.getDescripcion());
         args.putString("imagen", r.getImagenUrl());
         args.putString("fecha",r.getFecha().toString());
-        args.putString("hora",r.getHora());
+        args.putInt("hora",r.getHora());
+        args.putInt("minuto",r.getMinuto());
         args.putString("tono",r.getTono());
+        args.putBoolean("domingo",r.isDomingo());
+        args.putBoolean("lunes",r.isLunes());
+        args.putBoolean("martes",r.isMartes());
+        args.putBoolean("miercoles",r.isMiercoles());
+        args.putBoolean("jueves",r.isJueves());
+        args.putBoolean("viernes",r.isViernes());
+        args.putBoolean("sabado",r.isSabado());
         dialog.setArguments(args);
 
 

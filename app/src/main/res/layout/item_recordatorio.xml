@@ -65,14 +65,6 @@
                 android:textColor="@color/letraGris"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/tvMeridiem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="AM"
-                android:textColor="@color/letraGris"
-                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Estado y botón -->
