@@ -1,7 +1,9 @@
 package com.example.apprecordatorio.activities;
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -36,8 +38,17 @@ public class AlarmaActivity extends AppCompatActivity {
         TextView txtMensaje = findViewById(R.id.txtMensaje);
         txtMensaje.setText("¡Alarma: " + titulo + "!");
 
-        ImageView imagen = findViewById(R.id.ivAlarmaDisparada);
-        imagen.setVisibility(View.VISIBLE);
+        String imagenUri = getIntent().getStringExtra("imagen");
+
+
+
+        if(imagenUri!=null)
+        {
+            ImageView imagen = findViewById(R.id.ivAlarmaDisparada);
+            imagen.setImageURI(Uri.parse(imagenUri));
+            imagen.setVisibility(View.VISIBLE);
+        }
+
 
         Button btnDetener = findViewById(R.id.btnDetener);
         btnDetener.setOnClickListener(v -> detenerAlarma());

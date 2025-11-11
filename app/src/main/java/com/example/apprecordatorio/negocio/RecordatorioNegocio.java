@@ -39,4 +39,13 @@ public class RecordatorioNegocio {
         return dao.delete(r);
     }
 
+    public void desactivarAlarma(Alarma a,Context context)
+    {
+        if(dao.desactivarAlarma(a))au.cancelarAlarmas(context,a);
+
+    }
+    public void activarAlarma(Alarma a,Context context)
+    {
+        if(dao.activarAlarma(a))au.programarAlarmas(context,a);
+    }
 }

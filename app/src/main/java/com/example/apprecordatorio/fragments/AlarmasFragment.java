@@ -253,6 +253,51 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 ImageButton btnBorrar = cardView.findViewById(R.id.btnBorrar);
                 ImageButton btnEditar = cardView.findViewById(R.id.btnEditar);
                 Switch sw = cardView.findViewById(R.id.sEstado);
+                TextView tvDias = cardView.findViewById(R.id.tvDias);
+                TextView tvHora = cardView.findViewById(R.id.tvHora);
+                TextView tvMinuto = cardView.findViewById(R.id.tvMinutos);
+                TextView dosPuntos = cardView.findViewById(R.id.tvDosPuntos);
+
+                tvHora.setText(String.valueOf(r.getHora()));
+                tvMinuto.setText(String.valueOf(r.getMinuto()));
+
+                String dias = "";
+
+
+                    if(r.isDomingo()) dias+="D";
+                    if(r.isLunes()) dias+=" L";
+                    if(r.isMartes())dias+=" Ma";
+                    if(r.isMiercoles())dias+=" Mi";
+                    if(r.isJueves())dias+=" J";
+                    if(r.isViernes())dias+=" V";
+                    if(r.isSabado())dias+=" S";
+
+                    tvDias.setText(dias);
+
+
+                    sw.setOnClickListener(v->{
+                        if(sw.isChecked()){
+                            neg.activarAlarma(r,requireContext());
+                            cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
+                            txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                            btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                            tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                            dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                        }else{
+                            neg.desactivarAlarma(r,requireContext());
+                            cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
+                            txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                            btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                            tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                            dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                        }
+                    });
 
                 btnBorrar.setOnClickListener(v ->{
                     confirmarBorrado(r,neg);
@@ -267,12 +312,25 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
                 if(r.isEstado())
                 {
-                    Log.d("ACTIVADO","EL ESTADO ES TRUE");
                     sw.setChecked(true);
                     cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
                     txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                     btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
                     btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                    tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                    tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                    tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                    dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                }else
+                {
+                    cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
+                    txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                    btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                    tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                    dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
                 }
                 containerRecordatorios.addView(cardView);
             }
@@ -283,6 +341,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
     {
         if(neg.delete(r)>0)
         {
+            neg.desactivarAlarma(r,requireContext());
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
         }
         cargarRecordatorios();

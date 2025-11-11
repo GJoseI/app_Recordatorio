@@ -4,6 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.example.apprecordatorio.Receivers.AlarmaReceiver;
@@ -24,6 +27,19 @@ public class AlarmaUtil {
     }
 
     private void programarAlarma(Context context, Alarma r, int diaSemana) {
+
+        // 🧩 Paso 5 — Chequear permiso antes de programar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (!am.canScheduleExactAlarms()) {
+                Log.w("PROG ALARM", "No tiene permiso para programar alarmas exactas. Abriendo ajustes...");
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
+                return; // salimos sin programar hasta que el usuario lo habilite
+            }
+        }
+
         Log.d("PROG ALARM","ALARMA PROGRAMANDO PARA DIA:"+diaSemana+" "+r.getHora()+" "+r.getMinuto());
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, diaSemana);
@@ -38,9 +54,10 @@ public class AlarmaUtil {
 
         Intent intent = new Intent(context, AlarmaReceiver.class);
         intent.putExtra("titulo", r.getTitulo());
-        intent.putExtra("descripcion", r.getDescripcion());
-        intent.putExtra("tono", r.getTono());
-        intent.putExtra("imagen",r.getImagenUrl());
+        if(r.getDescripcion()!=null) intent.putExtra("descripcion", r.getDescripcion());
+        if(r.getTono()!=null) intent.putExtra("tono", r.getTono());
+        if(r.getImagenUrl()!=null)intent.putExtra("imagen",r.getImagenUrl());
+
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -50,11 +67,35 @@ public class AlarmaUtil {
         );
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(
+       /* alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY * 7, // semanal
                 pendingIntent
+        );*/
+
+        alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                pendingIntent
         );
+    }
+
+    public void cancelarAlarmas(Context context, Alarma r) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        for (int dia = Calendar.SUNDAY; dia <= Calendar.SATURDAY; dia++) {
+            int requestCode = r.getId() + dia;
+
+            Intent intent = new Intent(context, AlarmaReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    requestCode,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            alarmManager.cancel(pendingIntent);
+        }
     }
 }

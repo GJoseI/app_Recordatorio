@@ -17,11 +17,12 @@ public class AlarmaReceiver extends BroadcastReceiver {
         String imagen = intent.getStringExtra("imagen");
         String tono = intent.getStringExtra("tono");
 
+
         Intent i = new Intent(context, AlarmaActivity.class);
         i.putExtra("titulo", titulo);
-        i.putExtra("descripcion",descripcion);
-        i.putExtra("imagen",imagen);
-        i.putExtra("tono",tono);
+        if(descripcion!=null) i.putExtra("descripcion", descripcion);
+        if(tono!=null) i.putExtra("tono", tono);
+        if(imagen!=null)i.putExtra("imagen",imagen);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         context.startActivity(i);

@@ -157,5 +157,40 @@ public class RecordatorioDao {
         return lista;
     }
 
+    public void cambiarEstado (Alarma a) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        if (a.isEstado())
+        {
+            values.put("estado", 0);
+            db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+        }else
+        {
+            values.put("estado", 1);
+            db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+        }
+    }
+
+    public Boolean desactivarAlarma(Alarma a)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+            values.put("estado", 0);
+            int r =db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+
+        return ( r > 0);
+    }
+
+    public Boolean activarAlarma(Alarma a)
+    {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("estado", 1);
+        int r =db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
+
+        return ( r > 0);
+    }
 
 }
