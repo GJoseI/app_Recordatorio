@@ -80,49 +80,11 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-      //  alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-      //  recyclerView = view.findViewById(R.id.recyclerRecordatorios);
         fabAgregar = view.findViewById(R.id.fabAgregar);
-      //  btnEditar = view.findViewById(R.id.btnEditar);
-      //  sEstado = view.findViewById(R.id.sEstado);
-     //   tvHora = view.findViewById(R.id.tvHora);
-        //tvMinuto = view.findViewById(R.id.tvMinutos);
-      //  tvDias = view.findViewById(R.id.tvDias);
-
-       // recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-      //  recyclerView.setHasFixedSize(true);
-
-      //  listaRecordatorios = new ArrayList<>();
-
-        // ejemplo de datos, dsp cambiamos la funcion
-        //Aca cargamos la lista desde la bd segun el usuario, si no encuentra nada
-        //no mostrara recordatorios y dira "no hay recs"
-       /* listaRecordatorios.add(new Recordatorio(101,true,"Tomar medicación",LocalDate.now(),
-                "08:30",1,1,12345678,87654321));*/
-        /*
-        o
-
-        cargarRecordatorios();
-        */
-
-        // configurar el adapter
-        //adapter = new RecordatorioAdapter(listaRecordatorios);
-       // recyclerView.setAdapter(adapter);
-
-        //Acción del botón flotante agregar
         fabAgregar.setOnClickListener(v -> {
             agregarRecordatorio();
-            //Intent crear = new Intent(AlarmasFragment.this.getActivity(), CrearAlarmaActivity.class);
-          //  startActivity(crear);
         });
-
-        /*
-        btnEditar.setOnClickListener(v -> {
-           //codigo editar rec
-        });
-         */
     }
-
 
     private void agregarRecordatorio() {
 
@@ -146,7 +108,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
         if(lista!=null)
         {
-            for (Alarma r : lista)
+            for (Alarma alarma : lista)
             {
                 View cardView = inflater.inflate(R.layout.item_recordatorio, containerRecordatorios, false);
 
@@ -160,26 +122,26 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 TextView dosPuntos = cardView.findViewById(R.id.tvDosPuntos);
 
 
-                tvHora.setText(String.valueOf(r.getHora()));
-                tvMinuto.setText(String.valueOf(r.getMinuto()));
+                tvHora.setText(String.valueOf(alarma.getHora()));
+                tvMinuto.setText(String.valueOf(alarma.getMinuto()));
 
                 String dias = "";
 
 
-                    if(r.isDomingo()) dias+="D";
-                    if(r.isLunes()) dias+=" L";
-                    if(r.isMartes())dias+=" Ma";
-                    if(r.isMiercoles())dias+=" Mi";
-                    if(r.isJueves())dias+=" J";
-                    if(r.isViernes())dias+=" V";
-                    if(r.isSabado())dias+=" S";
+                    if(alarma.isDomingo()) dias+="D";
+                    if(alarma.isLunes()) dias+=" L";
+                    if(alarma.isMartes())dias+=" Ma";
+                    if(alarma.isMiercoles())dias+=" Mi";
+                    if(alarma.isJueves())dias+=" J";
+                    if(alarma.isViernes())dias+=" V";
+                    if(alarma.isSabado())dias+=" S";
 
                     tvDias.setText(dias);
 
 
                     sw.setOnClickListener(v->{
                         if(sw.isChecked()){
-                            neg.activarAlarma(r,requireContext());
+                            neg.activarAlarma(alarma,requireContext());
                             cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
                             txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                             btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
@@ -189,7 +151,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                             tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                             dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                         }else{
-                            neg.desactivarAlarma(r,requireContext());
+                            neg.desactivarAlarma(alarma,requireContext());
                             cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
                             txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
                             btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
@@ -202,17 +164,17 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                     });
 
                 btnBorrar.setOnClickListener(v ->{
-                    confirmarBorrado(r,neg);
+                    confirmarBorrado(alarma,neg);
                 });
 
 
                 btnEditar.setOnClickListener(v->{
-                    editarRecordatorio(r);
+                    editarRecordatorio(alarma);
                 });
 
-                txtTitulo.setText(r.getTitulo());
+                txtTitulo.setText(alarma.getTitulo());
 
-                if(r.isEstado())
+                if(alarma.isEstado())
                 {
                     sw.setChecked(true);
                     cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
@@ -239,9 +201,9 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         }
     }
 
-    public void borrarRecordatorio(Alarma r, RecordatorioNegocio neg)
+    public void borrarRecordatorio(Alarma alarma, RecordatorioNegocio neg)
     {
-        if(neg.delete(r,requireContext())>0)
+        if(neg.delete(alarma,requireContext())>0)
         {
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
         }
