@@ -84,7 +84,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void esconderFragmento() {
-        getSupportFragmentManager().popBackStack("overlay", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        findViewById(R.id.overlayContainer1).setVisibility(View.GONE);
+        FragmentManager fm = getSupportFragmentManager();
+
+        if(fm.getBackStackEntryCount() > 0){
+            fm.popBackStack();
+        }
+        fm.addOnBackStackChangedListener(() ->{
+            if(fm.getBackStackEntryCount() == 0){
+                findViewById(R.id.overlayContainer1).setVisibility(View.GONE);
+                fm.removeOnBackStackChangedListener(this::esconderFragmento);
+            }
+        });
+        //getSupportFragmentManager().popBackStack("overlay", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }
