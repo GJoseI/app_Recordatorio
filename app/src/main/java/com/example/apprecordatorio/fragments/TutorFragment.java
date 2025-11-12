@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.apprecordatorio.R;
-import com.example.apprecordatorio.activities.TutorMenuActivity;
+import com.example.apprecordatorio.activities.MainActivity;
 import com.example.apprecordatorio.activities.TutorRegistroActivity;
 
 public class TutorFragment extends Fragment {
@@ -26,15 +26,18 @@ public class TutorFragment extends Fragment {
         Button iniciar = view.findViewById(R.id.btnIniciarSesion);
 
         registrarse.setOnClickListener(v -> {
-
-                    Intent registro = new Intent(TutorFragment.this.getActivity(), TutorRegistroActivity.class);
-                    startActivity(registro);
-                });
+            Intent registro = new Intent(TutorFragment.this.getActivity(), TutorRegistroActivity.class);
+            startActivity(registro);
+        });
 
         iniciar.setOnClickListener(v -> {
-
-            Intent registro = new Intent(TutorFragment.this.getActivity(), TutorMenuActivity.class);
+            /*
+            Intent registro = new Intent(TutorFragment.this.getActivity(), TutorMenuFragment.class);
             startActivity(registro);
+
+             */
+            Fragment fragment = new TutorMenuFragment();
+            ((MainActivity) requireActivity()).mostrarFragmento(fragment);
         });
         return view;
     }
