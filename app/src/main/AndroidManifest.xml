@@ -22,9 +22,6 @@
             android:exported="false"
             android:theme="@style/Theme.Oscuro"/>
         <activity
-            android:name=".activities.EmergenciaActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.ResumenActivity"
             android:exported="false" />
         <activity
@@ -44,16 +41,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.TutorMenuActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Oscuro" />
-        <activity
-            android:name=".activities.RecordatoriosActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.EditarAlarmaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.CrearAlarmaActivity"
             android:exported="false"
             android:theme="@style/Theme.Oscuro" />
         <activity
