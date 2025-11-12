@@ -1,69 +1,44 @@
 package com.example.apprecordatorio.fragments;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.cardview.widget.CardView;
+
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.example.apprecordatorio.R;
-import com.example.apprecordatorio.Adapters.RecordatorioAdapter;
-import com.example.apprecordatorio.Receivers.AlarmReceiver;
-import com.example.apprecordatorio.activities.CrearAlarmaActivity;
 import com.example.apprecordatorio.dialogs.AltaRecordatorio;
-import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
 import com.example.apprecordatorio.dialogs.ModificacionRecordatorio;
-import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Alarma;
-import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
-import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
 import com.example.apprecordatorio.negocio.RecordatorioNegocio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 
 public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoListener {
 
-    private RecyclerView recyclerView;
+
     private FloatingActionButton fabAgregar;
-    private RecordatorioAdapter adapter;
-    private ImageButton btnEditar;
-    private Switch sEstado;
+
     private List<Alarma> lista;
     private LinearLayout containerRecordatorios;
-    private TextView tvHora, tvMinuto, tvDias;
-    private AlarmManager alarmManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,11 +55,16 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         fabAgregar = view.findViewById(R.id.fabAgregar);
+
         fabAgregar.setOnClickListener(v -> {
             agregarRecordatorio();
+
         });
+
     }
+
 
     private void agregarRecordatorio() {
 
@@ -108,7 +88,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
         if(lista!=null)
         {
-            for (Alarma alarma : lista)
+            for (Alarma r : lista)
             {
                 View cardView = inflater.inflate(R.layout.item_recordatorio, containerRecordatorios, false);
 
@@ -122,26 +102,26 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 TextView dosPuntos = cardView.findViewById(R.id.tvDosPuntos);
 
 
-                tvHora.setText(String.valueOf(alarma.getHora()));
-                tvMinuto.setText(String.valueOf(alarma.getMinuto()));
+                tvHora.setText(String.valueOf(r.getHora()));
+                tvMinuto.setText(String.valueOf(r.getMinuto()));
 
                 String dias = "";
 
 
-                    if(alarma.isDomingo()) dias+="D";
-                    if(alarma.isLunes()) dias+=" L";
-                    if(alarma.isMartes())dias+=" Ma";
-                    if(alarma.isMiercoles())dias+=" Mi";
-                    if(alarma.isJueves())dias+=" J";
-                    if(alarma.isViernes())dias+=" V";
-                    if(alarma.isSabado())dias+=" S";
+                    if(r.isDomingo()) dias+="D";
+                    if(r.isLunes()) dias+=" L";
+                    if(r.isMartes())dias+=" Ma";
+                    if(r.isMiercoles())dias+=" Mi";
+                    if(r.isJueves())dias+=" J";
+                    if(r.isViernes())dias+=" V";
+                    if(r.isSabado())dias+=" S";
 
                     tvDias.setText(dias);
 
 
                     sw.setOnClickListener(v->{
                         if(sw.isChecked()){
-                            neg.activarAlarma(alarma,requireContext());
+                            neg.activarAlarma(r,requireContext());
                             cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
                             txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                             btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
@@ -151,7 +131,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                             tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                             dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
                         }else{
-                            neg.desactivarAlarma(alarma,requireContext());
+                            neg.desactivarAlarma(r,requireContext());
                             cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
                             txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
                             btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
@@ -164,17 +144,17 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                     });
 
                 btnBorrar.setOnClickListener(v ->{
-                    confirmarBorrado(alarma,neg);
+                    confirmarBorrado(r,neg);
                 });
 
 
                 btnEditar.setOnClickListener(v->{
-                    editarRecordatorio(alarma);
+                    editarRecordatorio(r);
                 });
 
-                txtTitulo.setText(alarma.getTitulo());
+                txtTitulo.setText(r.getTitulo());
 
-                if(alarma.isEstado())
+                if(r.isEstado())
                 {
                     sw.setChecked(true);
                     cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
@@ -201,9 +181,9 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         }
     }
 
-    public void borrarRecordatorio(Alarma alarma, RecordatorioNegocio neg)
+    public void borrarRecordatorio(Alarma r, RecordatorioNegocio neg)
     {
-        if(neg.delete(alarma,requireContext())>0)
+        if(neg.delete(r,requireContext())>0)
         {
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
         }
