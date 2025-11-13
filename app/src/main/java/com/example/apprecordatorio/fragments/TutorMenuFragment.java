@@ -29,6 +29,7 @@ public class TutorMenuFragment extends Fragment {
         Button vincular = view.findViewById(R.id.btnVincular);
         Button seguimiento = view.findViewById(R.id.btnSeguimiento);
         Button atras = view.findViewById(R.id.btnAtras);
+        Button agregar = view.findViewById(R.id.btnAgregarRec);
 
         vincular.setOnClickListener(v ->{
             Fragment fragmento = new VincularFragment();
@@ -43,5 +44,11 @@ public class TutorMenuFragment extends Fragment {
         atras.setOnClickListener(v -> {
             ((MainActivity) requireActivity()).esconderFragmento();
         });
+        /*
+        agregar.setOnClickListener(v -> {
+            Fragment fragmento = new AgregarRecTutorFragment();
+            ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
+        });
+         */
     }
 }

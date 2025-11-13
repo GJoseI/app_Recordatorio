@@ -33,11 +33,11 @@
             android:exported="false"
             android:theme="@style/Theme.Oscuro" />
         <activity
-            android:name=".activities.TutorRegistroActivity"
+            android:name=".fragments.TutorRegistroFragment"
             android:exported="false"
             android:theme="@style/Theme.Oscuro" />
         <activity
-            android:name=".activities.TutorLogInActivity"
+            android:name=".fragments.TutorLogInFragment"
             android:exported="false" />
         <activity
             android:name=".fragments.TutorMenuFragment"

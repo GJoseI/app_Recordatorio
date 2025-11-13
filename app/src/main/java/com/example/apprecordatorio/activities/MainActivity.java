@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 }, 300);
                 fm.removeOnBackStackChangedListener(this);
             }
-
             }
         };
         fm.addOnBackStackChangedListener(listener);
