@@ -1,5 +1,6 @@
 package com.example.apprecordatorio.activities;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.apprecordatorio.R;
+import com.example.apprecordatorio.servicios.AlarmaService;
 
 public class AlarmaActivity extends AppCompatActivity {
 
@@ -25,12 +27,16 @@ public class AlarmaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-        );
+
+
+
+        // Métodos modernos (Android 8.1+)
+        setShowWhenLocked(true);
+        setTurnScreenOn(true);
+
+        // Flag extra para mantener la pantalla encendida
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setContentView(R.layout.activity_alarma);
 
         String titulo = getIntent().getStringExtra("titulo");
@@ -55,18 +61,20 @@ public class AlarmaActivity extends AppCompatActivity {
         btnDetener.setOnClickListener(v -> detenerAlarma());
 
         // Reproducir sonido
-        mediaPlayer = MediaPlayer.create(this, Uri.parse(tono));
+      /*  mediaPlayer = MediaPlayer.create(this, Uri.parse(tono));
         //mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        mediaPlayer.start();*/
     }
 
     private void detenerAlarma() {
-        if (mediaPlayer != null) {
+        /*if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
-        }
+        }*/
+        Intent stopIntent = new Intent(this, AlarmaService.class);
+        stopService(stopIntent);
         finish();
     }
 

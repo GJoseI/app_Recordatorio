@@ -55,7 +55,6 @@ public class AltaRecordatorioGeneral extends DialogFragment {
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                Log.e("URI:",uri.toString());
 
                 try {
                     FileUtil fu = new FileUtil();
