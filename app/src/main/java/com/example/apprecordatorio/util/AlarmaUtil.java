@@ -10,6 +10,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.example.apprecordatorio.Receivers.AlarmaReceiver;
+import com.example.apprecordatorio.activities.AlarmaActivity;
 import com.example.apprecordatorio.entidades.Alarma;
 
 import java.util.Calendar;
@@ -26,10 +27,11 @@ public class AlarmaUtil {
         if (r.isDomingo()) programarAlarma(context, r, Calendar.SUNDAY);
     }
 
-    private void programarAlarma(Context context, Alarma r, int diaSemana) {
+    public void programarAlarma(Context context, Alarma r, int diaSemana) {
 
         // Chequear permiso antes de programar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.createAttributionContext("com.example.apprecordatorio");
             AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (!am.canScheduleExactAlarms()) {
                 Log.w("PROG ALARM", "No tiene permiso para programar alarmas exactas. Abriendo ajustes...");
@@ -57,6 +59,11 @@ public class AlarmaUtil {
         if(r.getDescripcion()!=null) intent.putExtra("descripcion", r.getDescripcion());
         if(r.getTono()!=null) intent.putExtra("tono", r.getTono());
         if(r.getImagenUrl()!=null)intent.putExtra("imagen",r.getImagenUrl());
+        intent.putExtra("id", r.getId());
+        intent.putExtra("diaSemana", diaSemana);
+        intent.putExtra("hora", r.getHora());
+        intent.putExtra("minuto", r.getMinuto());
+
 
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(

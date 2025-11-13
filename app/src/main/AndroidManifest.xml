@@ -4,8 +4,11 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
     <application
         android:allowBackup="true"
@@ -19,7 +22,11 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.AlarmaActivity"
-            android:exported="false"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.Oscuro"/>
         <activity
             android:name=".activities.ResumenActivity"
@@ -38,6 +45,11 @@
         <receiver
             android:name=".Receivers.AlarmaReceiver"
             android:exported="true" />
+        <service
+            android:name=".servicios.AlarmaService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
+            android:stopWithTask="false"/>
     </application>
 
 </manifest>

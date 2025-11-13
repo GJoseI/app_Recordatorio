@@ -54,7 +54,7 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
         containerRecordatorios = view.findViewById(R.id.containerRecordatoriosGenerales);
         FloatingActionButton  btnAgregar = view.findViewById(R.id.btnAgregarRecGral);
 
-        btnAgregar.setOnClickListener(v -> agregarRecordatorio(inflater));
+        btnAgregar.setOnClickListener(v -> agregarRecordatorio());
 
         cargarRecordatorios(inflater);
 
@@ -62,12 +62,24 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
     }
 
 
-    private void agregarRecordatorio(LayoutInflater inflater) {
+    private void agregarRecordatorio() {
 
         AltaRecordatorioGeneral dialog = new AltaRecordatorioGeneral();
         dialog.setOnRecordatorioGuardadoListener(this);
         currentDialog = dialog; // guarda una referencia
-        dialog.show(getChildFragmentManager(), "hola");
+        dialog.show(getParentFragmentManager(), "hola");
+    }
+    private void dialogcomun() {
+        try {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Prueba")
+                    .setMessage("Si esto se muestra, el problema es el layout del diálogo original")
+                    .setPositiveButton("OK", null)
+                    .show();
+        } catch (Exception e) {
+            Log.e("DEBUG", "Error mostrando alert simple: " + e.getMessage(), e);
+            Toast.makeText(requireContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void cargarRecordatorios(LayoutInflater inflater)
