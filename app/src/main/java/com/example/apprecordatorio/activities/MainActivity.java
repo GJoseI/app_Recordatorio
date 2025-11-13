@@ -1,6 +1,8 @@
 package com.example.apprecordatorio.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -75,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         overlay.post(() ->{
             ft.setCustomAnimations(
                             android.R.anim.slide_in_left,
-                            android.R.anim.fade_out,
-                            android.R.anim.fade_in,
+                            android.R.anim.slide_out_right,
+                            android.R.anim.slide_in_left,
                             android.R.anim.slide_out_right).
                     replace(R.id.overlayContainer1, fragment)
                     .addToBackStack("overlay").commit();
@@ -89,12 +91,19 @@ public class MainActivity extends AppCompatActivity {
         if(fm.getBackStackEntryCount() > 0){
             fm.popBackStack();
         }
-        fm.addOnBackStackChangedListener(() ->{
+        FragmentManager.OnBackStackChangedListener listener = new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
             if(fm.getBackStackEntryCount() == 0){
-                findViewById(R.id.overlayContainer1).setVisibility(View.GONE);
-                fm.removeOnBackStackChangedListener(this::esconderFragmento);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    findViewById(R.id.overlayContainer1).setVisibility(View.GONE);
+                }, 300);
+                fm.removeOnBackStackChangedListener(this);
             }
-        });
+
+            }
+        };
+        fm.addOnBackStackChangedListener(listener);
         //getSupportFragmentManager().popBackStack("overlay", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }
