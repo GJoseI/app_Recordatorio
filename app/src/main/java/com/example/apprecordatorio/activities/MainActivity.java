@@ -5,6 +5,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +15,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.apprecordatorio.Adapters.MyViewPageAdapter;
@@ -63,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager2.setCurrentItem(tab.getPosition());
+                esconderFragmento();
             }
 
             @Override
@@ -83,5 +90,43 @@ public class MainActivity extends AppCompatActivity {
                 tabLayout.getTabAt(position).select();
             }
         });
+    }
+
+    public void mostrarFragmento (Fragment fragment){
+        View overlay = findViewById(R.id.overlayContainer1);
+        overlay.setVisibility(View.VISIBLE);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        overlay.post(() ->{
+            ft.setCustomAnimations(
+                            android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right,
+                            android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right).
+                    replace(R.id.overlayContainer1, fragment)
+                    .addToBackStack("overlay").commit();
+        });
+    }
+
+    public void esconderFragmento() {
+        FragmentManager fm = getSupportFragmentManager();
+
+        if(fm.getBackStackEntryCount() > 0){
+            fm.popBackStack();
+        }
+        FragmentManager.OnBackStackChangedListener listener = new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+            if(fm.getBackStackEntryCount() == 0){
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    findViewById(R.id.overlayContainer1).setVisibility(View.GONE);
+                }, 300);
+                fm.removeOnBackStackChangedListener(this);
+            }
+            }
+        };
+        fm.addOnBackStackChangedListener(listener);
+        //getSupportFragmentManager().popBackStack("overlay", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }
