@@ -25,25 +25,6 @@
             android:name=".activities.ResumenActivity"
             android:exported="false" />
         <activity
-            android:name=".fragments.SeguimientoFragment"
-            android:exported="false"
-            android:theme="@style/Theme.Oscuro" />
-        <activity
-            android:name=".fragments.VincularFragment"
-            android:exported="false"
-            android:theme="@style/Theme.Oscuro" />
-        <activity
-            android:name=".fragments.TutorRegistroFragment"
-            android:exported="false"
-            android:theme="@style/Theme.Oscuro" />
-        <activity
-            android:name=".fragments.TutorLogInFragment"
-            android:exported="false" />
-        <activity
-            android:name=".fragments.TutorMenuFragment"
-            android:exported="false"
-            android:theme="@style/Theme.Oscuro" />
-        <activity
             android:name=".activities.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Oscuro">
