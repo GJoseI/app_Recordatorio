@@ -21,28 +21,12 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
                     "domingo int, lunes int, martes int, miercoles int," +
                     "jueves int, viernes int, sabado int, estado integer, baja_logica int)";
 
+            String query3 ="create table paciente(id integer primary key, nombre text)";
+
             db.execSQL(query2);
             db.execSQL(query);
+            db.execSQL(query3);
 
-        // Trigger tabla recordatorios
-        db.execSQL(
-                "CREATE TRIGGER trg_baja_logica_recordatorios " +
-                        "BEFORE DELETE ON recordatorios " +
-                        "FOR EACH ROW BEGIN " +
-                        "UPDATE recordatorios SET baja_logica = 1 WHERE id = OLD.id; " +
-                        "SELECT RAISE(IGNORE); " +
-                        "END;"
-        );
-
-        // Trigger tabla recordatoriosGenerales
-        db.execSQL(
-                "CREATE TRIGGER trg_baja_logica_recordatorios_generales " +
-                        "BEFORE DELETE ON recordatoriosGenerales " +
-                        "FOR EACH ROW BEGIN " +
-                        "UPDATE recordatoriosGenerales SET baja_logica = 1 WHERE id = OLD.id; " +
-                        "SELECT RAISE(IGNORE); " +
-                        "END;"
-        );
 
     }
 
