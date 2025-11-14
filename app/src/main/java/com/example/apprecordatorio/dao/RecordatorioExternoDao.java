@@ -76,6 +76,11 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         try {
             con = new Conexion();
             Connection c = con.abrirConexion();
+            if (c == null) {
+                // NO HAY INTERNET NI CONEXIÓN AL SERVIDOR
+                Log.e("PacienteExternoDao", "No hay conexión a la BD externa");
+                return false; // devolvé cero para que el negocio sepa que no se pudo
+            }
 
             String sql = "INSERT INTO alarma (id_paciente, titulo, descripcion, tono, imagen, estado, " +
                     "domingo, lunes, martes, miercoles, jueves, viernes, sabado,baja_logica) " +

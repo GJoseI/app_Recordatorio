@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class PacienteExternoDao implements IPacienteExterno {
@@ -46,8 +47,9 @@ public class PacienteExternoDao implements IPacienteExterno {
 
 
     @Override
-    public boolean add(Paciente p) {
+    public int add(Paciente p) {
         int r = 0;
+        int newId = 0;
         Connection c = null;
 
         try {
@@ -55,21 +57,29 @@ public class PacienteExternoDao implements IPacienteExterno {
             c = con.abrirConexion();
 
             String sql = "INSERT INTO paciente (nombre) VALUES (?)";
-            PreparedStatement ps = c.prepareStatement(sql);
+            PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, p.getNombre());
 
             r = ps.executeUpdate();
 
+            if (r > 0) {
+                // Recuperar ID autogenerado
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                     newId = rs.getInt(1);
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (con != null) {
-                try { con.cerrar(); } catch (SQLException e) { e.printStackTrace(); }
+                try { con.cerrar(); } catch (Exception ignored) {}
             }
         }
 
-        return r > 0;
+        return newId;
     }
 
 
