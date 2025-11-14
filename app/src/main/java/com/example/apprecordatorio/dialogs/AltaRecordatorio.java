@@ -32,7 +32,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.entidades.Alarma;
+import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
+import com.example.apprecordatorio.negocio.PacienteNegocio;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
 import com.example.apprecordatorio.negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.util.FileUtil;
@@ -165,13 +167,38 @@ public class AltaRecordatorio extends DialogFragment {
                 }
 
 
-                if(neg.add(r, requireContext())>0)
+
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                executor.execute(() -> {
+
+
+
+                    long insertado = neg.add(r, requireContext());
+
+
+                    mainHandler.post(() -> {
+
+                        if (insertado>0) {
+                            imagenGuardada = true;
+                            Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                            if (listener != null) listener.onRecordatorioGuardado();
+                        } else {
+                            Toast.makeText(requireContext(),"Error al crear!",Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+                    });
+                });
+                /*
+                *    if(neg.add(r, requireContext())>0)
                 {
                     imagenGuardada = true;
                     Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
                     if (listener != null) listener.onRecordatorioGuardado();
                 }
                 dialog.dismiss();
+                * */
             } else {
                 editTitulo.setError("Ingrese un título");
             }

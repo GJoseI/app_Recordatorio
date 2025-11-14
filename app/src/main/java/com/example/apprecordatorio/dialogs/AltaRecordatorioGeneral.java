@@ -114,13 +114,37 @@ public class AltaRecordatorioGeneral extends DialogFragment {
                 }
 
 
-                if(neg.add(r)>0)
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                executor.execute(() -> {
+
+                    long insertado = neg.add(r);
+
+
+                    mainHandler.post(() -> {
+
+                        if (insertado>0) {
+                            imagenGuardada = true;
+                            Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                            if (listener != null) listener.onRecordatorioGuardado();
+                        } else {
+                            Toast.makeText(requireContext(),"Error al crear!",Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+                    });
+                });
+
+                /*
+                *  if(neg.add(r)>0)
                 {
                     imagenGuardada = true;
                     Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
                     if (listener != null) listener.onRecordatorioGuardado();
                 }
                 dialog.dismiss();
+                * */
+
             } else {
                 editTitulo.setError("Ingrese un título");
             }

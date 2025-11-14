@@ -1,6 +1,7 @@
 package com.example.apprecordatorio.negocio;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.apprecordatorio.dao.RecordatorioDao;
 import com.example.apprecordatorio.dao.RecordatorioExternoDao;
@@ -48,6 +49,7 @@ public class RecordatorioNegocio {
             }
         }
 
+        Log.e("NEG","RESULTADO: "+resultado);
         return resultado;
     }
     public int update(Alarma r,Context context)
@@ -72,6 +74,7 @@ public class RecordatorioNegocio {
             }
         }
 
+        Log.e("NEG","RESULTADO: "+resultado);
         return resultado;
     }
     public int delete(Alarma r,Context context)
@@ -93,6 +96,7 @@ public class RecordatorioNegocio {
             }
         }
 
+        Log.e("NEG","RESULTADO: "+resultado);
         return resultado;
     }
 
