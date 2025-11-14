@@ -22,7 +22,6 @@ import com.example.apprecordatorio.servicios.AlarmaService;
 
 public class AlarmaActivity extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +59,10 @@ public class AlarmaActivity extends AppCompatActivity {
         Button btnDetener = findViewById(R.id.btnDetener);
         btnDetener.setOnClickListener(v -> detenerAlarma());
 
-        // Reproducir sonido
-      /*  mediaPlayer = MediaPlayer.create(this, Uri.parse(tono));
-        //mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();*/
     }
 
     private void detenerAlarma() {
-        /*if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }*/
+
         Intent stopIntent = new Intent(this, AlarmaService.class);
         stopService(stopIntent);
         finish();

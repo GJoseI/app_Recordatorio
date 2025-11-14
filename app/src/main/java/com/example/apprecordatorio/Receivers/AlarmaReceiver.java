@@ -40,6 +40,14 @@ public class AlarmaReceiver extends BroadcastReceiver {
         AlarmaUtil au = new AlarmaUtil();
         au.programarAlarma(context,r,diaSemana);
 
+        Intent i = new Intent(context, AlarmaService.class);
+        i.putExtra("titulo", titulo);
+        if(descripcion!=null) i.putExtra("descripcion", descripcion);
+        if(tono!=null) i.putExtra("tono", tono);
+        if(imagen!=null)i.putExtra("imagen",imagen);
+        i.putExtras(Objects.requireNonNull(intent.getExtras()));
+        ContextCompat.startForegroundService(context, i);
+
         /*Intent i = new Intent(context, AlarmaActivity.class);
         i.putExtra("titulo", titulo);
         if(descripcion!=null) i.putExtra("descripcion", descripcion);
@@ -49,13 +57,7 @@ public class AlarmaReceiver extends BroadcastReceiver {
 
         context.startActivity(i);*/
 
-        Intent i = new Intent(context, AlarmaService.class);
-        i.putExtra("titulo", titulo);
-        if(descripcion!=null) i.putExtra("descripcion", descripcion);
-        if(tono!=null) i.putExtra("tono", tono);
-        if(imagen!=null)i.putExtra("imagen",imagen);
-        i.putExtras(Objects.requireNonNull(intent.getExtras()));
-        ContextCompat.startForegroundService(context, i);
+
 
     }
 }
