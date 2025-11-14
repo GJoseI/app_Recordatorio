@@ -21,73 +21,75 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.AlarmaActivity;
 
-public class AlarmaService extends Service {
-    private MediaPlayer mediaPlayer;
 
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("ALARM SERVICE","SE EJECUTO ALARMA SEVICE");
-        String titulo = intent.getStringExtra("titulo");
-        String tono = intent.getStringExtra("tono");
-        String descripcion = intent.getStringExtra("descripcion");
-        String imagen = intent.getStringExtra("imagen");
+    public class AlarmaService extends Service {
+        private MediaPlayer mediaPlayer;
 
-        Intent i = new Intent(this, AlarmaActivity.class);
-        i.putExtra("titulo", titulo);
-        i.putExtra("descripcion", descripcion);
-        i.putExtra("tono", tono);
-        i.putExtra("imagen", imagen);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+        @Override
+        public int onStartCommand(Intent intent, int flags, int startId) {
+            Log.d("ALARM SERVICE","SE EJECUTO ALARMA SEVICE");
+            String titulo = intent.getStringExtra("titulo");
+            String tono = intent.getStringExtra("tono");
+            String descripcion = intent.getStringExtra("descripcion");
+            String imagen = intent.getStringExtra("imagen");
 
-        PendingIntent fullScreenIntent = PendingIntent.getActivity(
-                this, 0, i, PendingIntent.FLAG_IMMUTABLE
-        );
+            Intent i = new Intent(this, AlarmaActivity.class);
+            i.putExtra("titulo", titulo);
+            i.putExtra("descripcion", descripcion);
+            i.putExtra("tono", tono);
+            i.putExtra("imagen", imagen);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-
-
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "alarma_channel")
-                .setSmallIcon(R.drawable.alarm_24px)
-                .setContentTitle(titulo)
-                .setContentText(descripcion)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setFullScreenIntent(fullScreenIntent, true)
-                .setOngoing(false);
-                       /// .setSilent(true);
-
-        NotificationManagerCompat.from(this).notify(1, builder.build());
-        startForeground(1, builder.build());
+            PendingIntent fullScreenIntent = PendingIntent.getActivity(
+                    this, 0, i, PendingIntent.FLAG_IMMUTABLE
+            );
 
 
-        // Reproducir el sonido
-        if (tono != null) {
-            mediaPlayer = MediaPlayer.create(this, Uri.parse(tono));
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
+
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "alarma_channel")
+                    .setSmallIcon(R.drawable.alarm_24px)
+                    .setContentTitle(titulo)
+                    .setContentText(descripcion)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setCategory(NotificationCompat.CATEGORY_ALARM)
+                    .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
+                    .setFullScreenIntent(fullScreenIntent, true)
+                    .setOngoing(false);
+            /// .setSilent(true);
+
+            NotificationManagerCompat.from(this).notify(1, builder.build());
+            startForeground(1, builder.build());
+
+
+            // Reproducir el sonido
+            if (tono != null) {
+                mediaPlayer = MediaPlayer.create(this, Uri.parse(tono));
+                mediaPlayer.setLooping(true);
+                mediaPlayer.start();
+            }
+
+            return START_STICKY;
         }
 
-        return START_STICKY;
-    }
 
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }
+            stopForeground(true);
+            //stopSelf();
+            Log.d("ALARM SERVICE","DESTRUYENDO ALARMA SERVICE...");
         }
-        stopForeground(true);
-        //stopSelf();
-        Log.d("ALARM SERVICE","DESTRUYENDO ALARMA SERVICE...");
-    }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
     }
-}
