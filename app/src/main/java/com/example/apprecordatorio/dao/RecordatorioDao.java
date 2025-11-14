@@ -44,6 +44,7 @@ public class RecordatorioDao {
             valores.put("viernes",a.isViernes());
             valores.put("sabado",a.isSabado());
             valores.put("estado",true);
+            valores.put("baja_logica",false);
 
             resultado = db.insert("recordatorios", null, valores);
         }catch (Exception e)
@@ -95,7 +96,8 @@ public class RecordatorioDao {
         return resultado;
     }
 
-    public int delete(Alarma a) {
+    /// no borrar por las dudas
+    /*public int delete(Alarma a) {
         SQLiteDatabase db = null;
         int resultado = 0;
         try
@@ -111,6 +113,31 @@ public class RecordatorioDao {
             }
         }
         return resultado;
+    }*/
+    public int delete(Alarma a) {
+        SQLiteDatabase db = null;
+        int resultado = 0;
+
+        try {
+            db = dbHelper.getWritableDatabase();
+
+            ContentValues cv = new ContentValues();
+            cv.put("baja_logica", 1);
+
+            resultado = db.update(
+                    "recordatorios",
+                    cv,
+                    "id = ?",
+                    new String[]{ String.valueOf(a.getId()) }
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) db.close();
+        }
+
+        return resultado; // devuelve 1 si se marcó, 0 si no existía
     }
 
     public List<Alarma> readAll() {
@@ -120,7 +147,7 @@ public class RecordatorioDao {
         try {
             db = dbHelper.getReadableDatabase();
 
-            cursor = db.rawQuery("SELECT * FROM recordatorios ORDER BY id DESC", null);
+            cursor = db.rawQuery("SELECT * FROM recordatorios WHERE baja_logica = 0 ORDER BY id DESC", null);
             while (cursor.moveToNext()) {
                 Alarma a = new Alarma();
                 a.setId(cursor.getInt(0));

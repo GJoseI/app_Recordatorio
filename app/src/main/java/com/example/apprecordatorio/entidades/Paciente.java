@@ -1,17 +1,16 @@
 package com.example.apprecordatorio.entidades;
 
 public class Paciente {
-    private int DNI;
+    private int id;
     private String nombre;
-    private String apellido;
+
 
     public Paciente() {
     }
 
-    public Paciente(String nombre, int DNI, String apellido) {
+    public Paciente(String nombre, int id, String apellido) {
         this.nombre = nombre;
-        this.DNI = DNI;
-        this.apellido = apellido;
+        this.id = id;
     }
 
     public String getNombre() {
@@ -22,27 +21,18 @@ public class Paciente {
         this.nombre = nombre;
     }
 
-    public int getDNI() {
-        return DNI;
+    public int getId() {
+        return id;
     }
 
-    public void setDNI(int DNI) {
-        this.DNI = DNI;
+    public void setId(int DNI) {
+        this.id = DNI;
     }
 
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
 
     @Override
     public String toString() {
-        return "paciente{" +
-                "apellido='" + apellido + '\'' +
-                ", DNI=" + DNI +
+        return "paciente{" +"id ="+id+
                 ", nombre='" + nombre + '\'' +
                 '}';
     }

@@ -55,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
                     NotificationManager.IMPORTANCE_HIGH
             );
             channel.setDescription("Notificaciones de alarma");
+            channel.setSound(null,null);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
+
         }
 
 

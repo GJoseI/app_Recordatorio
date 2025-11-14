@@ -1,67 +1,39 @@
 package com.example.apprecordatorio.entidades;
 
 public class Tutor {
-    private int DNI;
-    private String nombre;
-    private String apellido;
+    private int id;
+    private String username;
     private String email;
-    private String telefono;
-    private int dniPaciente;
     private String password;
-    private boolean estado;
+    private Paciente p;
 
-    public Tutor() {}
+    public Tutor() {
 
-    public Tutor(String password, String nombre, String telefono, boolean estado,
-                 String email, int dniPaciente, int DNI, String apellido) {
-        this.password = password;
-        this.nombre = nombre;
-        this.telefono = telefono;
-        this.estado = estado;
+    }
+
+    public Tutor(int id, String username, String email, String password, Paciente p) {
+        this.id = id;
+        this.username = username;
         this.email = email;
-        this.dniPaciente = dniPaciente;
-        this.DNI = DNI;
-        this.apellido = apellido;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
+        this.p = p;
     }
 
-    public String getNombre() {
-        return nombre;
+
+    public int getId() {
+        return id;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public boolean isEstado() {
-        return estado;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -72,33 +44,30 @@ public class Tutor {
         this.email = email;
     }
 
-    public int getDniPaciente() {
-        return dniPaciente;
+    public String getPassword() {
+        return password;
     }
 
-    public void setDniPaciente(int dniPaciente) {
-        this.dniPaciente = dniPaciente;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public int getDNI() {
-        return DNI;
+    public Paciente getP() {
+        return p;
     }
 
-    public void setDNI(int DNI) {
-        this.DNI = DNI;
+    public void setP(Paciente p) {
+        this.p = p;
     }
 
     @Override
     public String toString() {
-        return "tutor{" +
-                "apellido='" + apellido + '\'' +
-                ", DNI=" + DNI +
-                ", nombre='" + nombre + '\'' +
+        return "Tutor{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", dniPaciente=" + dniPaciente +
                 ", password='" + password + '\'' +
-                ", estado=" + estado +
+                ", p=" + p +
                 '}';
     }
 }

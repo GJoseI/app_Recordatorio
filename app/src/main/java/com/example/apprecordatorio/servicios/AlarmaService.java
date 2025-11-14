@@ -1,6 +1,7 @@
 package com.example.apprecordatorio.servicios;
 
 import android.Manifest;
+import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -32,7 +33,6 @@ public class AlarmaService extends Service {
         String descripcion = intent.getStringExtra("descripcion");
         String imagen = intent.getStringExtra("imagen");
 
-        // Intent para abrir la Activity al tocar la notificación o en pantalla bloqueada
         Intent i = new Intent(this, AlarmaActivity.class);
         i.putExtra("titulo", titulo);
         i.putExtra("descripcion", descripcion);
@@ -44,6 +44,9 @@ public class AlarmaService extends Service {
                 this, 0, i, PendingIntent.FLAG_IMMUTABLE
         );
 
+
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "alarma_channel")
                 .setSmallIcon(R.drawable.alarm_24px)
                 .setContentTitle(titulo)
@@ -51,8 +54,8 @@ public class AlarmaService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setFullScreenIntent(fullScreenIntent, true)
-                .setOngoing(false)
-                        .setSilent(true);
+                .setOngoing(false);
+                       /// .setSilent(true);
 
         NotificationManagerCompat.from(this).notify(1, builder.build());
         startForeground(1, builder.build());
