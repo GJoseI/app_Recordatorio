@@ -12,10 +12,8 @@ public class Conexion {
     private String password = "4Vs4SEkCIZ";
     private Connection con = null;
 
-
     public Conexion()
     {
-
     }
 
     public Connection abrirConexion()
