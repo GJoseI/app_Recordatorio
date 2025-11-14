@@ -29,6 +29,7 @@ public class RecordatorioGralDao {
             valores.put("titulo", rec.getTitulo());
             valores.put("contenido", rec.getDescripcion());
             valores.put("imagen", rec.getImagenUrl());
+            valores.put("baja_logica",false);
 
              resultado = db.insert("recordatoriosGenerales", null, valores);
         }catch (Exception e)
@@ -65,7 +66,7 @@ public class RecordatorioGralDao {
         }
         return resultado;
     }
-
+  /*
     public int delete(Recordatorio rec) {
         SQLiteDatabase db = null;
         int resultado = 0;
@@ -82,7 +83,33 @@ public class RecordatorioGralDao {
             }
         }
         return resultado;
-    }
+    }*/
+  public int delete(Recordatorio rec) {
+      SQLiteDatabase db = null;
+      int resultado = 0;
+
+      try {
+          db = dbHelper.getWritableDatabase();
+
+          ContentValues cv = new ContentValues();
+          cv.put("baja_logica", 1);
+
+          resultado = db.update(
+                  "recordatoriosGenerales",
+                  cv,
+                  "id = ?",
+                  new String[]{ String.valueOf(rec.getId()) }
+          );
+
+      } catch (Exception e) {
+          e.printStackTrace();
+      } finally {
+          if (db != null) db.close();
+      }
+
+      return resultado; // devuelve 1 si se marcó, 0 si no existía
+  }
+
 
     public List<Recordatorio> readAll() {
         List<Recordatorio> lista = new ArrayList<>();
@@ -92,7 +119,7 @@ public class RecordatorioGralDao {
         try {
             db = dbHelper.getReadableDatabase();
 
-            cursor = db.rawQuery("SELECT * FROM recordatoriosGenerales ORDER BY id DESC", null);
+            cursor = db.rawQuery("SELECT * FROM recordatoriosGenerales WHERE baja_logica = 0 ORDER BY id DESC", null);
             while (cursor.moveToNext()) {
                 Recordatorio r = new Recordatorio();
                 r.setId(cursor.getInt(0));

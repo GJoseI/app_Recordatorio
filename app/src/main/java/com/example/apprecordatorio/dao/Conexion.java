@@ -1,0 +1,40 @@
+package com.example.apprecordatorio.dao;
+
+import android.util.Log;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Conexion {
+    private String url= "jdbc:mysql://sql10.freesqldatabase.com:3306/sql10807656";
+    private String username = "sql10807656";
+    private String password = "4Vs4SEkCIZ";
+    private Connection con = null;
+
+
+    public Conexion()
+    {
+
+    }
+
+    public Connection abrirConexion()
+    {
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            Log.e("Conexion", "Error: No se encontró el driver JDBC");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Log.e("Conexion", "Error al conectar con la base de datos");
+        }
+        return con;
+    }
+
+    public void cerrar() throws SQLException {
+        this.con.close();
+    }
+}

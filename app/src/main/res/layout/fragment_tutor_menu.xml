@@ -67,7 +67,7 @@
             android:layout_marginBottom="88dp"
             android:backgroundTint="@color/fondoElementoSeleccionado"
             android:text="Seguimiento"
-            app:layout_constraintBottom_toTopOf="@+id/btnCodSeguimiento"
+            app:layout_constraintBottom_toTopOf="@+id/btnGenerarCodigo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
