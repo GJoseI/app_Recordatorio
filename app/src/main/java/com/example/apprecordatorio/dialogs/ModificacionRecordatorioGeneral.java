@@ -145,6 +145,25 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
                 }
 
 
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                executor.execute(() -> {
+
+                    long insertado = neg.update(r);
+
+                    mainHandler.post(() -> {
+
+                        if (insertado>0) {
+                            Toast.makeText(requireContext(),"Actualizado con exito!",Toast.LENGTH_SHORT).show();
+                            if (listener != null) listener.onRecordatorioGuardado();
+                        } else {
+                            Toast.makeText(requireContext(),"Error al modificar!",Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+                    });
+                });
+
+                /*
                 if(neg.update(r)>0)
                 {
                     Toast.makeText(requireContext(),"Actualizado con exito!",Toast.LENGTH_SHORT).show();
@@ -152,7 +171,7 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
                 }else {Log.e("UPDATE FALLO","NO SE MODIFICARON REGISTROS.");}
 
                 dialog.dismiss();
-
+                */
             } else {
                 editTitulo.setError("Ingrese un título");
             }

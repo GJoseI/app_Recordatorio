@@ -40,8 +40,7 @@ public class TutorFragment extends Fragment {
         tvCod = view.findViewById(R.id.tvCodSeguimiento);
 
         PacienteNegocio negS = new PacienteNegocio(requireContext());
-        Paciente pS = new Paciente();
-        pS = negS.read();
+        Paciente pS = negS.read();
         if(pS!=null)
         {
             btnCod.setVisibility(View.GONE);

@@ -10,7 +10,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 
-
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoListener {
@@ -183,10 +186,30 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
     public void borrarRecordatorio(Alarma r, RecordatorioNegocio neg)
     {
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            int insertado = neg.delete(r, requireContext());
+
+
+            mainHandler.post(() -> {
+
+                if (insertado>0) {
+
+                    Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(requireContext(),"Error al borrar!",Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+             /*
         if(neg.delete(r,requireContext())>0)
         {
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
-        }
+        }*/
         cargarRecordatorios();
     }
 

@@ -18,7 +18,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
     public RecordatorioExternoDao ()
     {
-        con = new Conexion();
+
     }
 
     public ArrayList<Alarma> readAll()
@@ -29,6 +29,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
 
             Connection c;
+            con = new Conexion();
             c = con.abrirConexion();
 
             Statement st = c.createStatement();
@@ -71,9 +72,9 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
     public boolean add(Alarma a) {
         int r = 0;
-        Conexion con=null;
 
         try {
+
             con = new Conexion();
             Connection c = con.abrirConexion();
             if (c == null) {
@@ -87,6 +88,14 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
             PreparedStatement ps = c.prepareStatement(sql);
+
+            /*Statement st = c.createStatement();
+            r = st.executeUpdate("INSERT INTO alarma (id_paciente, titulo, descripcion, tono, imagen, estado, " +
+                    "domingo, lunes, martes, miercoles, jueves, viernes, sabado,baja_logica) " +
+                            "VALUES ("+a.getPacienteId()+",'"+a.getTitulo()+"', '"+a.getDescripcion()+"'," +
+                    "'"+a.getTono()+"',"+a.getImagenUrl()+", "+a.isEstado()+", "+a.isDomingo()+"," +
+                    " "+a.isLunes()+", "+a.isMartes()+", "+a.isMiercoles()+", "+a.isJueves()+", "+a.isViernes()+"," +
+                    a.isSabado()+","+a.isBajaLogica()+", +)");*/
 
             ps.setInt(1, a.getPacienteId());
             ps.setString(2, a.getTitulo());
@@ -129,8 +138,8 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         int r = 0;
         try
         {
-            Connection c;
-            c = con.abrirConexion();
+            con = new Conexion();
+            Connection c = con.abrirConexion();
 
             String sql = "UPDATE alarma SET titulo=?, descripcion=?, tono=?,imagen=?,estado=?," +
                     "domingo=?,lunes=?,martes=?,miercoles=?,jueves=?,viernes=?,sabado=?,baja_logica=? WHERE id=?";
@@ -172,11 +181,11 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
     }
     public boolean delete(Alarma a) {
         int res = 0;
-        Connection c = null;
 
         try {
+
             con = new Conexion();
-            c = con.abrirConexion();
+            Connection c = con.abrirConexion();
 
             // Baja lógica
             String sql = "UPDATE alarma SET baja_logica = 1 WHERE id = ?";
@@ -202,6 +211,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
         try {
             Connection c;
+            con = new Conexion();
             c = con.abrirConexion();
 
             Statement st = c.createStatement();

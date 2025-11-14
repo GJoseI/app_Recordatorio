@@ -215,13 +215,35 @@ public class ModificacionRecordatorio extends DialogFragment {
                 }
 
 
-                if(neg.update(r, requireContext())>0)
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                executor.execute(() -> {
+
+                    long insertado = neg.update(r,requireContext());
+
+                    mainHandler.post(() -> {
+
+                        if (insertado>0) {
+                            imagenGuardada = true;
+                            Toast.makeText(requireContext(),"Modificado con exito!",Toast.LENGTH_SHORT).show();
+                            if (listener != null) listener.onRecordatorioGuardado();
+                        } else {
+                            Toast.makeText(requireContext(),"Error al modificar!",Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+                    });
+                });
+
+                /*
+                *  if(neg.update(r, requireContext())>0)
                 {
                     imagenGuardada = true;
                     Toast.makeText(requireContext(),"Modificado con exito!",Toast.LENGTH_SHORT).show();
                     if (listener != null) listener.onRecordatorioGuardado();
                 }
                 dialog.dismiss();
+                * */
+
             } else {
                 editTitulo.setError("Ingrese un título");
             }
