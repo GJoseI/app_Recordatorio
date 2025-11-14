@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 0
         );
 
-
+        /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     "alarma_channel",
@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
 
         }
+
+         */
+
+
 
 
         tabLayout = findViewById(R.id.tab_layout);
