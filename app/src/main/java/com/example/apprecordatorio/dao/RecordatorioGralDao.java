@@ -26,6 +26,7 @@ public class RecordatorioGralDao {
         try {
              db = dbHelper.getWritableDatabase();
             ContentValues valores = new ContentValues();
+           // valores.put("id",rec.getId());
             valores.put("titulo", rec.getTitulo());
             valores.put("contenido", rec.getDescripcion());
             valores.put("imagen", rec.getImagenUrl());
@@ -51,6 +52,7 @@ public class RecordatorioGralDao {
         {
             db = dbHelper.getWritableDatabase();
             ContentValues valores = new ContentValues();
+           // valores.put("id",rec.getId());
             valores.put("titulo", rec.getTitulo());
             valores.put("contenido", rec.getDescripcion());
             valores.put("imagen", rec.getImagenUrl());
@@ -174,4 +176,31 @@ public class RecordatorioGralDao {
         }
         return r;
     }
+    public int traerMaximoId()
+    {
+
+        int id = 0;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = dbHelper.getReadableDatabase();
+
+            cursor = db.rawQuery("SELECT MAX(id) from recordatoriosGenerales", null);
+            while (cursor.moveToNext()) {
+                id =   cursor.getInt(0);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if(db!=null) {
+                db.close();
+            }
+        }
+        return id;
+    }
+
 }

@@ -5,7 +5,7 @@ import com.example.apprecordatorio.entidades.Alarma;
 import java.util.ArrayList;
 
 public interface IRecordatorioExterno {
-    boolean add(Alarma a);
+    int add(Alarma a);
     ArrayList<Alarma>readAll();
     boolean delete (Alarma a);
 
