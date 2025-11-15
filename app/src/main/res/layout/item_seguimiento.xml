@@ -68,7 +68,8 @@
                     android:id="@+id/tvHoraSeguimiento"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="19:00 pm"
+                    android:text="19:00"
+                    android:visibility="gone"
                     android:textColor="@color/letraGris"
                     android:textSize="16sp" />
 

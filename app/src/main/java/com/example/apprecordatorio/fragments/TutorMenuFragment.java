@@ -30,6 +30,11 @@ public class TutorMenuFragment extends Fragment {
         Button seguimiento = view.findViewById(R.id.btnSeguimiento);
         Button atras = view.findViewById(R.id.btnAtras);
         Button agregar = view.findViewById(R.id.btnAgregarRec);
+        Button verAlarmas = view.findViewById(R.id.btnVerAlarmas);
+
+        verAlarmas.setOnClickListener(v -> {
+
+        });
 
         vincular.setOnClickListener(v ->{
             Fragment fragmento = new VincularFragment();
@@ -37,7 +42,10 @@ public class TutorMenuFragment extends Fragment {
         });
 
         seguimiento.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putInt("idPaciente",14);
             Fragment fragmento = new SeguimientoFragment();
+            fragmento.setArguments(args);
             ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
         });
 

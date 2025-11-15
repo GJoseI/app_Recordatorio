@@ -26,18 +26,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/btnVincular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
-        android:layout_marginEnd="96dp"
+        android:layout_marginEnd="112dp"
         android:backgroundTint="@color/naranjita"
         android:text="Vincular dispositivos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitulo" />
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,6 +66,20 @@
             android:layout_marginBottom="88dp"
             android:backgroundTint="@color/fondoElementoSeleccionado"
             android:text="Seguimiento"
+            app:layout_constraintBottom_toTopOf="@+id/btnGenerarCodigo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAgregarRec" />
+
+        <Button
+            android:id="@+id/btnVerAlarmas"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="4dp"
+            android:layout_marginBottom="88dp"
+            android:backgroundTint="@color/fondoElementoSeleccionado"
+            android:text="Ver Alarmas"
             app:layout_constraintBottom_toTopOf="@+id/btnGenerarCodigo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

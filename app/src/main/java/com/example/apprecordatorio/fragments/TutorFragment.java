@@ -122,6 +122,7 @@ public class TutorFragment extends Fragment {
         Button registrarse = view.findViewById(R.id.btnRegistrarse);
         Button iniciar = view.findViewById(R.id.btnIniciarSesion);
 
+
         registrarse.setOnClickListener(v -> {
             //Intent registro = new Intent(TutorFragment.this.getActivity(), TutorRegistroFragment.class);
             //startActivity(registro);

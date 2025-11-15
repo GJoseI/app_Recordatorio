@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 public interface IRecordatorioExterno {
     int add(Alarma a);
-    ArrayList<Alarma>readAll();
+    ArrayList<Alarma>readAllFromPaciente(int id);
     boolean delete (Alarma a);
 
     boolean update (Alarma a);
 
-    Alarma readOne(int id);
+    Alarma readOneFrom(int id, int idPaciente);
 }
