@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.MainActivity;
+import com.example.apprecordatorio.dao.PacienteExternoDao;
 import com.example.apprecordatorio.dao.TutorExternoDao;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Tutor;
@@ -141,6 +142,9 @@ public class TutorFragment extends Fragment {
             Handler mainHandler = new Handler(Looper.getMainLooper());
             executor.execute(() ->{
                 Tutor tutor = tutorExternoDao.obtenerTutor(user, pass, null);
+                PacienteExternoDao pdao = new PacienteExternoDao();
+                Paciente p = pdao.readOne(tutor.getP().getId());
+                tutor.setP(p);
                 mainHandler.post(() ->{
                     if(tutor !=  null){
                         Bundle args = new Bundle();
@@ -148,6 +152,8 @@ public class TutorFragment extends Fragment {
                         args.putString("pass", pass);
                         args.putInt("id",tutor.getId());
                         args.putString("email", tutor.getEmail());
+                        args.putInt("codSeguimiento",tutor.getP().getId());
+                        args.putString("nombrePaciente",tutor.getP().getNombre());
                         Fragment fragment = new TutorMenuFragment();
                         fragment.setArguments(args);
                         ((MainActivity) requireActivity()).mostrarFragmento(fragment);

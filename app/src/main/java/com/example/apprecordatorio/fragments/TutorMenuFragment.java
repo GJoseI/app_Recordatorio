@@ -23,11 +23,33 @@ import com.example.apprecordatorio.entidades.Tutor;
 public class TutorMenuFragment extends Fragment {
 
     TextView tvSiguiendo;
+
+    int codSeguimiento =-1;
+    Button vincular;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tutor_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_tutor_menu, container, false);
+
+        vincular = view.findViewById(R.id.btnVincular);
+        tvSiguiendo = view.findViewById(R.id.tvSiguiendo);
+        Bundle conIdPaciente = getArguments();
+        if(conIdPaciente!=null)
+        {
+            codSeguimiento = conIdPaciente.getInt("codSeguimiento",-1);
+           String nombrePaciente = conIdPaciente.getString("nombrePaciente","default");
+
+           if(codSeguimiento!=-1)
+           {
+               Log.d("cod seguimiento"," "+codSeguimiento+" nombre"+nombrePaciente);
+               vincular.setVisibility(View.GONE);
+               tvSiguiendo.setText("Siguiendo a "+nombrePaciente);
+               tvSiguiendo.setVisibility(View.VISIBLE);
+           }
+        }
+
+        return view;
     }
 
     @Override
@@ -36,11 +58,11 @@ public class TutorMenuFragment extends Fragment {
 
 
         Bundle args = getArguments();
-        Button vincular = view.findViewById(R.id.btnVincular);
+
         Button seguimiento = view.findViewById(R.id.btnSeguimiento);
         Button atras = view.findViewById(R.id.btnAtras);
         Button agregar = view.findViewById(R.id.btnAgregarRec);
-        tvSiguiendo = view.findViewById(R.id.tvSiguiendo);
+
 
 
         TutorExternoDao tutorExternoDao = new TutorExternoDao();
@@ -70,9 +92,13 @@ public class TutorMenuFragment extends Fragment {
         });
 
         seguimiento.setOnClickListener(v -> {
+            Bundle argss = new Bundle();
+            argss.putInt("idPaciente",codSeguimiento);
             Fragment fragmento = new SeguimientoFragment();
+            fragmento.setArguments(argss);
             ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
         });
+
 
         atras.setOnClickListener(v -> {
             ((MainActivity) requireActivity()).esconderFragmento();

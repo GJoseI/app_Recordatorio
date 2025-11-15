@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.MainActivity;
@@ -49,21 +50,34 @@ public class VincularFragment extends Fragment {
             if(args != null){
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 Handler mainHandler = new Handler(Looper.getMainLooper());
+                Tutor tutor = new Tutor();
+                TutorExternoDao tutorExternoDao = new TutorExternoDao();
+                PacienteExternoDao pacienteExternoDao = new PacienteExternoDao();
                 executor.execute(() ->{
-                    Tutor tutor = new Tutor();
-                    TutorExternoDao tutorExternoDao = new TutorExternoDao();
-                    PacienteExternoDao pacienteExternoDao = new PacienteExternoDao();
+
                     tutor.setUsername(args.getString("user"));
                     tutor.setPassword(args.getString("pass"));
                     tutor.setId(args.getInt("id"));
                     tutor.setEmail(args.getString("email"));
                     tutor.setP(pacienteExternoDao.readOne(Integer.parseInt(codSeguimiento.getText().toString())));
-                    Boolean update = tutorExternoDao.update(tutor);
+                    boolean update = tutorExternoDao.update(tutor);
                     mainHandler.post(()->{
                         if(update){
                             Toast.makeText(this.getContext(),"Vinculacion con exito",Toast.LENGTH_SHORT).show();
 
-                            ((MainActivity) requireActivity()).esconderFragmento();
+                            //((MainActivity) requireActivity()).esconderFragmento();
+
+                            Bundle argsb = new Bundle();
+                            argsb.putString("user", tutor.getUsername());
+                            argsb.putString("pass",tutor.getPassword());
+                            argsb.putInt("id",tutor.getId());
+                            argsb.putString("email", tutor.getEmail());
+                            argsb.putInt("codSeguimiento",tutor.getP().getId());
+                            argsb.putString("nombrePaciente",tutor.getP().getNombre());
+                            Fragment fragment = new TutorMenuFragment();
+                            fragment.setArguments(argsb);
+                            ((MainActivity) requireActivity()).mostrarFragmento(fragment);
+
                         }else{
                             Toast.makeText(this.getContext(),"Error al vincular",Toast.LENGTH_SHORT).show();
                         }
