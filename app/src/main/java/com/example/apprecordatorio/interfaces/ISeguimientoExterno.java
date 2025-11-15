@@ -7,6 +7,6 @@ import java.util.ArrayList;
 public interface ISeguimientoExterno {
 
     boolean add(Seguimiento s);
-    ArrayList<Seguimiento>readAll();
+    ArrayList<Seguimiento>readAllFromPaciente(int id);
 
 }

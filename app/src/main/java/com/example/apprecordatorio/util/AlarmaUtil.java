@@ -59,7 +59,10 @@ public class AlarmaUtil {
         if(r.getDescripcion()!=null) intent.putExtra("descripcion", r.getDescripcion());
         if(r.getTono()!=null) intent.putExtra("tono", r.getTono());
         if(r.getImagenUrl()!=null)intent.putExtra("imagen",r.getImagenUrl());
+
         intent.putExtra("id", r.getId());
+        intent.putExtra("pacienteId",r.getPacienteId());
+
         intent.putExtra("diaSemana", diaSemana);
         intent.putExtra("hora", r.getHora());
         intent.putExtra("minuto", r.getMinuto());

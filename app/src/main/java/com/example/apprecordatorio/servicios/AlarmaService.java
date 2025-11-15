@@ -13,6 +13,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -24,18 +25,28 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.AlarmaActivity;
+import com.example.apprecordatorio.dao.SeguimientoExternoDao;
+import com.example.apprecordatorio.entidades.Alarma;
+import com.example.apprecordatorio.entidades.Seguimiento;
 
 public class AlarmaService extends Service {
     private MediaPlayer mediaPlayer;
 
+    private Handler handler = new Handler();
+    private Runnable timeoutRunnable;
+    private boolean atendida = false;
+
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         Log.d("ALARM SERVICE","SE EJECUTO ALARMA SEVICE");
         String titulo = intent.getStringExtra("titulo");
         String tono = intent.getStringExtra("tono");
         String descripcion = intent.getStringExtra("descripcion");
         String imagen = intent.getStringExtra("imagen");
+        int idAlarma = intent.getIntExtra("id",-1);
+        int pacienteId = intent.getIntExtra("pacienteId",-1);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //        AudioAttributes attributes = new AudioAttributes.Builder()
@@ -86,6 +97,8 @@ public class AlarmaService extends Service {
             mediaPlayer.start();
         }
 
+        apagarEn30(idAlarma,pacienteId);
+
         return START_STICKY;
     }
 
@@ -108,4 +121,30 @@ public class AlarmaService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    public void apagarEn30(int idAlarma,int pacienteId) {
+        long timeout = 30000;
+
+        timeoutRunnable = () -> {
+            if (!atendida) {
+                Log.d("ALARM SERVICE", "Tiempo agotado. Alarma NO ATENDIDA");
+
+
+                // 2) cerrar foreground y notificación
+                stopForeground(true);
+                stopSelf();
+
+                // 3) llamar a tu DAO
+              /*  SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                Seguimiento s = new Seguimiento();
+                Alarma a = new Alarma();
+                a.setId(idAlarma);
+                s.setAlarma(a);
+
+                dao.add(s);*/
+            }
+        };
+        handler.postDelayed(timeoutRunnable, timeout);
+    }
+
 }

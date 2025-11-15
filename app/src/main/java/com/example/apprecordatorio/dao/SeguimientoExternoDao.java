@@ -48,7 +48,7 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
 
 
     @Override
-    public ArrayList<Seguimiento> readAll() {
+    public ArrayList<Seguimiento> readAllFromPaciente(int id) {
         ArrayList<Seguimiento> lista = new ArrayList<>();
 
         Conexion cn = new Conexion();
@@ -56,11 +56,12 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String query = "SELECT id, atendida, id_alarma, fecha_hora FROM seguimiento";
+        String query = "SELECT * FROM seguimiento WHERE id_paciente = ?";
 
         try {
             conn = cn.abrirConexion();
             ps = conn.prepareStatement(query);
+            ps.setInt(1,id);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -72,6 +73,7 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                 // cargar alarma (solo ID por ahora)
                 Alarma a = new Alarma();
                 a.setId(rs.getInt("id_alarma"));
+                a.setPacienteId(id);
                 s.setAlarma(a);
 
                 // campo timestamp como String

@@ -125,25 +125,53 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
 
                     sw.setOnClickListener(v->{
                         if(sw.isChecked()){
-                            neg.activarAlarma(r,requireContext());
-                            cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
-                            txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
-                            btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                            btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                            tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
-                            tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
-                            tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
-                            dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                            executor.execute(() -> {
+
+                                neg.activarAlarma(r,requireContext());
+
+                                mainHandler.post(() -> {
+
+                                    cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
+                                    txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                                    btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                                    btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                                    tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                                    tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                                    tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                                    dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraBlanca));
+                                });
+                            });
+
+
+
                         }else{
-                            neg.desactivarAlarma(r,requireContext());
-                            cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
-                            txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
-                            btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
-                            btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
-                            tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
-                            tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
-                            tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
-                            dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                            executor.execute(() -> {
+
+                                neg.desactivarAlarma(r,requireContext());
+
+                                mainHandler.post(() -> {
+
+                                    cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
+                                    txtTitulo.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                                    btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                                    btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                                    tvDias.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                                    tvHora.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                                    tvMinuto.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                                    dosPuntos.setTextColor(ContextCompat.getColor(requireContext(),R.color.letraGris));
+                                });
+                            });
+
+
+
                         }
                     });
 
