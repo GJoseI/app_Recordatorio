@@ -22,8 +22,8 @@ public class NotasExternoDao implements INotaExterno {
             con = new Conexion();
             c = con.abrirConexion();
 
-            String sql = "INSERT INTO notas (titulo, descripcion, imagen, id_paciente, baja_logica) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO notas (titulo, descripcion, imagen, id_paciente, baja_logica,id) " +
+                    "VALUES (?, ?, ?, ?, ?,?)";
 
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setString(1, r.getTitulo());
@@ -31,6 +31,7 @@ public class NotasExternoDao implements INotaExterno {
             ps.setString(3, r.getImagenUrl());
             ps.setInt(4, r.getPacienteId());
             ps.setBoolean(5, r.isBajaLogica());
+            ps.setInt(6,r.getId());
 
             res = ps.executeUpdate();
 
