@@ -41,11 +41,19 @@ public class AlarmaService extends Service {
     private Runnable timeoutRunnable;
     private boolean atendida = false;
 
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.d("ALARM SERVICE","SE EJECUTO ALARMA SEVICE");
+        // ---- MANEJO DE STOP ----
+        if (intent != null && "STOP_ALARM".equals(intent.getAction())) {
+            atendida = true;
+            handler.removeCallbacks(timeoutRunnable);
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
+        Log.d("ALARM SERVICE","SE EJECUTO ALARMA SERVICE");
+
         String titulo = intent.getStringExtra("titulo");
         String tono = intent.getStringExtra("tono");
         String descripcion = intent.getStringExtra("descripcion");
@@ -53,28 +61,24 @@ public class AlarmaService extends Service {
         int idAlarma = intent.getIntExtra("id",-1);
         int pacienteId = intent.getIntExtra("pacienteId",-1);
 
+        // ---- NOTIFICACIÓN ----
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//        AudioAttributes attributes = new AudioAttributes.Builder()
-//                .setUsage(AudioAttributes.USAGE_ALARM)
-//                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//                .build();
             NotificationChannel channel = new NotificationChannel(
                     "alarma_channel",
                     "Alarmas",
                     NotificationManager.IMPORTANCE_HIGH
             );
-            channel.setDescription("Notificaciones de alarma");
             channel.setSound(null, null);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
+            getSystemService(NotificationManager.class).createNotificationChannel(channel);
         }
 
-                // Intent para abrir la Activity al tocar la notificación o en pantalla bloqueada
         Intent i = new Intent(this, AlarmaActivity.class);
         i.putExtra("titulo", titulo);
         i.putExtra("descripcion", descripcion);
         i.putExtra("tono", tono);
         i.putExtra("imagen", imagen);
+        i.putExtra("idAlarma", idAlarma);
+        i.putExtra("idPaciente", pacienteId);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent fullScreenIntent = PendingIntent.getActivity(
@@ -89,36 +93,21 @@ public class AlarmaService extends Service {
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
                 .setFullScreenIntent(fullScreenIntent, true)
-                .setOngoing(false).setAutoCancel(true);
+                .setOngoing(true);
 
-        NotificationManagerCompat.from(this).notify(1, builder.build());
         startForeground(1, builder.build());
 
-
-        // Reproducir el sonido
+        // ---- SONIDO ----
         if (tono != null) {
             mediaPlayer = MediaPlayer.create(this, Uri.parse(tono));
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
         }
 
-        apagarEn30(idAlarma,pacienteId);
+        // ---- TIMEOUT ----
+        apagarEn30(idAlarma, pacienteId);
 
         return START_STICKY;
-    }
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
-        stopForeground(true);
-        //stopSelf();
-        Log.d("ALARM SERVICE","DESTRUYENDO ALARMA SERVICE...");
     }
 
     @Nullable
@@ -127,44 +116,46 @@ public class AlarmaService extends Service {
         return null;
     }
 
+    @Override
+    public void onDestroy() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+        stopForeground(true);
+        Log.d("ALARM SERVICE","DESTRUYENDO ALARMA SERVICE...");
+        super.onDestroy();
+    }
+
     public void apagarEn30(int idAlarma,int pacienteId) {
         long timeout = 30000;
 
         timeoutRunnable = () -> {
             if (!atendida) {
                 Log.d("ALARM SERVICE", "Tiempo agotado. Alarma NO ATENDIDA");
-                Log.d("ALARM SERVICE","PACIENTE ID"+pacienteId+" alarma id"+idAlarma);
 
-                // 2) cerrar foreground y notificación
                 stopForeground(true);
                 stopSelf();
 
-
                 ExecutorService executor = Executors.newSingleThreadExecutor();
-                Handler mainHandler = new Handler(Looper.getMainLooper());
 
                 executor.execute(() -> {
-
-                    if(pacienteId!=-1)
-                    {
+                    if(pacienteId != -1) {
                         SeguimientoExternoDao dao = new SeguimientoExternoDao();
                         Seguimiento s = new Seguimiento();
                         Alarma a = new Alarma();
                         a.setPacienteId(pacienteId);
                         a.setId(idAlarma);
                         s.setAlarma(a);
-
+                        s.setAtendida(false);
                         dao.add(s);
                     }
-
-                    mainHandler.post(() -> {
-                        Log.d("ALARM SERVICE", "Seguimiento registrado");
-                    });
                 });
+
                 executor.shutdown();
             }
         };
+
         handler.postDelayed(timeoutRunnable, timeout);
     }
-
 }
