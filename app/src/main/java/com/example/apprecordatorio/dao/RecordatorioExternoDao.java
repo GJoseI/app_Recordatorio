@@ -22,7 +22,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
     }
 
-    public ArrayList<Alarma> readAll()
+    public ArrayList<Alarma> readAllFromPaciente(int id)
     {
         ArrayList<Alarma> result = new ArrayList<Alarma>();
 
@@ -34,7 +34,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             c = con.abrirConexion();
 
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM alarma");
+            ResultSet rs = st.executeQuery("SELECT * FROM alarma WHERE id_paciente ="+id+"and baja_logica = 0");
 
             while (rs.next()) {
                 Alarma a = new Alarma();
@@ -225,7 +225,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         return res > 0;
     }
 
-    public Alarma readOne(int id)
+    public Alarma readOneFrom(int id,int idPaciente)
     {
         Alarma a = new Alarma();
 
@@ -235,7 +235,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             c = con.abrirConexion();
 
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM alarma where id ="+id+" and id_paciente =");
+            ResultSet rs = st.executeQuery("SELECT * FROM alarma where id ="+id+" and id_paciente ="+idPaciente);
 
             while (rs.next()) {
 

@@ -75,6 +75,7 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                 a.setId(rs.getInt("id_alarma"));
                 a.setPacienteId(id);
                 s.setAlarma(a);
+                s.setTimestamp(rs.getTimestamp("fecha_hora").toString());
 
                 // campo timestamp como String
                 s.setTimestamp(rs.getString("fecha_hora"));

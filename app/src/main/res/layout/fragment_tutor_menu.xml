@@ -72,6 +72,20 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnAgregarRec" />
+
+        <Button
+            android:id="@+id/btnVerAlarmas"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="4dp"
+            android:layout_marginBottom="88dp"
+            android:backgroundTint="@color/fondoElementoSeleccionado"
+            android:text="Ver Alarmas"
+            app:layout_constraintBottom_toTopOf="@+id/btnGenerarCodigo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAgregarRec" />
     </LinearLayout>
 
     <Button
@@ -92,15 +106,17 @@
         android:id="@+id/tvSiguiendo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="164dp"
-        android:layout_marginTop="24dp"
+        android:visibility="gone"
+        android:layout_marginTop="44dp"
         android:background="@drawable/bg_edittext_redondeado"
         android:backgroundTint="@color/naranjita"
+        android:gravity="center_vertical"
         android:text="TextView"
-        android:textSize="20dp"
         android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnVincular" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitulo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

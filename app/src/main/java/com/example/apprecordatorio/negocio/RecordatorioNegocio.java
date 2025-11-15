@@ -10,6 +10,7 @@ import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.util.AlarmaUtil;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecordatorioNegocio {
@@ -19,6 +20,13 @@ public class RecordatorioNegocio {
     private RecordatorioExternoDao daoEx;
 
     private PacienteNegocio pneg;
+
+
+
+    public ArrayList<Alarma>readAllFromPaciente(int id )
+    {
+        return daoEx.readAllFromPaciente(id);
+    }
 
     public RecordatorioNegocio(Context context)
     {
@@ -150,5 +158,10 @@ public class RecordatorioNegocio {
             }
         }
 
+    }
+
+    public Alarma readOneFrom(int id, int idPaciente)
+    {
+        return daoEx.readOneFrom(id,idPaciente);
     }
 }
