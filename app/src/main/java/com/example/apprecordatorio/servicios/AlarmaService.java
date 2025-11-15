@@ -15,7 +15,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
@@ -28,6 +30,9 @@ import com.example.apprecordatorio.activities.AlarmaActivity;
 import com.example.apprecordatorio.dao.SeguimientoExternoDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Seguimiento;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AlarmaService extends Service {
     private MediaPlayer mediaPlayer;
@@ -128,20 +133,35 @@ public class AlarmaService extends Service {
         timeoutRunnable = () -> {
             if (!atendida) {
                 Log.d("ALARM SERVICE", "Tiempo agotado. Alarma NO ATENDIDA");
-
+                Log.d("ALARM SERVICE","PACIENTE ID"+pacienteId+" alarma id"+idAlarma);
 
                 // 2) cerrar foreground y notificación
                 stopForeground(true);
                 stopSelf();
 
-                // 3) llamar a tu DAO
-              /*  SeguimientoExternoDao dao = new SeguimientoExternoDao();
-                Seguimiento s = new Seguimiento();
-                Alarma a = new Alarma();
-                a.setId(idAlarma);
-                s.setAlarma(a);
 
-                dao.add(s);*/
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                executor.execute(() -> {
+
+                    if(pacienteId!=-1)
+                    {
+                        SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                        Seguimiento s = new Seguimiento();
+                        Alarma a = new Alarma();
+                        a.setPacienteId(pacienteId);
+                        a.setId(idAlarma);
+                        s.setAlarma(a);
+
+                        dao.add(s);
+                    }
+
+                    mainHandler.post(() -> {
+                        Log.d("ALARM SERVICE", "Seguimiento registrado");
+                    });
+                });
+                executor.shutdown();
             }
         };
         handler.postDelayed(timeoutRunnable, timeout);

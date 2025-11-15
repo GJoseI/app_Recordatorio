@@ -54,6 +54,8 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
                 a.setViernes(rs.getBoolean("viernes"));
                 a.setSabado(rs.getBoolean("sabado"));
                 a.setBajaLogica(rs.getBoolean("baja_logica"));
+                a.setHora(rs.getInt("hora"));
+                a.setMinuto(rs.getInt("minuto"));
 
                 result.add(a);
             }
@@ -87,8 +89,8 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             }
 
             String sql = "INSERT INTO alarma (id,id_paciente, titulo, descripcion, tono, imagen, estado, " +
-                    "domingo, lunes, martes, miercoles, jueves, viernes, sabado,baja_logica) " +
-                    "VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+                    "domingo, lunes, martes, miercoles, jueves, viernes, sabado,baja_logica,hora,minuto) " +
+                    "VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
 
             PreparedStatement ps = c.prepareStatement(sql);
 
@@ -108,6 +110,8 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             ps.setBoolean(13, a.isViernes());
             ps.setBoolean(14, a.isSabado());
             ps.setBoolean(15,false);
+            ps.setInt(16,a.getHora());
+            ps.setInt(17,a.getMinuto());
 
             r = ps.executeUpdate();
 
@@ -145,7 +149,8 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             //Log.d("dao ex update","cod paciente en read",)
 
             String sql = "UPDATE alarma SET titulo = ?, descripcion = ?, tono = ?, imagen = ?, estado = ?, " +
-                    "domingo = ?, lunes = ?, martes=?, miercoles = ?, jueves = ?, viernes = ?, sabado = ?, baja_logica = ? " +
+                    "domingo = ?, lunes = ?, martes=?, miercoles = ?, jueves = ?, viernes = ?, sabado = ?, baja_logica = ?, " +
+                    "hora = ?, minuto = ? " +
                     "WHERE id = ? AND id_paciente = ?";
 
             PreparedStatement ps = c.prepareStatement(sql);
@@ -162,8 +167,10 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             ps.setBoolean(11, a.isViernes());
             ps.setBoolean(12, a.isSabado());
             ps.setBoolean(13, a.isBajaLogica());
-            ps.setInt(14, a.getId());
-            ps.setInt(15,a.getPacienteId());
+            ps.setInt(14,a.getHora());
+            ps.setInt(15,a.getMinuto());
+            ps.setInt(16, a.getId());
+            ps.setInt(17,a.getPacienteId());
 
 
             r = ps.executeUpdate();
