@@ -190,4 +190,22 @@ public class TutorExternoDao implements ITutorExterno {
 
         return res > 0;
     }
+
+    public Tutor obtenerTutor(String user, String pass, String email){
+        TutorExternoDao tutorExternoDao = new TutorExternoDao();
+        ArrayList<Tutor> listaTutores = tutorExternoDao.readAll();
+        Tutor tutorObtenido = null;
+        for(Tutor tutor : listaTutores){
+            if(user == null && pass == null) {
+                if(tutor.getEmail().toString().equals(email)){
+                    tutorObtenido = tutor;
+                }
+            }else {
+                if (tutor.getPassword().toString().equals(pass) && tutor.getUsername().toString().equals(user)) {
+                    tutorObtenido = tutor;
+                }
+            }
+        }
+        return tutorObtenido;
+    }
 }
