@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -82,10 +83,16 @@ public class ModificacionRecordatorio extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_alta_recordatorio, null);
 
+        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
+        tvTitulo.setText("Editar Alarma");
+
+
+
         EditText editTitulo = view.findViewById(R.id.etTitulo);
         EditText editContenido = view.findViewById(R.id.etDesc);
         Button btnCancelar = view.findViewById(R.id.btnCancelar);
         Button btnGuardar = view.findViewById(R.id.btnGuardar);
+        btnGuardar.setText("Guardar");
         Button btnImg = view.findViewById(R.id.btnSeleccionarImagenAlarma);
         imgPreview = view.findViewById(R.id.ivDialog);
         TimePicker timePicker = view.findViewById(R.id.tpHora);
