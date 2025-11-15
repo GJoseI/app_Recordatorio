@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/espaciadorTutorLogin" />
 
     <EditText
-        android:id="@+id/et_userTRegistro"
+        android:id="@+id/et_mailTRegistro"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_marginTop="56dp"
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         android:padding="2dp" />
     <EditText
-        android:id="@+id/et_mailTRegistro"
+        android:id="@+id/et_userTRegistro"
         android:layout_width="300dp"
         android:layout_height="45dp"
         android:layout_marginTop="56dp"
@@ -76,7 +76,7 @@
         android:textColorHint="@color/letraGris"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_userTRegistro"
+        app:layout_constraintTop_toBottomOf="@+id/et_mailTRegistro"
         android:padding="2dp" />
 
     <EditText
@@ -93,7 +93,7 @@
         android:textColorHint="@color/letraGris"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_mailTRegistro"
+        app:layout_constraintTop_toBottomOf="@+id/et_userTRegistro"
         android:padding="2dp" />
 
     <EditText

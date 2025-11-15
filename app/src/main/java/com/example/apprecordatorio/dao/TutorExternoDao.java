@@ -1,5 +1,7 @@
 package com.example.apprecordatorio.dao;
 
+import android.util.Log;
+
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Tutor;
 import com.example.apprecordatorio.interfaces.ITutorExterno;
@@ -18,21 +20,24 @@ public class TutorExternoDao implements ITutorExterno {
     public boolean add(Tutor t) {
         int res = 0;
 
-        Connection c = null;
-
         try {
             con = new Conexion();
-            c = con.abrirConexion();
+            Connection c = con.abrirConexion();
+            if (c == null) {
+
+                Log.e("TutorExternoDao", "No hay conexión a la BD externa");
+                return false;
+            }
 
             String sql = "INSERT INTO tutor (nombre_usuario, email, password) " +
-                    "VALUES (?, ?, ?, ?)";
+                    "VALUES (?, ?, ?)";
 
             PreparedStatement ps = c.prepareStatement(sql);
 
             ps.setString(1, t.getUsername());
             ps.setString(2, t.getEmail());
             //ps.setInt(3, t.getP().getId());   // el paciente lo asignamos despues
-            ps.setString(4, t.getPassword());
+            ps.setString(3, t.getPassword());
 
             res = ps.executeUpdate();
 
@@ -40,7 +45,8 @@ public class TutorExternoDao implements ITutorExterno {
             e.printStackTrace();
         } finally {
             if (con != null) {
-                try { con.cerrar(); } catch (SQLException e) { e.printStackTrace(); }
+                Log.d("DEbug con", "intento de cierre de coneccion");
+                try { con.cerrar(); } catch (SQLException e) { throw new RuntimeException(e); }
             }
         }
 
@@ -52,9 +58,9 @@ public class TutorExternoDao implements ITutorExterno {
     @Override
     public ArrayList<Tutor> readAll() {
         ArrayList<Tutor> lista = new ArrayList<>();
-        Connection c = null;
 
         try {
+            Connection c;
             con = new Conexion();
             c = con.abrirConexion();
 
@@ -194,18 +200,20 @@ public class TutorExternoDao implements ITutorExterno {
     public Tutor obtenerTutor(String user, String pass, String email){
         TutorExternoDao tutorExternoDao = new TutorExternoDao();
         ArrayList<Tutor> listaTutores = tutorExternoDao.readAll();
-        Tutor tutorObtenido = null;
         for(Tutor tutor : listaTutores){
             if(user == null && pass == null) {
                 if(tutor.getEmail().toString().equals(email)){
-                    tutorObtenido = tutor;
+                    return tutor;
                 }
-            }else {
-                if (tutor.getPassword().toString().equals(pass) && tutor.getUsername().toString().equals(user)) {
-                    tutorObtenido = tutor;
+            }
+            else {
+                if(email == null) {
+                    if (tutor.getPassword().toString().equals(pass) && tutor.getUsername().toString().equals(user)) {
+                        return tutor;
+                    }
                 }
             }
         }
-        return tutorObtenido;
+        return null;
     }
 }

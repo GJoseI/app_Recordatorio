@@ -20,6 +20,7 @@ import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.MainActivity;
 import com.example.apprecordatorio.dao.TutorExternoDao;
 import com.example.apprecordatorio.entidades.Paciente;
+import com.example.apprecordatorio.entidades.Tutor;
 import com.example.apprecordatorio.negocio.PacienteNegocio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -134,12 +135,20 @@ public class TutorFragment extends Fragment {
             String user = etUser.getText().toString();
             String pass = etPass.getText().toString();
             TutorExternoDao tutorExternoDao = new TutorExternoDao();
-            if(tutorExternoDao.obtenerTutor(user, pass, null) != null){
-                Fragment fragment = new TutorMenuFragment();
-                ((MainActivity) requireActivity()).mostrarFragmento(fragment);
-            }else{
-                Toast.makeText(this.getContext(),"Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
-            }
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Handler mainHandler = new Handler(Looper.getMainLooper());
+            executor.execute(() ->{
+                Tutor tutor = tutorExternoDao.obtenerTutor(user, pass, null);
+                mainHandler.post(() ->{
+                    if(tutor !=  null){
+                        Fragment fragment = new TutorMenuFragment();
+                        ((MainActivity) requireActivity()).mostrarFragmento(fragment);
+                    }else{
+                        Toast.makeText(this.getContext(),"Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
         });
     }
 }
