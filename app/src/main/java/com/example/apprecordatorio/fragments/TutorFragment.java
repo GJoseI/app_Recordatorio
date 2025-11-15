@@ -1,6 +1,5 @@
 package com.example.apprecordatorio.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.MainActivity;
+import com.example.apprecordatorio.dao.TutorExternoDao;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.negocio.PacienteNegocio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -31,6 +31,8 @@ public class TutorFragment extends Fragment {
 
     Button btnCod;
     TextView tvCod;
+    EditText etUser;
+    EditText etPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +40,8 @@ public class TutorFragment extends Fragment {
 
         btnCod = view.findViewById(R.id.btnGenerarCodigo);
         tvCod = view.findViewById(R.id.tvCodSeguimiento);
+        etPass = view.findViewById(R.id.et_passTinicio);
+        etUser = view.findViewById(R.id.et_userTInicio);
 
         PacienteNegocio negS = new PacienteNegocio(requireContext());
         Paciente pS = negS.read();
@@ -126,8 +130,16 @@ public class TutorFragment extends Fragment {
         });
 
         iniciar.setOnClickListener(v -> {
-            Fragment fragment = new TutorMenuFragment();
-            ((MainActivity) requireActivity()).mostrarFragmento(fragment);
+            /// Funcion para corroborar datos ingresados
+            String user = etUser.getText().toString();
+            String pass = etPass.getText().toString();
+            TutorExternoDao tutorExternoDao = new TutorExternoDao();
+            if(tutorExternoDao.obtenerTutor(user, pass, null) != null){
+                Fragment fragment = new TutorMenuFragment();
+                ((MainActivity) requireActivity()).mostrarFragmento(fragment);
+            }else{
+                Toast.makeText(this.getContext(),"Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
