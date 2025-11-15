@@ -27,6 +27,7 @@ public class AlarmaReceiver extends BroadcastReceiver {
         int minuto = intent.getIntExtra("minuto", -1);
         int id = intent.getIntExtra("id", -1);
         int diaSemana = intent.getIntExtra("diaSemana", -1);
+        int pacienteId = intent.getIntExtra("pacienteId",-1);
 
         Alarma r = new Alarma();
         r.setId(id);
@@ -45,6 +46,8 @@ public class AlarmaReceiver extends BroadcastReceiver {
         if(descripcion!=null) i.putExtra("descripcion", descripcion);
         if(tono!=null) i.putExtra("tono", tono);
         if(imagen!=null)i.putExtra("imagen",imagen);
+        i.putExtra("id",id);
+        i.putExtra("pacienteId",pacienteId);
         i.putExtras(Objects.requireNonNull(intent.getExtras()));
         ContextCompat.startForegroundService(context, i);
 

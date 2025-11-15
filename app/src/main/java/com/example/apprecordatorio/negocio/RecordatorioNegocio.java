@@ -125,7 +125,8 @@ public class RecordatorioNegocio {
             if(dao.desactivarAlarma(a))au.cancelarAlarmas(context,a);
         }else
         {
-          a.setEstado(false);
+            a.setEstado(false);
+            a.setPacienteId(p.getId());
             if(dao.desactivarAlarma(a)) {
                 daoEx.update(a);
                 au.cancelarAlarmas(context, a);
@@ -141,6 +142,7 @@ public class RecordatorioNegocio {
             if(dao.activarAlarma(a))au.programarAlarmas(context,a);
         }else {
             a.setEstado(true);
+            a.setPacienteId(p.getId());
             if (dao.activarAlarma(a))
             {
                 daoEx.update(a);

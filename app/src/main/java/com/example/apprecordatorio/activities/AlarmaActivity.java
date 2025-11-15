@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,59 +20,76 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.apprecordatorio.R;
+import com.example.apprecordatorio.dao.SeguimientoExternoDao;
+import com.example.apprecordatorio.entidades.Alarma;
+import com.example.apprecordatorio.entidades.Seguimiento;
 import com.example.apprecordatorio.servicios.AlarmaService;
 
-public class AlarmaActivity extends AppCompatActivity {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+public class AlarmaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-        // Métodos modernos (Android 8.1+)
         setShowWhenLocked(true);
         setTurnScreenOn(true);
-
-        // Flag extra para mantener la pantalla encendida
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_alarma);
 
         String titulo = getIntent().getStringExtra("titulo");
+        int idAlarma = getIntent().getIntExtra("idAlarma", -1);
+        int pacienteId = getIntent().getIntExtra("idPaciente", -1);
 
         TextView txtMensaje = findViewById(R.id.txtMensaje);
         txtMensaje.setText("¡Alarma: " + titulo + "!");
 
         String imagenUri = getIntent().getStringExtra("imagen");
-
-
-        String tono = getIntent().getStringExtra("tono");
-
-        if(imagenUri!=null)
-        {
+        if (imagenUri != null) {
             ImageView imagen = findViewById(R.id.ivAlarmaDisparada);
             imagen.setImageURI(Uri.parse(imagenUri));
             imagen.setVisibility(View.VISIBLE);
         }
 
-
         Button btnDetener = findViewById(R.id.btnDetener);
-        btnDetener.setOnClickListener(v -> detenerAlarma());
-
+        btnDetener.setOnClickListener(v -> detenerAlarma(idAlarma, pacienteId));
     }
 
-    private void detenerAlarma() {
+    private void detenerAlarma(int idAlarma, int pacienteId) {
 
+        // ----- 1) Pedir al Service que pare la alarma -----
         Intent stopIntent = new Intent(this, AlarmaService.class);
-        stopService(stopIntent);
-        finish();
-    }
+        stopIntent.setAction("STOP_ALARM");
+        startService(stopIntent);
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        detenerAlarma();
+        // ----- 2) Registrar seguimiento -----
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+
+            if (pacienteId != -1) {
+                SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                Seguimiento s = new Seguimiento();
+                Alarma a = new Alarma();
+                a.setPacienteId(pacienteId);
+                a.setId(idAlarma);
+                s.setAlarma(a);
+                s.setAtendida(true);
+
+                dao.add(s);
+            }
+
+            mainHandler.post(() ->
+                    Log.d("ALARM ACTIVITY", "Seguimiento registrado")
+            );
+        });
+
+        executor.shutdown();
+
+        finish();
     }
 }
