@@ -142,7 +142,13 @@ public class TutorFragment extends Fragment {
                 Tutor tutor = tutorExternoDao.obtenerTutor(user, pass, null);
                 mainHandler.post(() ->{
                     if(tutor !=  null){
+                        Bundle args = new Bundle();
+                        args.putString("user", user);
+                        args.putString("pass", pass);
+                        args.putInt("id",tutor.getId());
+                        args.putString("email", tutor.getEmail());
                         Fragment fragment = new TutorMenuFragment();
+                        fragment.setArguments(args);
                         ((MainActivity) requireActivity()).mostrarFragmento(fragment);
                     }else{
                         Toast.makeText(this.getContext(),"Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();

@@ -99,11 +99,10 @@ public class TutorExternoDao implements ITutorExterno {
     @Override
     public boolean update(Tutor t) {
         int res = 0;
-        Connection c = null;
 
         try {
             con = new Conexion();
-            c = con.abrirConexion();
+            Connection c = con.abrirConexion();
 
             String sql = "UPDATE tutor SET nombre_usuario=?, email=?, id_paciente=?, password=? WHERE id=?";
 
