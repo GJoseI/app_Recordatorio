@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,6 +188,8 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
     public void borrarRecordatorio(Alarma r, RecordatorioNegocio neg)
     {
 
+        Log.d("ALA FRAG","id de la alarma: "+r.getId());
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -203,6 +206,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
                 } else {
                     Toast.makeText(requireContext(),"Error al borrar!",Toast.LENGTH_SHORT).show();
                 }
+                cargarRecordatorios();
             });
         });
              /*
@@ -210,7 +214,6 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         {
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
         }*/
-        cargarRecordatorios();
     }
 
     private void confirmarBorrado(Alarma recordatorio, RecordatorioNegocio neg) {

@@ -29,6 +29,7 @@ public class RecordatorioDao {
         try {
             db = dbHelper.getWritableDatabase();
             ContentValues valores = new ContentValues();
+            //valores.put("id",a.getId());
             valores.put("titulo", a.getTitulo());
             valores.put("contenido", a.getDescripcion());
             valores.put("imagen", a.getImagenUrl());
@@ -67,6 +68,7 @@ public class RecordatorioDao {
         {
             db = dbHelper.getWritableDatabase();
             ContentValues valores = new ContentValues();
+            //valores.put("id",a.getId());
             valores.put("titulo", a.getTitulo());
             valores.put("contenido", a.getDescripcion());
             valores.put("imagen", a.getImagenUrl());
@@ -216,6 +218,59 @@ public class RecordatorioDao {
         int r =db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
 
         return ( r > 0);
+    }
+
+    public int traerProximoId()
+    {
+
+        int id = 0;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = dbHelper.getReadableDatabase();
+
+            cursor = db.rawQuery("SELECT MAX(id) from recordatorios", null);
+            while (cursor.moveToNext()) {
+               id =   cursor.getInt(0);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if(db!=null) {
+                db.close();
+            }
+        }
+        return id+1;
+    }
+
+    public int traerIdMaximo()
+    {
+        int id = 0;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = dbHelper.getReadableDatabase();
+
+            cursor = db.rawQuery("SELECT MAX(id) from recordatorios", null);
+            while (cursor.moveToNext()) {
+                id =   cursor.getInt(0);
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if(db!=null) {
+                db.close();
+            }
+        }
+        return id;
     }
 
 }

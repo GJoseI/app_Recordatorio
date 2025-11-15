@@ -22,8 +22,8 @@ public class NotasExternoDao implements INotaExterno {
             con = new Conexion();
             c = con.abrirConexion();
 
-            String sql = "INSERT INTO notas (titulo, descripcion, imagen, id_paciente, baja_logica) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO notas (titulo, descripcion, imagen, id_paciente, baja_logica,id) " +
+                    "VALUES (?, ?, ?, ?, ?,?)";
 
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setString(1, r.getTitulo());
@@ -31,6 +31,7 @@ public class NotasExternoDao implements INotaExterno {
             ps.setString(3, r.getImagenUrl());
             ps.setInt(4, r.getPacienteId());
             ps.setBoolean(5, r.isBajaLogica());
+            ps.setInt(6,r.getId());
 
             res = ps.executeUpdate();
 
@@ -97,10 +98,11 @@ public class NotasExternoDao implements INotaExterno {
             c = con.abrirConexion();
 
             // Baja lógica
-            String sql = "UPDATE notas SET baja_logica = 1 WHERE id = ?";
+            String sql = "UPDATE notas SET baja_logica = 1 WHERE id = ? and id_paciente = ?";
             PreparedStatement ps = c.prepareStatement(sql);
 
             ps.setInt(1, r.getId());
+            ps.setInt(2,r.getPacienteId());
             res = ps.executeUpdate();
 
         } catch (Exception e) {
@@ -127,7 +129,7 @@ public class NotasExternoDao implements INotaExterno {
             c = con.abrirConexion();
 
             String sql = "UPDATE notas SET titulo=?, descripcion=?, imagen=?, id_paciente=?, baja_logica=? " +
-                    "WHERE id=?";
+                    "WHERE id=? and id_paciente = ?";
 
             PreparedStatement ps = c.prepareStatement(sql);
 
@@ -137,6 +139,7 @@ public class NotasExternoDao implements INotaExterno {
             ps.setInt(4, r.getPacienteId());
             ps.setBoolean(5, r.isBajaLogica());
             ps.setInt(6, r.getId());
+            ps.setInt(7, r.getPacienteId());
 
             res = ps.executeUpdate();
 
@@ -189,4 +192,6 @@ public class NotasExternoDao implements INotaExterno {
 
         return r;
     }
+
+
 }

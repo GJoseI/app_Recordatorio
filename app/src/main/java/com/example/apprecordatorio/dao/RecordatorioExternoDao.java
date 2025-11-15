@@ -3,6 +3,7 @@ package com.example.apprecordatorio.dao;
 import android.util.Log;
 
 import com.example.apprecordatorio.entidades.Alarma;
+import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.interfaces.IRecordatorioExterno;
 
 import java.sql.Connection;
@@ -70,9 +71,11 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
     }
 
 
-    public boolean add(Alarma a) {
+    public int add(Alarma a) {
         int r = 0;
 
+        Log.d("EN ADD DAOEX","ID ALARMA"+a.getId()+" id paciente"+a.getPacienteId() );
+        int newId =0;
         try {
 
             con = new Conexion();
@@ -80,40 +83,35 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             if (c == null) {
 
                 Log.e("PacienteExternoDao", "No hay conexión a la BD externa");
-                return false;
+                return 0;
             }
 
-            String sql = "INSERT INTO alarma (id_paciente, titulo, descripcion, tono, imagen, estado, " +
+            String sql = "INSERT INTO alarma (id,id_paciente, titulo, descripcion, tono, imagen, estado, " +
                     "domingo, lunes, martes, miercoles, jueves, viernes, sabado,baja_logica) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+                    "VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
             PreparedStatement ps = c.prepareStatement(sql);
 
-            /*Statement st = c.createStatement();
-            r = st.executeUpdate("INSERT INTO alarma (id_paciente, titulo, descripcion, tono, imagen, estado, " +
-                    "domingo, lunes, martes, miercoles, jueves, viernes, sabado,baja_logica) " +
-                            "VALUES ("+a.getPacienteId()+",'"+a.getTitulo()+"', '"+a.getDescripcion()+"'," +
-                    "'"+a.getTono()+"',"+a.getImagenUrl()+", "+a.isEstado()+", "+a.isDomingo()+"," +
-                    " "+a.isLunes()+", "+a.isMartes()+", "+a.isMiercoles()+", "+a.isJueves()+", "+a.isViernes()+"," +
-                    a.isSabado()+","+a.isBajaLogica()+", +)");*/
+            ps.setInt(1,a.getId());
+            ps.setInt(2, a.getPacienteId());
+            ps.setString(3, a.getTitulo());
+            ps.setString(4, a.getDescripcion());
+            ps.setString(5, a.getTono());
+            ps.setString(6, a.getImagenUrl());
+            ps.setBoolean(7, a.isEstado());
 
-            ps.setInt(1, a.getPacienteId());
-            ps.setString(2, a.getTitulo());
-            ps.setString(3, a.getDescripcion());
-            ps.setString(4, a.getTono());
-            ps.setString(5, a.getImagenUrl());
-            ps.setBoolean(6, a.isEstado());
-
-            ps.setBoolean(7, a.isDomingo());
-            ps.setBoolean(8, a.isLunes());
-            ps.setBoolean(9, a.isMartes());
-            ps.setBoolean(10, a.isMiercoles());
-            ps.setBoolean(11, a.isJueves());
-            ps.setBoolean(12, a.isViernes());
-            ps.setBoolean(13, a.isSabado());
-            ps.setBoolean(14,false);
+            ps.setBoolean(8, a.isDomingo());
+            ps.setBoolean(9, a.isLunes());
+            ps.setBoolean(10, a.isMartes());
+            ps.setBoolean(11, a.isMiercoles());
+            ps.setBoolean(12, a.isJueves());
+            ps.setBoolean(13, a.isViernes());
+            ps.setBoolean(14, a.isSabado());
+            ps.setBoolean(15,false);
 
             r = ps.executeUpdate();
+
+
 
 
         } catch (Exception e) {
@@ -128,8 +126,10 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             }
         }
 
-        return r > 0;
+        return r;
     }
+
+
 
 
 
@@ -141,8 +141,13 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             con = new Conexion();
             Connection c = con.abrirConexion();
 
-            String sql = "UPDATE alarma SET titulo=?, descripcion=?, tono=?,imagen=?,estado=?," +
-                    "domingo=?,lunes=?,martes=?,miercoles=?,jueves=?,viernes=?,sabado=?,baja_logica=? WHERE id=?";
+            Log.d("dao ex update"," cod paciente: "+a.getPacienteId());
+            //Log.d("dao ex update","cod paciente en read",)
+
+            String sql = "UPDATE alarma SET titulo = ?, descripcion = ?, tono = ?, imagen = ?, estado = ?, " +
+                    "domingo = ?, lunes = ?, martes=?, miercoles = ?, jueves = ?, viernes = ?, sabado = ?, baja_logica = ? " +
+                    "WHERE id = ? AND id_paciente = ?";
+
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setString(1, a.getTitulo());
             ps.setString(2, a.getDescripcion());
@@ -156,8 +161,10 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             ps.setBoolean(10, a.isJueves());
             ps.setBoolean(11, a.isViernes());
             ps.setBoolean(12, a.isSabado());
-            ps.setInt(13, a.getId());
-            ps.setBoolean(14, a.isBajaLogica());
+            ps.setBoolean(13, a.isBajaLogica());
+            ps.setInt(14, a.getId());
+            ps.setInt(15,a.getPacienteId());
+
 
             r = ps.executeUpdate();
         }catch (Exception e)
@@ -184,15 +191,21 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
         try {
 
+            Log.d("dao ex delete"," cod paciente: "+a.getPacienteId());
+            Log.d("dao ex delete"," cod alarma: "+a.getId());
             con = new Conexion();
             Connection c = con.abrirConexion();
 
             // Baja lógica
-            String sql = "UPDATE alarma SET baja_logica = 1 WHERE id = ?";
+            String sql = "UPDATE alarma SET baja_logica = 1 WHERE id = ? and id_paciente = ?";
             PreparedStatement ps = c.prepareStatement(sql);
 
             ps.setInt(1, a.getId());
+            ps.setInt(2, a.getPacienteId());
+
             res = ps.executeUpdate();
+
+            Log.d("DAO DEL","ID ALARAMA "+a.getId()+"el resultado es "+res);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,7 +228,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             c = con.abrirConexion();
 
             Statement st = c.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM alarma where id ="+id+"");
+            ResultSet rs = st.executeQuery("SELECT * FROM alarma where id ="+id+" and id_paciente =");
 
             while (rs.next()) {
 
@@ -250,5 +263,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         }
         return a;
     }
+
+
 
 }

@@ -18,7 +18,7 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String query = "INSERT INTO seguimiento (atendida, id_alarma) VALUES (?, ?)";
+        String query = "INSERT INTO seguimiento (atendida, id_alarma, id_paciente) VALUES (?, ?,?)";
 
         try {
             conn = cn.abrirConexion();
@@ -26,6 +26,7 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
 
             ps.setBoolean(1, s.isAtendida());
             ps.setInt(2, s.getAlarma().getId());
+            ps.setInt(3,s.getAlarma().getPacienteId());
 
             int resultado = ps.executeUpdate();
 

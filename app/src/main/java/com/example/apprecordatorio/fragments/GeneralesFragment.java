@@ -203,6 +203,7 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
                 } else {
                     Toast.makeText(requireContext(),"Error al borrar!",Toast.LENGTH_SHORT).show();
                 }
+                cargarRecordatorios(inflater);
             });
         });
 
@@ -210,7 +211,7 @@ public class GeneralesFragment extends Fragment implements OnRecordatorioGuardad
         {
             Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
         }*/
-        cargarRecordatorios(inflater);
+
     }
 
     private void confirmarBorrado(Recordatorio recordatorio, RecordatorioGralNegocio neg, LayoutInflater inflater) {

@@ -29,7 +29,13 @@ public class RecordatorioNegocio {
     }
     public List<Alarma> readAll()
     {
-        return dao.readAll();
+        List<Alarma> lista = dao.readAll();
+
+        for(Alarma a : lista)
+        {
+            Log.d("EN READ NEG","id: "+a.getId());
+        }
+        return lista;
     }
     public long add(Alarma r, Context context)
     {
@@ -37,19 +43,23 @@ public class RecordatorioNegocio {
         Paciente p = pneg.read();
         if(p==null)
         {
+           // int id = dao.TraerProximoId();
+            //r.setId(id);
             resultado = dao.add(r);
             if(resultado>0) au.programarAlarmas(context, r);
         }else {
-            r.setPacienteId(p.getId());
-            resultado = dao.add(r);
-            if(resultado>0)
-            {
-                au.programarAlarmas(context, r);
-                if(!daoEx.add(r))resultado = -1;// = error bd
-            }
+                r.setPacienteId(p.getId());
+                resultado = dao.add(r);
+                if(resultado>0)
+                {
+                    int id = dao.traerIdMaximo();
+                    r.setId(id);
+                    au.programarAlarmas(context, r);
+                    if(daoEx.add(r)<=0)resultado=-1;
+                }
         }
 
-        Log.e("NEG","RESULTADO: "+resultado);
+        Log.e("NEG add","RESULTADO: "+resultado);
         return resultado;
     }
     public int update(Alarma r,Context context)
@@ -69,16 +79,18 @@ public class RecordatorioNegocio {
             resultado =  dao.update(r);
             if (resultado>0)
             {
+                r.setPacienteId(p.getId());
                 au.programarAlarmas(context,r);
                 if(!daoEx.update(r))resultado = -1;
             }
         }
 
-        Log.e("NEG","RESULTADO: "+resultado);
+        Log.e("NEG update","RESULTADO: "+resultado);
         return resultado;
     }
     public int delete(Alarma r,Context context)
     {
+        String nombre = "";
         int resultado = 0;
         Paciente p= pneg.read();
 
@@ -92,11 +104,15 @@ public class RecordatorioNegocio {
             resultado = dao.delete(r);
             if(resultado>0) {
                 au.cancelarAlarmas(context, r);
+                r.setPacienteId(p.getId());
                 if (!daoEx.delete(r)) resultado = -1;
             }
+            nombre = p.getNombre();
         }
 
-        Log.e("NEG","RESULTADO: "+resultado);
+
+
+        Log.e("NEG delete","RESULTADO: "+resultado+"PACIENTE: "+nombre);
         return resultado;
     }
 
