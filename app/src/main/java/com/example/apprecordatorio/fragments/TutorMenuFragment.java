@@ -1,5 +1,6 @@
 package com.example.apprecordatorio.fragments;
 
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,15 +18,21 @@ import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.MainActivity;
 import com.example.apprecordatorio.dao.PacienteExternoDao;
 import com.example.apprecordatorio.dao.TutorExternoDao;
+
+import com.example.apprecordatorio.dialogs.AltaNotaExterno;
+import com.example.apprecordatorio.dialogs.AltaRecordatorioExterno;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Tutor;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import androidx.appcompat.app.AlertDialog;
 
 public class TutorMenuFragment extends Fragment {
 
     TextView tvSiguiendo;
 
-    int codSeguimiento =-1;
+    int codSeguimiento = 0;
     Button vincular;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,10 +44,10 @@ public class TutorMenuFragment extends Fragment {
         Bundle conIdPaciente = getArguments();
         if(conIdPaciente!=null)
         {
-            codSeguimiento = conIdPaciente.getInt("codSeguimiento",-1);
+            codSeguimiento = conIdPaciente.getInt("codSeguimiento",0);
            String nombrePaciente = conIdPaciente.getString("nombrePaciente","default");
 
-           if(codSeguimiento!=-1)
+           if(codSeguimiento!=0)
            {
                Log.d("cod seguimiento"," "+codSeguimiento+" nombre"+nombrePaciente);
                vincular.setVisibility(View.GONE);
@@ -66,7 +73,7 @@ public class TutorMenuFragment extends Fragment {
 
 
         TutorExternoDao tutorExternoDao = new TutorExternoDao();
-        Tutor tutor = tutorExternoDao.obtenerTutor(args.getString("user"), args.getString("pass"), null);
+        Tutor tutor = tutorExternoDao.login(args.getString("user"), args.getString("pass"));
         if(tutor!=null) {
             PacienteExternoDao pacienteExternoDao = new PacienteExternoDao();
             if (tutor.getP().getId() > 0) {
@@ -75,7 +82,7 @@ public class TutorMenuFragment extends Fragment {
                 vincular.setVisibility(View.GONE);
             }
         }else{
-            Log.d("debug tutor", "ta vacio");
+            Log.d("tutor menu frag", "tutor esta vacio");
         }
 
         vincular.setOnClickListener(v ->{
@@ -103,11 +110,50 @@ public class TutorMenuFragment extends Fragment {
         atras.setOnClickListener(v -> {
             ((MainActivity) requireActivity()).esconderFragmento();
         });
-        /*
+
         agregar.setOnClickListener(v -> {
-            Fragment fragmento = new AgregarRecTutorFragment();
-            ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
+            View viewDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_recordatorio, null);
+
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
+                    .setTitle("Selecciona un tipo de recordatorio")
+                    .setView(viewDialog)
+                    .setNegativeButton("Cancelar", null);
+
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+
+            viewDialog.findViewById(R.id.btnAlarma).setOnClickListener(v1 ->
+            {
+                crearAlarma();
+                dialog.dismiss();
+            });
+            viewDialog.findViewById(R.id.btnNota).setOnClickListener(v1 -> {
+                crearNota();
+                dialog.dismiss();
+            });
         });
-         */
+
+    }
+
+    public void crearAlarma()
+    {
+        AltaRecordatorioExterno dialog = new AltaRecordatorioExterno();
+
+        Bundle args = new Bundle();
+        args.putInt("codSeguimiento",codSeguimiento);
+        //dialog.setOnRecordatorioGuardadoListener(this);
+        // currentDialog = dialog; // guarda una referencia
+        dialog.show(getChildFragmentManager(), "Crear Alarma");
+        dialog.setArguments(args);
+    }
+    public void crearNota()
+    {
+        AltaNotaExterno dialog = new AltaNotaExterno();
+        Bundle args = new Bundle();
+        args.putInt("codSeguimiento",codSeguimiento);
+
+        dialog.show(getChildFragmentManager(), "Crear Nota");
+        dialog.setArguments(args);
     }
 }

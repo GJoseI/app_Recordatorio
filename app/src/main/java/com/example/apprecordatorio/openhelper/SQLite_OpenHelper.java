@@ -14,12 +14,13 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
             String query = "create table recordatoriosGenerales(id integer primary key autoincrement, titulo text, contenido text, " +
-                    "imagen text, baja_logica int)";
+                    "imagen text, baja_logica int,id_remoto int,updated_at int, pending_changes int)";
 
             String query2 = "create table recordatorios(id integer primary key autoincrement, titulo text, contenido text," +
                    "imagen text, tono text, fecha date,  hora int, minuto int," +
                     "domingo int, lunes int, martes int, miercoles int," +
-                    "jueves int, viernes int, sabado int, estado integer, baja_logica int)";
+                    "jueves int, viernes int, sabado int, estado integer, baja_logica int" +
+                    ",id_remoto int, updated_at int, pending_changes int)";
 
             String query3 ="create table paciente(id integer primary key, nombre text)";
 

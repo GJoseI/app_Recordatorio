@@ -6,11 +6,11 @@ import com.example.apprecordatorio.entidades.Recordatorio;
 import java.util.ArrayList;
 
 public interface INotaExterno {
-    boolean add(Recordatorio r);
-    ArrayList<Recordatorio> readAll();
+    int add(Recordatorio r);
+    ArrayList<Recordatorio> readAllFrom(int id);
     boolean delete (Recordatorio r);
 
     boolean update (Recordatorio r);
 
-    Recordatorio readOne(int id);
+    Recordatorio readOne(int id,int idPaciente);
 }

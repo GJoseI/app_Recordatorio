@@ -33,15 +33,38 @@ public class RecordatorioGralNegocio {
     }
     public long add(Recordatorio r)
     {
+        Paciente p =  pneg.read();
+        if(p!=null)
+        {
+            r.setPacienteId(p.getId());
+        }
+
         return dao.add(r);
     }
     public int update(Recordatorio r)
     {
+       Paciente p =  pneg.read();
+        if(p!=null)
+        {
+            r.setPacienteId(p.getId());
+        }
+
         return dao.update(r);
     }
     public int delete(Recordatorio r)
     {
+        Paciente p =  pneg.read();
+        if(p!=null)
+        {
+            r.setPacienteId(p.getId());
+        }
+
         return dao.delete(r);
+    }
+
+    public boolean addEx(Recordatorio r)
+    {
+        return (daoEx.add(r)>0) ;
     }
 
     public Recordatorio readOne(int id){return dao.readOne(id);}

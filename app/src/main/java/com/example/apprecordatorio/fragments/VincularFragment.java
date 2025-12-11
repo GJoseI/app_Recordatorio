@@ -60,7 +60,7 @@ public class VincularFragment extends Fragment {
                     tutor.setId(args.getInt("id"));
                     tutor.setEmail(args.getString("email"));
                     tutor.setP(pacienteExternoDao.readOne(Integer.parseInt(codSeguimiento.getText().toString())));
-                    boolean update = tutorExternoDao.update(tutor);
+                    boolean update = tutorExternoDao.vincular(tutor);
                     mainHandler.post(()->{
                         if(update){
                             Toast.makeText(this.getContext(),"Vinculacion con exito",Toast.LENGTH_SHORT).show();

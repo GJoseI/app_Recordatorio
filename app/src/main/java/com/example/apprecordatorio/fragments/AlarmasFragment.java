@@ -264,7 +264,7 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         args.putString("titulo", r.getTitulo());
         args.putString("descripcion", r.getDescripcion());
         args.putString("imagen", r.getImagenUrl());
-        args.putString("fecha",r.getFecha().toString());
+//        args.putString("fecha",r.getFecha().toString());
         args.putInt("hora",r.getHora());
         args.putInt("minuto",r.getMinuto());
         args.putString("tono",r.getTono());

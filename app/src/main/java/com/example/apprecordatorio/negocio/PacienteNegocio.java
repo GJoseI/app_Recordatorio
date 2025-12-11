@@ -5,7 +5,9 @@ import android.content.Context;
 import com.example.apprecordatorio.dao.NotasExternoDao;
 import com.example.apprecordatorio.dao.PacienteDao;
 import com.example.apprecordatorio.dao.PacienteExternoDao;
+import com.example.apprecordatorio.dao.RecordatorioDao;
 import com.example.apprecordatorio.dao.RecordatorioExternoDao;
+import com.example.apprecordatorio.dao.RecordatorioGralDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Recordatorio;
@@ -14,6 +16,8 @@ import java.util.List;
 
 public class PacienteNegocio {
 
+    private RecordatorioDao rd;
+    private RecordatorioGralDao nd;
     private PacienteDao dao;
     private PacienteExternoDao daoEx;
     private  RecordatorioExternoDao daoExAlarma;
@@ -21,6 +25,8 @@ public class PacienteNegocio {
 
     public  PacienteNegocio(Context context)
     {
+        rd = new RecordatorioDao(context);
+        nd = new RecordatorioGralDao(context);
         dao = new PacienteDao(context);
         daoEx = new PacienteExternoDao();
         daoExAlarma = new RecordatorioExternoDao();
@@ -58,13 +64,17 @@ public class PacienteNegocio {
             {
                 a.setPacienteId(p.getId());
                 rneg.update(a,context);
-                daoExAlarma.add(a);
+                int id = daoExAlarma.add(a);
+                a.setIdRemoto(id);
+                rd.updateIdRemoto(a);
             }
             for (Recordatorio r : notas)
             {
                 r.setPacienteId(p.getId());
                 gneg.update(r);
-                notasExDao.add(r);
+                int id = notasExDao.add(r);
+                r.setIdRemoto(id);
+                nd.updateIdRemoto(r);
             }
         }
     }

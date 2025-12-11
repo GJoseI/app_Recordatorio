@@ -61,7 +61,7 @@ public class TutorFragment extends Fragment {
             input.setHint("Nombre");
 
             new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
-                    .setTitle("Ingresa tu nombre")
+                    .setTitle("Ingresa un nombre")
                     .setMessage("Nombre de la persona a seguir:")
                     .setView(input)
                     .setPositiveButton("Aceptar", (dialog, which) -> {
@@ -141,10 +141,17 @@ public class TutorFragment extends Fragment {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Handler mainHandler = new Handler(Looper.getMainLooper());
             executor.execute(() ->{
-                Tutor tutor = tutorExternoDao.obtenerTutor(user, pass, null);
+                Tutor tutor = tutorExternoDao.login(user, pass);
                 PacienteExternoDao pdao = new PacienteExternoDao();
-                Paciente p = pdao.readOne(tutor.getP().getId());
-                tutor.setP(p);
+
+                if(tutor.getP().getId()>0)
+                {
+                   //Paciente p = new Paciente();
+
+                    tutor.setP(pdao.readOne(tutor.getP().getId()));
+                }
+
+
                 mainHandler.post(() ->{
                     if(tutor !=  null){
                         Bundle args = new Bundle();

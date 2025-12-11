@@ -43,7 +43,7 @@ public class TutorRegistroFragment extends Fragment {
             String email = etEmail.getText().toString().trim();
             TutorExternoDao tutorExternoDao = new TutorExternoDao();
             Tutor tutor = new Tutor();
-                String error = validarRegistro(email, pass, pass2, tutorExternoDao);
+                String error = validarRegistro(email, pass, pass2);
                 if (error != null) {
                     Toast.makeText(this.getContext(), error, Toast.LENGTH_SHORT).show();
                 } else {
@@ -74,13 +74,13 @@ public class TutorRegistroFragment extends Fragment {
 
     }
 
-    public String validarRegistro(String email, String pass, String pass2, TutorExternoDao tutorExternoDao){
+    public String validarRegistro(String email, String pass, String pass2){
 
         if(!validarEmail(email)) return "Email invalido";
 
         if (!pass.equals(pass2)) return "Las contraseñas no coinciden";
 
-        if (tutorExternoDao.obtenerTutor(null, null, email) != null) return "Ya existe un tutor con este email";
+       // if (tutorExternoDao.login(null, null, email) != null) return "Ya existe un tutor con este email";
 
         return null;
     }

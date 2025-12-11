@@ -7,6 +7,9 @@ import java.time.LocalDate;
     public class Recordatorio {
         private int id;
 
+        private int idRemoto;
+        private boolean pendingChanges;
+        private long updatedAt;
         private String imagenUrl;
         private int pacienteId;
         private String descripcion;
@@ -75,5 +78,29 @@ import java.time.LocalDate;
 
         public void setBajaLogica(boolean bajaLogica) {
             this.bajaLogica = bajaLogica;
+        }
+
+        public int getIdRemoto() {
+            return idRemoto;
+        }
+
+        public void setIdRemoto(int idRemoto) {
+            this.idRemoto = idRemoto;
+        }
+
+        public boolean isPendingChanges() {
+            return pendingChanges;
+        }
+
+        public void setPendingChanges(boolean pendingChanges) {
+            this.pendingChanges = pendingChanges;
+        }
+
+        public long getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public void setUpdatedAt(long updatedAt) {
+            this.updatedAt = updatedAt;
         }
     }

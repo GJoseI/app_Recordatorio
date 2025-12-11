@@ -51,8 +51,6 @@ public class RecordatorioNegocio {
         Paciente p = pneg.read();
         if(p==null)
         {
-           // int id = dao.TraerProximoId();
-            //r.setId(id);
             resultado = dao.add(r);
             if(resultado>0) au.programarAlarmas(context, r);
         }else {
@@ -60,10 +58,9 @@ public class RecordatorioNegocio {
                 resultado = dao.add(r);
                 if(resultado>0)
                 {
-                    int id = dao.traerIdMaximo();
-                    r.setId(id);
+                    r.setId((int)resultado);
                     au.programarAlarmas(context, r);
-                    if(daoEx.add(r)<=0)resultado=-1;
+                    //if(daoEx.add(r)<=0)resultado=-1;
                 }
         }
 
@@ -89,7 +86,7 @@ public class RecordatorioNegocio {
             {
                 r.setPacienteId(p.getId());
                 au.programarAlarmas(context,r);
-                if(!daoEx.update(r))resultado = -1;
+               // if(!daoEx.update(r))resultado = -1;
             }
         }
 
@@ -113,7 +110,7 @@ public class RecordatorioNegocio {
             if(resultado>0) {
                 au.cancelarAlarmas(context, r);
                 r.setPacienteId(p.getId());
-                if (!daoEx.delete(r)) resultado = -1;
+                //if (!daoEx.delete(r)) resultado = -1;
             }
             nombre = p.getNombre();
         }
@@ -136,7 +133,7 @@ public class RecordatorioNegocio {
             a.setEstado(false);
             a.setPacienteId(p.getId());
             if(dao.desactivarAlarma(a)) {
-                daoEx.update(a);
+               // daoEx.update(a);
                 au.cancelarAlarmas(context, a);
             };
 
@@ -153,7 +150,7 @@ public class RecordatorioNegocio {
             a.setPacienteId(p.getId());
             if (dao.activarAlarma(a))
             {
-                daoEx.update(a);
+               // daoEx.update(a);
                 au.programarAlarmas(context,a);
             }
         }
@@ -164,4 +161,13 @@ public class RecordatorioNegocio {
     {
         return daoEx.readOneFrom(id,idPaciente);
     }
+
+    public boolean addExterno(Alarma a)
+    {
+        //int id = daoEx.getLastId(a.getPacienteId());
+        //a.setId(id+
+        Log.d("RNEG","ID PACIENTE "+a.getPacienteId());
+        return (daoEx.add(a)>0);
+    }
+
 }

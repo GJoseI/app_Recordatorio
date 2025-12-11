@@ -5,17 +5,97 @@ import android.util.Log;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Tutor;
 import com.example.apprecordatorio.interfaces.ITutorExterno;
+import com.example.apprecordatorio.util.HttpUtils;
+
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TutorExternoDao implements ITutorExterno {
 
-    private Conexion con;
+   // private Conexion con;
 
+
+    private String BASE_URL = "http://10.0.2.2/pruebaphp/";
+    @Override
+    public boolean add(Tutor t) {
+        String url = BASE_URL + "addTutor.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("nombre_usuario", t.getUsername());
+        params.put("email", t.getEmail());
+        params.put("password", t.getPassword());
+
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+            return json.optBoolean("success", false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Tutor login(String username, String password) {
+        String url = BASE_URL + "loginTutor.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("nombre_usuario", username);
+        params.put("password", password);
+
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+
+            if (json.optBoolean("success")) {
+                Tutor t = new Tutor();
+                t.setId(json.getInt("id"));
+                t.setUsername(json.getString("nombre_usuario"));
+                t.setEmail(json.getString("email"));
+                int idPaciente = json.optInt("id_paciente", 0);
+                //if(idPaciente>0)
+                //{
+                    Paciente paciente = new Paciente();
+                    paciente.setId(idPaciente);
+                    t.setP(paciente);
+                //}
+                return t;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null; // login incorrecto
+    }
+
+    @Override
+    public boolean vincular(Tutor t) {
+        String url = BASE_URL + "vincularTutor.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_tutor", String.valueOf(t.getId()));
+        params.put("id_paciente", String.valueOf(t.getP().getId()));
+
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+            return json.optBoolean("success", false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    /*
     @Override
     public boolean add(Tutor t) {
         int res = 0;
@@ -128,6 +208,35 @@ public class TutorExternoDao implements ITutorExterno {
     }
 
 
+    public boolean vincular(Tutor t) {
+        int res = 0;
+
+        try {
+            con = new Conexion();
+            Connection c = con.abrirConexion();
+
+            String sql = "UPDATE tutor SET id_paciente=? WHERE id=?";
+
+            PreparedStatement ps = c.prepareStatement(sql);
+
+
+            ps.setInt(1, t.getP().getId());
+            ps.setInt(2, t.getId());
+
+            res = ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (con != null) {
+                try { con.cerrar(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+
+        return res > 0;
+    }
+
+
 
     @Override
     public Tutor readOne(int id) {
@@ -215,4 +324,6 @@ public class TutorExternoDao implements ITutorExterno {
         }
         return null;
     }
+    */
+
 }
