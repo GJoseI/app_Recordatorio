@@ -26,11 +26,12 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
 
         HashMap<String, String> params = new HashMap<>();
         params.put("atendida", s.isAtendida() ? "1" : "0");
-        params.put("id_alarma", String.valueOf(s.getAlarma().getId()));
+        params.put("id_alarma", String.valueOf(s.getAlarma().getIdRemoto()));
         params.put("id_paciente", String.valueOf(s.getAlarma().getPacienteId()));
+        params.put("fecha_hora",String.valueOf(s.getTimestamp()));
 
         String json = HttpUtils.post(url, params);
-
+        Log.d("sync up seg daoex",json);
         try {
             JSONObject obj = new JSONObject(json);
             return obj.optBoolean("success", false);

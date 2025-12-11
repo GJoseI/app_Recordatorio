@@ -24,9 +24,13 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
 
             String query3 ="create table paciente(id integer primary key, nombre text)";
 
+            String query4 ="create table seguimiento(id integer primary key autoincrement," +
+                    " id_alarma int,id_paciente int, atendida int, timestamp string, pending_upload)";
+
             db.execSQL(query2);
             db.execSQL(query);
             db.execSQL(query3);
+            db.execSQL(query4);
 
 
     }

@@ -7,8 +7,11 @@ import com.example.apprecordatorio.dao.NotasExternoDao;
 import com.example.apprecordatorio.dao.RecordatorioDao;
 import com.example.apprecordatorio.dao.RecordatorioExternoDao;
 import com.example.apprecordatorio.dao.RecordatorioGralDao;
+import com.example.apprecordatorio.dao.SeguimientoDao;
+import com.example.apprecordatorio.dao.SeguimientoExternoDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Recordatorio;
+import com.example.apprecordatorio.entidades.Seguimiento;
 import com.example.apprecordatorio.util.AlarmaUtil;
 
 import java.util.List;
@@ -24,6 +27,9 @@ public class SyncManager {
 
     private final AlarmaUtil alarmaUtil;
 
+    private final SeguimientoExternoDao seguimientoEx;
+    private final SeguimientoDao seguimientoLocal;
+
     public SyncManager(Context ctx) {
 
         this.context = ctx;
@@ -35,8 +41,29 @@ public class SyncManager {
         this.alarmasEx = new RecordatorioExternoDao();
 
         this.alarmaUtil = new AlarmaUtil();
+
+        this.seguimientoEx = new SeguimientoExternoDao();
+        this.seguimientoLocal = new SeguimientoDao(context);
+
     }
 
+
+    public void syncUpSeguimiento()
+    {
+        List<Seguimiento> pendientes = seguimientoLocal.readAllPendingUpload();
+
+        Log.d("sync up seg","en sync up seg");
+        for(Seguimiento s : pendientes)
+        {
+            Log.d("sync up seg","seguimiento"+s.getId()+" id remoto:"+s.getAlarma().getIdRemoto()+" id paciente "+s.getAlarma().getPacienteId());
+            if(seguimientoEx.add(s))
+            {
+                Log.d("sync up seg","agrego");
+                s.setPending_upload(false);
+                seguimientoLocal.setPendingUpload(s);
+            }
+        }
+    }
 
 
     public void syncUpNotas(int idPaciente) {
@@ -157,6 +184,7 @@ public class SyncManager {
     public void syncTodo(int idPaciente) {
         syncUpNotas(idPaciente);
         syncUpAlarmas(idPaciente);
+        syncUpSeguimiento();
 
         syncDownNotas(idPaciente);
         syncDownAlarmas(idPaciente);

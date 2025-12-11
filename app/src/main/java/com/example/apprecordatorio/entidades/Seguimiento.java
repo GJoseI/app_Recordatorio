@@ -9,6 +9,10 @@ public class Seguimiento {
 
     boolean atendida;
 
+    boolean pending_upload;
+
+
+
 
     public Seguimiento()
     {
@@ -46,4 +50,14 @@ public class Seguimiento {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
+
+    public boolean isPending_upload() {
+        return pending_upload;
+    }
+
+    public void setPending_upload(boolean pending_upload) {
+        this.pending_upload = pending_upload;
+    }
+
+
 }

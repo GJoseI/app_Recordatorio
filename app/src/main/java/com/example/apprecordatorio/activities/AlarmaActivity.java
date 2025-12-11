@@ -20,11 +20,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.apprecordatorio.R;
+import com.example.apprecordatorio.dao.RecordatorioDao;
+import com.example.apprecordatorio.dao.SeguimientoDao;
 import com.example.apprecordatorio.dao.SeguimientoExternoDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Seguimiento;
 import com.example.apprecordatorio.servicios.AlarmaService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -72,13 +76,22 @@ public class AlarmaActivity extends AppCompatActivity {
         executor.execute(() -> {
 
             if (pacienteId != -1) {
-                SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                //SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                SeguimientoDao dao = new SeguimientoDao(this);
+                RecordatorioDao rdao = new RecordatorioDao(this);
                 Seguimiento s = new Seguimiento();
                 Alarma a = new Alarma();
                 a.setPacienteId(pacienteId);
-                a.setId(idAlarma);
+                int idremoto = rdao.getIdRemoto(idAlarma);
+                a.setIdRemoto(idremoto);
+                Log.d("sync up seg","id alarma remota en alarma activity"+idremoto);
                 s.setAlarma(a);
                 s.setAtendida(true);
+                long timestamp = System.currentTimeMillis();
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String mysqlTimestamp = sdf.format(new Date(timestamp));
+                s.setTimestamp(mysqlTimestamp);
 
                 dao.add(s);
             }

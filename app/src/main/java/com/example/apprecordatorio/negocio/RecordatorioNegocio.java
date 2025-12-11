@@ -69,6 +69,8 @@ public class RecordatorioNegocio {
     }
     public int update(Alarma r,Context context)
     {
+        Log.d("sync up seg","id remoto en update"+r.getIdRemoto());
+
         au.cancelarAlarmas(context,r);
 
         int resultado = 0;

@@ -30,6 +30,19 @@ public class AlarmaUtil {
     public void programarAlarma(Context context, Alarma r, int diaSemana) {
 
 
+        // Chequear permiso antes de programar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.createAttributionContext("com.example.apprecordatorio");
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (!am.canScheduleExactAlarms()) {
+                Log.w("PROG ALARM", "No tiene permiso para programar alarmas exactas. Abriendo ajustes...");
+                Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                context.startActivity(intent);
+                return; // salimos sin programar hasta que el usuario lo habilite
+            }
+        }
+
 
         Log.d("PROG ALARM","PROGRAMANDO ALARMA PARA DIA:"+diaSemana+" "+r.getHora()+" "+r.getMinuto());
         Calendar calendar = Calendar.getInstance();

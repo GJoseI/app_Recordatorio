@@ -499,4 +499,32 @@ public class RecordatorioDao {
         return a;
     }
 
+    public Integer getIdRemoto(int id) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int a = 0;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+
+            cursor = db.rawQuery("SELECT id_remoto FROM recordatorios WHERE id = ?", new String[]{String.valueOf(id)});
+
+
+            if (cursor.moveToFirst()) {
+               a = cursor.getInt(0);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return a;
+    }
+
 }

@@ -27,6 +27,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.AlarmaActivity;
+import com.example.apprecordatorio.dao.RecordatorioDao;
+import com.example.apprecordatorio.dao.SeguimientoDao;
 import com.example.apprecordatorio.dao.SeguimientoExternoDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Seguimiento;
@@ -141,11 +143,14 @@ public class AlarmaService extends Service {
 
                 executor.execute(() -> {
                     if(pacienteId != -1) {
-                        SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                        //SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                        SeguimientoDao dao = new SeguimientoDao(this);
+                        RecordatorioDao rdao = new RecordatorioDao(this);
                         Seguimiento s = new Seguimiento();
                         Alarma a = new Alarma();
                         a.setPacienteId(pacienteId);
-                        a.setId(idAlarma);
+                        int idremoto = rdao.getIdRemoto(idAlarma);
+                        a.setIdRemoto(idremoto);
                         s.setAlarma(a);
                         s.setAtendida(false);
                         dao.add(s);
