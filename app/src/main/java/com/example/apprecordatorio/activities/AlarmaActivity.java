@@ -49,7 +49,7 @@ public class AlarmaActivity extends AppCompatActivity {
         int pacienteId = getIntent().getIntExtra("idPaciente", -1);
 
         TextView txtMensaje = findViewById(R.id.txtMensaje);
-        txtMensaje.setText("¡Alarma: " + titulo + "!");
+        txtMensaje.setText("¡" + titulo + "!");
 
         String imagenUri = getIntent().getStringExtra("imagen");
         if (imagenUri != null) {
@@ -64,12 +64,12 @@ public class AlarmaActivity extends AppCompatActivity {
 
     private void detenerAlarma(int idAlarma, int pacienteId) {
 
-        // ----- 1) Pedir al Service que pare la alarma -----
+
         Intent stopIntent = new Intent(this, AlarmaService.class);
         stopIntent.setAction("STOP_ALARM");
         startService(stopIntent);
 
-        // ----- 2) Registrar seguimiento -----
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler mainHandler = new Handler(Looper.getMainLooper());
 

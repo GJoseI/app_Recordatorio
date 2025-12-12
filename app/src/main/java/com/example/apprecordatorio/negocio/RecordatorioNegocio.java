@@ -171,5 +171,17 @@ public class RecordatorioNegocio {
         Log.d("RNEG","ID PACIENTE "+a.getPacienteId());
         return (daoEx.add(a)>0);
     }
+    public List<Alarma> readAllExterno(int idPaciente)
+    {
+        return daoEx.readAllFromPaciente(idPaciente);
+    }
+    public boolean updateExterno(Alarma a)
+    {
+        return daoEx.update(a);
+    }
+    public boolean deleteExterno(Alarma a)
+    {
+        return daoEx.delete(a);
+    }
 
 }

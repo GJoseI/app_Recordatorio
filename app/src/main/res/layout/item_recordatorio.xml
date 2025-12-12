@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Descripción del recordatorio"
                 android:textColor="@color/letraGris"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
             <ImageButton
                 android:id="@+id/btnEditar"
@@ -76,12 +76,13 @@
                 android:id="@+id/sEstado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
                 android:scaleX="1.5"
                 android:scaleY="1.5" />
 
             <View
                 android:layout_width="195dp"
-                android:layout_height="32dp"
+                android:layout_height="2dp"
                 android:layout_weight="1" />
 
 

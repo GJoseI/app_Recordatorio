@@ -2,6 +2,8 @@ package com.example.apprecordatorio.fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,15 +26,21 @@ import com.example.apprecordatorio.dialogs.AltaNotaExterno;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioExterno;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Tutor;
+import com.example.apprecordatorio.util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.appcompat.app.AlertDialog;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class TutorMenuFragment extends Fragment {
 
-    TextView tvSiguiendo;
+    Button tvSiguiendo;
 
     int codSeguimiento = 0;
     Button vincular;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +78,8 @@ public class TutorMenuFragment extends Fragment {
         Button seguimiento = view.findViewById(R.id.btnSeguimiento);
         Button atras = view.findViewById(R.id.btnAtras);
         Button agregar = view.findViewById(R.id.btnAgregarRec);
-
+        Button verAlarmas = view.findViewById(R.id.btnVerAlarmas);
+        Button verNotas = view.findViewById(R.id.btnVerNotas);
 
 
         TutorExternoDao tutorExternoDao = new TutorExternoDao();
@@ -98,12 +108,63 @@ public class TutorMenuFragment extends Fragment {
             ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
         });
 
+        tvSiguiendo.setOnClickListener(v -> {
+
+            new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
+                    .setTitle("Desvincular")
+                    .setMessage("¿Seguro que desea desvincularse?")
+                    .setPositiveButton("Aceptar", (dialog, which) -> {
+
+                        if (checkearTodoBien()) {
+
+                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                            Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                            executor.execute(() -> {
+                                boolean ok = tutorExternoDao.desvincular(args.getInt("id"));
+
+                                mainHandler.post(() -> {
+                                    if (ok) {
+                                        Toast.makeText(requireContext(), "Desvinculado con éxito", Toast.LENGTH_SHORT).show();
+
+                                        // Recargar fragment
+                                        Fragment fragment = new TutorMenuFragment();
+
+                                        Bundle argsb = new Bundle();
+                                        argsb.putString("user", args.getString("user"));
+                                        argsb.putString("pass", args.getString("pass"));
+                                        argsb.putInt("id", args.getInt("id"));
+                                        argsb.putString("email", args.getString("email"));
+                                        argsb.putInt("codSeguimiento", 0); // sin paciente
+                                        fragment.setArguments(argsb);
+
+                                        ((MainActivity) requireActivity()).mostrarFragmento(fragment);
+
+                                    } else {
+                                        Toast.makeText(requireContext(), "Error al desvincular", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            });
+
+                            executor.shutdown();
+                        }
+
+                    })
+                    .setNegativeButton("Cancelar", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
+
         seguimiento.setOnClickListener(v -> {
-            Bundle argss = new Bundle();
-            argss.putInt("idPaciente",codSeguimiento);
-            Fragment fragmento = new SeguimientoFragment();
-            fragmento.setArguments(argss);
-            ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
+            if(checkearTodoBien())
+            {
+                Bundle argss = new Bundle();
+                argss.putInt("idPaciente",codSeguimiento);
+                Fragment fragmento = new SeguimientoFragment();
+                fragmento.setArguments(argss);
+                ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
+            }
         });
 
 
@@ -112,28 +173,73 @@ public class TutorMenuFragment extends Fragment {
         });
 
         agregar.setOnClickListener(v -> {
-            View viewDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_recordatorio, null);
-
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
-                    .setTitle("Selecciona un tipo de recordatorio")
-                    .setView(viewDialog)
-                    .setNegativeButton("Cancelar", null);
-
-            AlertDialog dialog = builder.create();
-
-            dialog.show();
-
-            viewDialog.findViewById(R.id.btnAlarma).setOnClickListener(v1 ->
+            if(checkearTodoBien())
             {
-                crearAlarma();
-                dialog.dismiss();
-            });
-            viewDialog.findViewById(R.id.btnNota).setOnClickListener(v1 -> {
-                crearNota();
-                dialog.dismiss();
-            });
+                View viewDialog = getLayoutInflater().inflate(R.layout.dialog_tipo_recordatorio, null);
+
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
+                        .setTitle("Selecciona un tipo de recordatorio")
+                        .setView(viewDialog)
+                        .setNegativeButton("Cancelar", null);
+
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
+                viewDialog.findViewById(R.id.btnAlarma).setOnClickListener(v1 ->
+                {
+                    crearAlarma();
+                    dialog.dismiss();
+                });
+                viewDialog.findViewById(R.id.btnNota).setOnClickListener(v1 -> {
+                    crearNota();
+                    dialog.dismiss();
+                });
+            }
         });
 
+        verAlarmas.setOnClickListener(v->{
+            if(checkearTodoBien())
+            {
+                Bundle argss = new Bundle();
+                argss.putInt("idPaciente",codSeguimiento);
+                Fragment fragmento = new AlarmaTutorFragment();
+                fragmento.setArguments(argss);
+                if (isAdded() && getActivity() != null && !requireActivity().isFinishing()) {
+                    ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
+                }
+            }
+        });
+
+        verNotas.setOnClickListener(v->{);
+            if(checkearTodoBien())
+            {
+                Bundle argss = new Bundle();
+                argss.putInt("idPaciente",codSeguimiento);
+                Fragment fragmento = new NotaTutorFragment();
+                fragmento.setArguments(argss);
+                if (isAdded() && getActivity() != null && !requireActivity().isFinishing()) {
+                    ((MainActivity) requireActivity()).mostrarFragmento(fragmento);
+                }
+            }
+        });
+
+    }
+
+    public boolean checkearTodoBien()
+    {
+        if(!NetworkUtils.hayConexion(requireContext()))
+        {
+            Toast.makeText(requireContext(),"Revise su conexion a internet",Toast.LENGTH_SHORT).show();
+            return false;
+        }else {
+            if(codSeguimiento<=0)
+            {
+                Toast.makeText(requireContext(),"No esta vinculado",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
     }
 
     public void crearAlarma()

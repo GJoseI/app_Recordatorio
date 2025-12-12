@@ -118,7 +118,9 @@ public class SyncManager {
                     alarmasLocal.updateIdRemoto(a);
                 }
             } else {
+
                 ok = alarmasEx.update(a);
+
             }
 
             if (ok) {
@@ -157,6 +159,7 @@ public class SyncManager {
 
         for (Alarma remoto : remotos) {
 
+            Log.d("sync alarmas","un registro");
             Alarma local = alarmasLocal.readOneByIdRemoto(remoto.getIdRemoto());
 
             if (local == null) {
@@ -166,7 +169,8 @@ public class SyncManager {
                 alarmaUtil.programarAlarmas(context,remoto);
 
             } else {
-
+                Log.d("sync alarmas","alarma "+remoto.getIdRemoto());
+                Log.d("sync alarmas","remoto: "+remoto.getUpdatedAt()+" local: "+local.getUpdatedAt());
                 if (remoto.getUpdatedAt() > local.getUpdatedAt()) {
                     remoto.setId(local.getId());
                     alarmaUtil.cancelarAlarmas(context, remoto);
@@ -182,11 +186,13 @@ public class SyncManager {
 
     /** Sincronización completa */
     public void syncTodo(int idPaciente) {
+        syncDownNotas(idPaciente);
+        syncDownAlarmas(idPaciente);
+
         syncUpNotas(idPaciente);
         syncUpAlarmas(idPaciente);
         syncUpSeguimiento();
 
-        syncDownNotas(idPaciente);
-        syncDownAlarmas(idPaciente);
+
     }
 }

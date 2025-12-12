@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -33,14 +34,12 @@ import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.util.FileUtil;
-import com.example.apprecordatorio.util.NetworkUtils;
 
 import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AltaRecordatorioExterno extends DialogFragment {
-
+public class ModificacionRecordatorioExterno extends DialogFragment {
     private Uri imagenSeleccionadaUri;
     private ImageView imgPreview;
 
@@ -83,10 +82,16 @@ public class AltaRecordatorioExterno extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_alta_recordatorio, null);
 
+        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
+        tvTitulo.setText("Editar Alarma");
+
+
+
         EditText editTitulo = view.findViewById(R.id.etTitulo);
         EditText editContenido = view.findViewById(R.id.etDesc);
         Button btnCancelar = view.findViewById(R.id.btnCancelar);
         Button btnGuardar = view.findViewById(R.id.btnGuardar);
+        btnGuardar.setText("Guardar");
         Button btnImg = view.findViewById(R.id.btnSeleccionarImagenAlarma);
         imgPreview = view.findViewById(R.id.ivDialog);
         TimePicker timePicker = view.findViewById(R.id.tpHora);
@@ -98,6 +103,7 @@ public class AltaRecordatorioExterno extends DialogFragment {
         ToggleButton jueves = view.findViewById(R.id.btJue);
         ToggleButton viernes = view.findViewById(R.id.btVie);
         ToggleButton sabado = view.findViewById(R.id.btSa);
+        String viejaImagen;
 
         Spinner spTono = view.findViewById(R.id.spAlarmaTono);
         String[] nombresTonos = {"Terraria", "Age of Empires"};
@@ -108,10 +114,50 @@ public class AltaRecordatorioExterno extends DialogFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spTono.setAdapter(adapter);
 
+
+        /// cargar alarma
+
+        Bundle args = getArguments();
+        if (args != null) {
+            editTitulo.setText(args.getString("titulo"));
+
+
+            domingo.setChecked(args.getBoolean("domingo"));
+            lunes.setChecked(args.getBoolean("lunes"));
+            martes.setChecked(args.getBoolean("martes"));
+            miercoles.setChecked(args.getBoolean("miercoles"));
+            jueves.setChecked(args.getBoolean("jueves"));
+            viernes.setChecked(args.getBoolean("viernes"));
+            sabado.setChecked(args.getBoolean("sabado"));
+
+            String desc = args.getString("descripcion");
+            if(desc!=null)editContenido.setText(desc);
+
+            timePicker.setHour(args.getInt("hora"));
+            timePicker.setMinute(args.getInt("minuto"));
+
+            for (int i = 0; i < recursosTonos.length; i++) {
+                String tonoArmado = "android.resource://" + requireContext().getPackageName() + "/" + recursosTonos[i];
+                if (tonoArmado.equals(args.getString("tono"))) {
+                    spTono.setSelection(i);  //
+                    break;
+                }
+            }
+
+            viejaImagen = args.getString("imagen");
+            if (viejaImagen != null && !viejaImagen.isEmpty()) {
+                Log.e("EN IF",viejaImagen);
+                imgPreview.setImageURI(Uri.parse(viejaImagen));
+                imgPreview.setVisibility(View.VISIBLE);
+            }
+        }else
+        {
+            viejaImagen = null;
+        }
+
+
         builder.setView(view);
         AlertDialog dialog = builder.create();
-
-        btnImg.setOnClickListener(v -> agregarImg());
 
         spTono.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             MediaPlayer mediaPlayer;
@@ -126,90 +172,87 @@ public class AltaRecordatorioExterno extends DialogFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+        btnImg.setOnClickListener(v -> agregarImg());
 
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
         btnGuardar.setOnClickListener(v -> {
             String titulo = editTitulo.getText().toString().trim();
             String contenido = editContenido.getText().toString().trim();
             if (!titulo.isEmpty()) {
-                if(!domingo.isChecked()&&!lunes.isChecked()&&!martes.isChecked()&&!miercoles.isChecked()
-                    &&!jueves.isChecked()&&!viernes.isChecked()&&!sabado.isChecked())
+                RecordatorioNegocio neg = new RecordatorioNegocio(getContext());
+                Alarma r = new Alarma();
+
+                if(args!=null)
                 {
-                    Toast.makeText(requireContext(),"Seleccione un dia",Toast.LENGTH_SHORT).show();
+                    r.setIdRemoto(args.getInt("id_remoto"));
+                    r.setPacienteId(args.getInt("id_paciente"));
                 }
-                else {
-                    RecordatorioNegocio neg = new RecordatorioNegocio(getContext());
-                    Alarma r = new Alarma();
 
-                    Bundle args = getArguments();
-                    if(args!=null){
-                        r.setPacienteId(args.getInt("codSeguimiento"));
+                r.setTitulo(titulo);
+                r.setDescripcion(contenido);
+                r.setFecha(LocalDate.now());
+                r.setHora(timePicker.getHour());
+                r.setMinuto(timePicker.getMinute());
+                r.setEstado(true);
+
+
+                if(domingo.isChecked())r.setDomingo(true);
+                if(lunes.isChecked())r.setLunes(true);
+                if(martes.isChecked())r.setMartes(true);
+                if(miercoles.isChecked())r.setMiercoles(true);
+                if(jueves.isChecked())r.setJueves(true);
+                if(viernes.isChecked())r.setViernes(true);
+                if(sabado.isChecked())r.setSabado(true);
+
+                int seleccion = spTono.getSelectedItemPosition();
+                int recursoSeleccionado = recursosTonos[seleccion];
+
+                Uri tonoUri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/" + recursoSeleccionado);
+
+                r.setTono(tonoUri.toString());
+
+                if (imagenSeleccionadaUri != null) {
+
+                    if (viejaImagen != null && !viejaImagen.equals(imagenSeleccionadaUri.toString())) {
+                        FileUtil fu = new FileUtil();
+                        fu.borrarImagenAnterior(viejaImagen);
                     }
-
-                    r.setTitulo(titulo);
-                    r.setDescripcion(contenido);
-                    r.setFecha(LocalDate.now());
-                    r.setHora(timePicker.getHour());
-                    r.setMinuto(timePicker.getMinute());
-
-                    if(domingo.isChecked())r.setDomingo(true);
-                    if(lunes.isChecked())r.setLunes(true);
-                    if(martes.isChecked())r.setMartes(true);
-                    if(miercoles.isChecked())r.setMiercoles(true);
-                    if(jueves.isChecked())r.setJueves(true);
-                    if(viernes.isChecked())r.setViernes(true);
-                    if(sabado.isChecked())r.setSabado(true);
-
-                    int seleccion = spTono.getSelectedItemPosition();
-                    int recursoSeleccionado = recursosTonos[seleccion];
-
-                    Uri tonoUri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/"
-                            + recursoSeleccionado);
-
-                    r.setTono(tonoUri.toString());
-
-                    if (imagenSeleccionadaUri != null) {
-                        r.setImagenUrl(imagenSeleccionadaUri.toString());
-                        Log.e("URI EN R:","ruta: "+r.getImagenUrl());
-                    }
+                    r.setImagenUrl(imagenSeleccionadaUri.toString());
+                    Log.e("URI EN R:","ruta: "+r.getImagenUrl());
+                }else {
+                    r.setImagenUrl(viejaImagen);
+                }
 
 
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                executor.execute(() -> {
 
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    Handler mainHandler = new Handler(Looper.getMainLooper());
+                    boolean insertado = neg.updateExterno(r);
 
-                    executor.execute(() -> {
+                    mainHandler.post(() -> {
 
-                        boolean insertado;
-
-                        if(NetworkUtils.hayConexion(requireContext()))
-                        {
-                            insertado = neg.addExterno(r);
-                        }else {
-                            insertado = false;
+                        if (insertado) {
+                            imagenGuardada = true;
+                            Toast.makeText(requireContext(),"Modificado con exito!",Toast.LENGTH_SHORT).show();
+                            if (listener != null) listener.onRecordatorioGuardado();
+                        } else {
+                            Toast.makeText(requireContext(),"Error al modificar!",Toast.LENGTH_SHORT).show();
                         }
-                        mainHandler.post(() -> {
-
-                            if (insertado) {
-                                imagenGuardada = true;
-                                Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
-                                if (listener != null) listener.onRecordatorioGuardado();
-                            } else {
-                                Toast.makeText(requireContext(),"Error al crear!",Toast.LENGTH_SHORT).show();
-                            }
-                            dialog.dismiss();
-                        });
+                        dialog.dismiss();
                     });
+                });
+
                 /*
-                *    if(neg.add(r, requireContext())>0)
+                *  if(neg.update(r, requireContext())>0)
                 {
                     imagenGuardada = true;
-                    Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(),"Modificado con exito!",Toast.LENGTH_SHORT).show();
                     if (listener != null) listener.onRecordatorioGuardado();
                 }
                 dialog.dismiss();
                 * */
-                }
+
             } else {
                 editTitulo.setError("Ingrese un título");
             }

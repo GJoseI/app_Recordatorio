@@ -49,13 +49,14 @@ public class TutorExternoDao implements ITutorExterno {
         params.put("nombre_usuario", username);
         params.put("password", password);
 
+        Tutor t;
         String response = HttpUtils.post(url, params);
 
         try {
             JSONObject json = new JSONObject(response);
 
             if (json.optBoolean("success")) {
-                Tutor t = new Tutor();
+                t = new Tutor();
                 t.setId(json.getInt("id"));
                 t.setUsername(json.getString("nombre_usuario"));
                 t.setEmail(json.getString("email"));
@@ -89,6 +90,22 @@ public class TutorExternoDao implements ITutorExterno {
         try {
             JSONObject json = new JSONObject(response);
             return json.optBoolean("success", false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean desvincular(int idTutor) {
+        String url = BASE_URL + "desvincular.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_tutor", String.valueOf(idTutor));
+
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+            return json.getBoolean("success");
         } catch (Exception e) {
             return false;
         }

@@ -21,6 +21,7 @@ import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.MainActivity;
 import com.example.apprecordatorio.dao.TutorExternoDao;
 import com.example.apprecordatorio.entidades.Tutor;
+import com.example.apprecordatorio.util.NetworkUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,33 +39,49 @@ public class TutorRegistroFragment extends Fragment {
         btnRegistrase = view.findViewById(R.id.btnRegistrarse);
 
         btnRegistrase.setOnClickListener(v -> {
-            String pass = etPass.getText().toString();
-            String pass2 = etPass2.getText().toString();
+            String pass = etPass.getText().toString().trim();
+            String pass2 = etPass2.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
-            TutorExternoDao tutorExternoDao = new TutorExternoDao();
-            Tutor tutor = new Tutor();
-                String error = validarRegistro(email, pass, pass2);
-                if (error != null) {
-                    Toast.makeText(this.getContext(), error, Toast.LENGTH_SHORT).show();
-                } else {
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    Handler mainHandler = new Handler(Looper.getMainLooper());
+            String user = etUser.getText().toString().trim();
 
-                    executor.execute(() -> {
-                        tutor.setEmail(etEmail.getText().toString());
-                        tutor.setUsername(etUser.getText().toString());
-                        tutor.setPassword(etPass.getText().toString());
-                        Boolean agregado = tutorExternoDao.add(tutor);
-                        mainHandler.post(() ->{
-                            if(agregado){
-                                Toast.makeText(this.getContext(), "Registro correcto", Toast.LENGTH_SHORT).show();
-                                ((MainActivity) requireActivity()).esconderFragmento();
-                            }else {
-                                Toast.makeText(this.getContext(), "Error al registrar", Toast.LENGTH_SHORT).show();
-                            }
+            if(!NetworkUtils.hayConexion(requireContext()))
+            {
+                Toast.makeText(requireContext(), "Revise su conexion a internet", Toast.LENGTH_SHORT).show();
+            }
+            else {
+
+                if (email.isEmpty() || pass.isEmpty() || pass2.isEmpty() || user.isEmpty()) {
+                    Toast.makeText(requireContext(), "Complete todos los campos", Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    TutorExternoDao tutorExternoDao = new TutorExternoDao();
+                    Tutor tutor = new Tutor();
+                    String error = validarRegistro(email, pass, pass2);
+                    if (error != null) {
+                        Toast.makeText(this.getContext(), error, Toast.LENGTH_SHORT).show();
+                    } else {
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        Handler mainHandler = new Handler(Looper.getMainLooper());
+
+                        executor.execute(() -> {
+                            tutor.setEmail(etEmail.getText().toString());
+                            tutor.setUsername(etUser.getText().toString());
+                            tutor.setPassword(etPass.getText().toString());
+                            Boolean agregado = tutorExternoDao.add(tutor);
+                            mainHandler.post(() ->{
+                                if(agregado){
+                                    Toast.makeText(this.getContext(), "Registro correcto", Toast.LENGTH_SHORT).show();
+                                    ((MainActivity) requireActivity()).esconderFragmento();
+                                }else {
+                                    Toast.makeText(this.getContext(), "Error al registrar", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         });
-                    });
+                    }
                 }
+            }
+
+
         });
         return view;
     }

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.GeneralesFragment">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.AlarmaTutorFragment">
 
     <TextView
         android:id="@+id/tvTitulo"
@@ -21,12 +19,12 @@
         android:paddingTop="5dp"
         android:paddingRight="10dp"
         android:paddingBottom="5dp"
-        android:text="@string/tituloGenerales"
+        android:text="@string/tituloAlarmas"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- Lista de recordatorios -->
     <FrameLayout
         app:layout_constraintTop_toBottomOf="@id/tvTitulo"
         android:layout_marginTop="50dp"
@@ -43,7 +41,7 @@
 
             <!-- contenido -->
             <LinearLayout
-                android:id="@+id/containerRecordatoriosGenerales"
+                android:id="@+id/containerRecordatoriosAlarmas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -52,19 +50,5 @@
             </LinearLayout>
         </ScrollView>
     </FrameLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAgregarRecGral"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:padding="12dp"
-        android:scaleType="center"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="#EC9A29"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:tint="@color/letraBlanca" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

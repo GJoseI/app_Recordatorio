@@ -196,20 +196,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void mostrarFragmento (Fragment fragment){
+    public void mostrarFragmento(Fragment fragment) {
         View overlay = findViewById(R.id.overlayContainer1);
         overlay.setVisibility(View.VISIBLE);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
 
-        overlay.post(() ->{
+        overlay.post(() -> {
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+
             ft.setCustomAnimations(
                             android.R.anim.slide_in_left,
                             android.R.anim.slide_out_right,
                             android.R.anim.slide_in_left,
-                            android.R.anim.slide_out_right).
-                    replace(R.id.overlayContainer1, fragment)
-                    .addToBackStack("overlay").commit();
+                            android.R.anim.slide_out_right
+                    )
+                    .replace(R.id.overlayContainer1, fragment)
+                    .addToBackStack("overlay")
+                    .commit();
         });
     }
 

@@ -44,26 +44,15 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         ArrayList<Alarma> list = new ArrayList<>();
 
         try {
-            URL url = new URL(BASE_URL+"readAllAlarmas.php");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
 
-            String data = "id_paciente=" + idPaciente;
+            Map<String, String> params = new HashMap<>();
+            params.put("id_paciente", String.valueOf(idPaciente));
 
-            OutputStream os = conn.getOutputStream();
-            os.write(data.getBytes());
-            os.flush();
-            os.close();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
+            String response = HttpUtils.post(BASE_URL + "readAllAlarmas.php", params);
 
-            while ((line = br.readLine()) != null) sb.append(line);
-            br.close();
 
-            JSONObject json = new JSONObject(sb.toString());
+            JSONObject json = new JSONObject(response);
 
             if (json.getBoolean("success")) {
 

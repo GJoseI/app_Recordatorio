@@ -136,60 +136,67 @@ public class AltaRecordatorio extends DialogFragment {
             String titulo = editTitulo.getText().toString().trim();
             String contenido = editContenido.getText().toString().trim();
             if (!titulo.isEmpty()) {
-                RecordatorioNegocio neg = new RecordatorioNegocio(getContext());
-                Alarma r = new Alarma();
-
-                r.setTitulo(titulo);
-                r.setDescripcion(contenido);
-                r.setFecha(LocalDate.now());
-                r.setHora(timePicker.getHour());
-                r.setMinuto(timePicker.getMinute());
-
-                if(domingo.isChecked())r.setDomingo(true);
-                if(lunes.isChecked())r.setLunes(true);
-                if(martes.isChecked())r.setMartes(true);
-                if(miercoles.isChecked())r.setMiercoles(true);
-                if(jueves.isChecked())r.setJueves(true);
-                if(viernes.isChecked())r.setViernes(true);
-                if(sabado.isChecked())r.setSabado(true);
-
-                int seleccion = spTono.getSelectedItemPosition();
-                int recursoSeleccionado = recursosTonos[seleccion];
-
-                Uri tonoUri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/"
-                        + recursoSeleccionado);
-
-                r.setTono(tonoUri.toString());
-
-                if (imagenSeleccionadaUri != null) {
-                    r.setImagenUrl(imagenSeleccionadaUri.toString());
-                    Log.e("URI EN R:","ruta: "+r.getImagenUrl());
+                if(!domingo.isChecked()&&!lunes.isChecked()&&!martes.isChecked()&&!miercoles.isChecked()
+                        &&!jueves.isChecked()&&!viernes.isChecked()&&!sabado.isChecked())
+                {
+                    Toast.makeText(requireContext(),"Seleccione un dia",Toast.LENGTH_SHORT).show();
                 }
+                else
+                {
+                    RecordatorioNegocio neg = new RecordatorioNegocio(getContext());
+                    Alarma r = new Alarma();
+
+                    r.setTitulo(titulo);
+                    r.setDescripcion(contenido);
+                    r.setFecha(LocalDate.now());
+                    r.setHora(timePicker.getHour());
+                    r.setMinuto(timePicker.getMinute());
+
+                    if(domingo.isChecked())r.setDomingo(true);
+                    if(lunes.isChecked())r.setLunes(true);
+                    if(martes.isChecked())r.setMartes(true);
+                    if(miercoles.isChecked())r.setMiercoles(true);
+                    if(jueves.isChecked())r.setJueves(true);
+                    if(viernes.isChecked())r.setViernes(true);
+                    if(sabado.isChecked())r.setSabado(true);
+
+                    int seleccion = spTono.getSelectedItemPosition();
+                    int recursoSeleccionado = recursosTonos[seleccion];
+
+                    Uri tonoUri = Uri.parse("android.resource://" + requireContext().getPackageName() + "/"
+                            + recursoSeleccionado);
+
+                    r.setTono(tonoUri.toString());
+
+                    if (imagenSeleccionadaUri != null) {
+                        r.setImagenUrl(imagenSeleccionadaUri.toString());
+                        Log.e("URI EN R:","ruta: "+r.getImagenUrl());
+                    }
 
 
 
-                ExecutorService executor = Executors.newSingleThreadExecutor();
-                Handler mainHandler = new Handler(Looper.getMainLooper());
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
 
-                executor.execute(() -> {
-
-
-
-                    long insertado = neg.add(r, requireContext());
+                    executor.execute(() -> {
 
 
-                    mainHandler.post(() -> {
 
-                        if (insertado>0) {
-                            imagenGuardada = true;
-                            Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
-                            if (listener != null) listener.onRecordatorioGuardado();
-                        } else {
-                            Toast.makeText(requireContext(),"Error al crear!",Toast.LENGTH_SHORT).show();
-                        }
-                        dialog.dismiss();
+                        long insertado = neg.add(r, requireContext());
+
+
+                        mainHandler.post(() -> {
+
+                            if (insertado>0) {
+                                imagenGuardada = true;
+                                Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                                if (listener != null) listener.onRecordatorioGuardado();
+                            } else {
+                                Toast.makeText(requireContext(),"Error al crear!",Toast.LENGTH_SHORT).show();
+                            }
+                            dialog.dismiss();
+                        });
                     });
-                });
                 /*
                 *    if(neg.add(r, requireContext())>0)
                 {
@@ -199,6 +206,8 @@ public class AltaRecordatorio extends DialogFragment {
                 }
                 dialog.dismiss();
                 * */
+                }
+
             } else {
                 editTitulo.setError("Ingrese un título");
             }
