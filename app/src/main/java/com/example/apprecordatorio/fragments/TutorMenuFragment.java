@@ -211,7 +211,7 @@ public class TutorMenuFragment extends Fragment {
             }
         });
 
-        verNotas.setOnClickListener(v->{);
+        verNotas.setOnClickListener(v->{
             if(checkearTodoBien())
             {
                 Bundle argss = new Bundle();

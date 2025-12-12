@@ -25,6 +25,7 @@ import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
+import com.example.apprecordatorio.util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,126 +41,126 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
     private List<Recordatorio> lista;
 
     private AltaRecordatorioGeneral currentDialog = null;
+    private Bundle args;
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_generales, container, false);
+        View view = inflater.inflate(R.layout.fragment_nota_tutor, container, false);
 
         containerRecordatorios = view.findViewById(R.id.containerRecordatoriosGenerales);
-        FloatingActionButton btnAgregar = view.findViewById(R.id.btnAgregarRecGral);
 
-        btnAgregar.setOnClickListener(v -> agregarRecordatorio());
-
-        cargarRecordatorios(inflater);
+        args = getArguments();
+        cargarRecordatorios();
 
         return view;
     }
 
-
-    private void agregarRecordatorio() {
-
-        AltaRecordatorioGeneral dialog = new AltaRecordatorioGeneral();
-        dialog.setOnRecordatorioGuardadoListener(this);
-        currentDialog = dialog; // guarda una referencia
-        dialog.show(getParentFragmentManager(), "hola");
-    }
-    private void dialogcomun() {
-        try {
-            new AlertDialog.Builder(requireContext())
-                    .setTitle("Prueba")
-                    .setMessage("Si esto se muestra, el problema es el layout del diálogo original")
-                    .setPositiveButton("OK", null)
-                    .show();
-        } catch (Exception e) {
-            Log.e("DEBUG", "Error mostrando alert simple: " + e.getMessage(), e);
-            Toast.makeText(requireContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void cargarRecordatorios(LayoutInflater inflater)
+    private void cargarRecordatorios()
     {
+        LayoutInflater inflater = getLayoutInflater();
         containerRecordatorios.removeAllViews();
         RecordatorioGralNegocio neg = new RecordatorioGralNegocio(requireContext());
-        lista = neg.readAll();
 
-        if(lista!=null)
-        {
-            for (Recordatorio r : lista)
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(()->{
+
+            if(args!=null)
             {
-                View cardView = inflater.inflate(R.layout.item_recordatorio_general, containerRecordatorios, false);
+                lista = neg.readAllEx(args.getInt("idPaciente"));
+            }
 
-                TextView txtTitulo = cardView.findViewById(R.id.txtTituloRecGral);
-                ImageButton btnBorrar = cardView.findViewById(R.id.ibtnDeleteRegGral);
-                ImageButton btnEditar = cardView.findViewById(R.id.ibtnEditarRecGral);
-                TextView txtDescripcion = cardView.findViewById(R.id.txtDescripcionRecGral);
-                LinearLayout layoutExpandible = cardView.findViewById(R.id.layoutExpandibleRecGral);
-                ImageView imgRec = cardView.findViewById(R.id.imgRecGral);
 
-                btnBorrar.setOnClickListener(v ->{
-                    confirmarBorrado(r,neg,inflater);
-                });
 
-                btnEditar.setOnClickListener(v->{
-                    editarRecordatorio(r);
-                });
+            handler.post(()->{
 
-                txtTitulo.setText(r.getTitulo());
-                txtDescripcion.setText(r.getDescripcion());
-                String imgUri = r.getImagenUrl();
-
-                if(imgUri!=null)
+                if(lista!=null)
                 {
-                    Log.e("URI:",imgUri);
-                    imgRec.setImageURI(Uri.parse(imgUri));
-                }
+                    for (Recordatorio r : lista)
+                    {
+                        View cardView = inflater.inflate(R.layout.item_recordatorio_general, containerRecordatorios, false);
 
+                        TextView txtTitulo = cardView.findViewById(R.id.txtTituloRecGral);
+                        ImageButton btnBorrar = cardView.findViewById(R.id.ibtnDeleteRegGral);
+                        ImageButton btnEditar = cardView.findViewById(R.id.ibtnEditarRecGral);
+                        TextView txtDescripcion = cardView.findViewById(R.id.txtDescripcionRecGral);
+                        LinearLayout layoutExpandible = cardView.findViewById(R.id.layoutExpandibleRecGral);
+                        ImageView imgRec = cardView.findViewById(R.id.imgRecGral);
 
-                cardView.setOnClickListener(v -> {
+                        btnBorrar.setOnClickListener(v ->{
+                            confirmarBorrado(r,neg,inflater);
+                        });
 
-                    if (layoutExpandible.getVisibility() != View.VISIBLE) {
+                        btnEditar.setOnClickListener(v->{
+                            editarRecordatorio(r);
+                        });
 
+                        txtTitulo.setText(r.getTitulo());
+                        txtDescripcion.setText(r.getDescripcion());
+                        String imgUri = r.getImagenUrl();
 
-                        layoutExpandible.setVisibility(View.VISIBLE);
-
-
-                        if(r.getImagenUrl()!=null)
+                        if(imgUri!=null)
                         {
-                            imgRec.setVisibility(View.VISIBLE);
+                            Log.e("URI:",imgUri);
+                            imgRec.setImageURI(Uri.parse(imgUri));
                         }
 
 
+                        cardView.setOnClickListener(v -> {
+
+                            if (layoutExpandible.getVisibility() != View.VISIBLE) {
 
 
-                        cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
-                        txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                        txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                                layoutExpandible.setVisibility(View.VISIBLE);
 
-                        btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                        btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
-                    } else {
 
-                        layoutExpandible.setVisibility(View.GONE);
+                                if(r.getImagenUrl()!=null)
+                                {
+                                    imgRec.setVisibility(View.VISIBLE);
+                                }
 
-                        cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
-                        txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
-                        txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
 
-                        btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
-                        btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+
+
+                                cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoSeleccionado));
+                                txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                                txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+
+                                btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                                btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraBlanca));
+                            } else {
+
+                                layoutExpandible.setVisibility(View.GONE);
+
+                                cardView.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.fondoElementoOscuro));
+                                txtTitulo.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                                txtDescripcion.setTextColor(ContextCompat.getColor(requireContext(), R.color.letraGris));
+
+                                btnEditar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                                btnBorrar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.letraGris));
+                            }
+                        });
+
+                        containerRecordatorios.addView(cardView);
                     }
-                });
+                }
 
-                containerRecordatorios.addView(cardView);
-            }
-        }
+            });
+
+
+        });
+
+
+
     }
 
     @Override
     public void onRecordatorioGuardado() {
-        cargarRecordatorios(LayoutInflater.from(requireContext()));
+        cargarRecordatorios();
     }
 
     public void editarRecordatorio(Recordatorio r)
@@ -169,6 +170,7 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
 
         Bundle args = new Bundle();
         args.putInt("id", r.getId());
+        args.putInt("idRemoto", r.getIdRemoto());
         args.putString("titulo", r.getTitulo());
         args.putString("descripcion", r.getDescripcion());
         args.putString("imagen", r.getImagenUrl());
@@ -184,19 +186,24 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
-            long insertado = neg.delete(r);
+            boolean insertado;
 
-
+            if(NetworkUtils.hayConexion(requireContext()))
+            {
+                insertado = neg.deleteEx(r);
+            }else {
+                insertado = false;
+            }
             mainHandler.post(() -> {
 
-                if (insertado>0) {
+                if (insertado) {
 
                     Toast.makeText(requireContext(), "borrado con exito.", Toast.LENGTH_SHORT).show();
 
                 } else {
                     Toast.makeText(requireContext(),"Error al borrar!",Toast.LENGTH_SHORT).show();
                 }
-                cargarRecordatorios(inflater);
+                cargarRecordatorios();
             });
         });
 

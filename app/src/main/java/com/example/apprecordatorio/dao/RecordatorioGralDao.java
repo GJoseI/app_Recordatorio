@@ -133,9 +133,9 @@ public class RecordatorioGralDao {
             // valores.put("id",rec.getId());
             cv.put("id_remoto", r.getIdRemoto());
             cv.put("titulo", r.getTitulo());
-            cv.put("descripcion", r.getDescripcion());
+            cv.put("contenido", r.getDescripcion());
             cv.put("imagen", r.getImagenUrl());
-            cv.put("id_paciente", r.getPacienteId());
+            //cv.put("id_paciente", r.getPacienteId());
             cv.put("baja_logica", r.isBajaLogica() ? 1 : 0);
             cv.put("updated_at", r.getUpdatedAt());
             cv.put("pending_changes", 0);

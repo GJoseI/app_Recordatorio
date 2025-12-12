@@ -55,7 +55,8 @@ public class NotasExternoDao implements INotaExterno {
     }
     @Override
     public ArrayList<Recordatorio> readAllFrom(int idPaciente) {
-        String url = BASE_URL + "readAllFromNotas.php";
+        String url = BASE_URL + "readAllNotasFrom.php";
+
 
         HashMap<String, String> params = new HashMap<>();
         params.put("id_paciente", String.valueOf(idPaciente));
@@ -66,7 +67,7 @@ public class NotasExternoDao implements INotaExterno {
             String response = HttpUtils.post(url, params);
             JSONObject json = new JSONObject(response);
 
-
+            Log.d("NOTA EXTERNO","response: "+response);
             if (json.optBoolean("success", false)) {
                 JSONArray array = json.optJSONArray("data");
                 if (array != null) {
@@ -83,6 +84,8 @@ public class NotasExternoDao implements INotaExterno {
                         String tsString = o.getString("updated_at");
                         long ts = parseTimestamp(tsString);
                         r.setUpdatedAt(ts);
+
+                        Log.d("NOTA EXTERNO","id: "+r.getIdRemoto()+" titulo: "+r.getTitulo()+" ts: "+r.getUpdatedAt());
 
                         lista.add(r);
                     }

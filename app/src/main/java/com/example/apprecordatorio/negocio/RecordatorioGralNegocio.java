@@ -66,7 +66,19 @@ public class RecordatorioGralNegocio {
     {
         return (daoEx.add(r)>0) ;
     }
-
+    public boolean updateEx(Recordatorio r)
+    {
+        return daoEx.update(r);
+    }
+    public boolean deleteEx(Recordatorio r)
+    {
+        return daoEx.delete(r);
+    }
+    public List<Recordatorio> readAllEx(int pacienteId)
+    {
+        Log.d("NOTAS EXTERNO","EN NEGOCIO");
+        return daoEx.readAllFrom(pacienteId);
+    }
     public Recordatorio readOne(int id){return dao.readOne(id);}
 /*
     public List<Recordatorio> readAll()
