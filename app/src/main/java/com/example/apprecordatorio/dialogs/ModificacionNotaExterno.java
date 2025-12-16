@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
@@ -32,23 +33,25 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AltaNotaExterno extends DialogFragment {
-    private String imagenSeleccionadaBase64;
+public class ModificacionNotaExterno extends DialogFragment {
+
+
     private ImageView imgPreview;
 
     private OnRecordatorioGuardadoListener listener;
 
+    private static final String BASE_URL = "http://10.0.2.2/pruebaphp";
+    private String imagenSeleccionadaBase64;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-
+                Log.e("URI:",uri.toString());
                 try {
                     FileUtil fu = new FileUtil();
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Handler handler = new Handler(Looper.getMainLooper());
 
                     executor.execute(()->{
-
                         try {
                             imagenSeleccionadaBase64 = fu.uriToBase64(requireContext(),uri);
                         } catch (IOException e) {
@@ -67,8 +70,6 @@ public class AltaNotaExterno extends DialogFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
             });
 
     @NonNull
@@ -84,52 +85,85 @@ public class AltaNotaExterno extends DialogFragment {
         Button btnGuardar = view.findViewById(R.id.btnGuardarDialogRg);
         Button btnImg = view.findViewById(R.id.btnImagenDialogRg);
         imgPreview = view.findViewById(R.id.ivDialogRg);
+        String viejaImagen;
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
 
+
+        ///  cargar los datos del recordatorio en la card
+        Bundle args = getArguments();
+        if (args != null) {
+            editTitulo.setText(args.getString("titulo"));
+            editContenido.setText(args.getString("descripcion"));
+
+            viejaImagen = args.getString("imagen");
+            if (viejaImagen != null && !viejaImagen.isEmpty()) {
+                Log.e("EN IF",viejaImagen);
+                Glide.with(this)
+                        .load(BASE_URL + "/" + viejaImagen)
+                        .into(imgPreview);
+
+                imgPreview.setVisibility(View.VISIBLE);
+            }
+
+        } else {
+            viejaImagen = null;
+        }
+
+
         btnImg.setOnClickListener(v -> agregarImg());
 
-        btnCancelar.setOnClickListener(v -> dialog.dismiss());
+        btnCancelar.setOnClickListener(v -> {
+
+            dialog.dismiss();
+        });
+
         btnGuardar.setOnClickListener(v -> {
+
             String titulo = editTitulo.getText().toString().trim();
             String contenido = editContenido.getText().toString().trim();
-            if (!titulo.isEmpty()) {
+
+            if (!titulo.isEmpty())
+            {
                 RecordatorioGralNegocio neg = new RecordatorioGralNegocio(getContext());
                 Recordatorio r = new Recordatorio();
+
+                if(args!=null)
+                {
+                    r.setId(args.getInt("id"));
+                    r.setIdRemoto(args.getInt("idRemoto"));
+                    r.setPacienteId(args.getInt("idPaciente"));
+                }
                 r.setTitulo(titulo);
                 r.setDescripcion(contenido);
+
 
                 if (imagenSeleccionadaBase64 != null) {
                     r.setImagenUrl(imagenSeleccionadaBase64);
                     Log.e("URI EN R:","ruta: "+r.getImagenUrl());
+                }else {
+                    r.setImagenUrl(viejaImagen);
                 }
 
-                Bundle args = getArguments();
-                if(args!=null){
-                    r.setPacienteId(args.getInt("codSeguimiento"));
-                }
 
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 Handler mainHandler = new Handler(Looper.getMainLooper());
-
                 executor.execute(() -> {
 
-                    boolean insertado = neg.addEx(r);
-
+                    boolean insertado = neg.updateEx(r);
 
                     mainHandler.post(() -> {
 
                         if (insertado) {
-                            Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(),"Actualizado con exito!",Toast.LENGTH_SHORT).show();
                             if (listener != null) listener.onRecordatorioGuardado();
                         } else {
-                            Toast.makeText(requireContext(),"Error al crear!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(),"Error al modificar!",Toast.LENGTH_SHORT).show();
                         }
                         dialog.dismiss();
                     });
                 });
-
             } else {
                 editTitulo.setError("Ingrese un título");
             }
@@ -163,9 +197,5 @@ public class AltaNotaExterno extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        Log.d("EN DISMIS","SE EJECUTO");
-
     }
-
-
 }

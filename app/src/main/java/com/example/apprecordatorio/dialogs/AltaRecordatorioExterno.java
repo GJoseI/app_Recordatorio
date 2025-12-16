@@ -35,18 +35,19 @@ import com.example.apprecordatorio.negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.util.FileUtil;
 import com.example.apprecordatorio.util.NetworkUtils;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AltaRecordatorioExterno extends DialogFragment {
 
-    private Uri imagenSeleccionadaUri;
+
+    private String imagenSeleccionadaBase64;
     private ImageView imgPreview;
 
     private OnRecordatorioGuardadoListener listener;
 
-    private boolean imagenGuardada = false;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -58,10 +59,17 @@ public class AltaRecordatorioExterno extends DialogFragment {
                     Handler handler = new Handler(Looper.getMainLooper());
 
                     executor.execute(()->{
-                        Uri localUri = fu.copiarImagenLocal(uri,requireContext());
+
+                        try {
+                            imagenSeleccionadaBase64 = fu.uriToBase64(requireContext(),uri);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            throw new RuntimeException(e);
+                        }
+                        ;
 
                         handler.post(()->{
-                            setImagenSeleccionada(localUri);
+                            setImagenSeleccionada(uri);
 
                         });
                         executor.close();
@@ -151,6 +159,7 @@ public class AltaRecordatorioExterno extends DialogFragment {
                     r.setFecha(LocalDate.now());
                     r.setHora(timePicker.getHour());
                     r.setMinuto(timePicker.getMinute());
+                    r.setEstado(true);
 
                     if(domingo.isChecked())r.setDomingo(true);
                     if(lunes.isChecked())r.setLunes(true);
@@ -168,8 +177,8 @@ public class AltaRecordatorioExterno extends DialogFragment {
 
                     r.setTono(tonoUri.toString());
 
-                    if (imagenSeleccionadaUri != null) {
-                        r.setImagenUrl(imagenSeleccionadaUri.toString());
+                    if (imagenSeleccionadaBase64 != null) {
+                        r.setImagenUrl(imagenSeleccionadaBase64);
                         Log.e("URI EN R:","ruta: "+r.getImagenUrl());
                     }
 
@@ -191,7 +200,6 @@ public class AltaRecordatorioExterno extends DialogFragment {
                         mainHandler.post(() -> {
 
                             if (insertado) {
-                                imagenGuardada = true;
                                 Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
                                 if (listener != null) listener.onRecordatorioGuardado();
                             } else {
@@ -200,15 +208,6 @@ public class AltaRecordatorioExterno extends DialogFragment {
                             dialog.dismiss();
                         });
                     });
-                /*
-                *    if(neg.add(r, requireContext())>0)
-                {
-                    imagenGuardada = true;
-                    Toast.makeText(requireContext(),"Creado con exito!",Toast.LENGTH_SHORT).show();
-                    if (listener != null) listener.onRecordatorioGuardado();
-                }
-                dialog.dismiss();
-                * */
                 }
             } else {
                 editTitulo.setError("Ingrese un título");
@@ -236,14 +235,6 @@ public class AltaRecordatorioExterno extends DialogFragment {
 
     public void setImagenSeleccionada(Uri uri) {
 
-        FileUtil fu = new FileUtil();
-        if(imagenSeleccionadaUri!=null)
-        {
-            fu.borrarImagenAnterior(imagenSeleccionadaUri.toString());
-        }
-
-        imagenSeleccionadaUri = uri;
-        Log.e("URI en SET:",imagenSeleccionadaUri.toString());
         imgPreview.setVisibility(View.VISIBLE);
         imgPreview.setImageURI(uri);
     }
@@ -251,11 +242,7 @@ public class AltaRecordatorioExterno extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        FileUtil fu = new FileUtil();
-        if(imagenSeleccionadaUri!=null && !imagenGuardada)
-        {
-            fu.borrarImagenAnterior(imagenSeleccionadaUri.toString());
-        }
+
 
         Log.d("EN DISMIS","SE EJECUTO");
 

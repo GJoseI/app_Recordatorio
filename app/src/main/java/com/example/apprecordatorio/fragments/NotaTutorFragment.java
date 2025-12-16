@@ -19,8 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
+import com.example.apprecordatorio.dialogs.ModificacionNotaExterno;
+import com.example.apprecordatorio.dialogs.ModificacionRecordatorioExterno;
 import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
@@ -42,6 +45,8 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
 
     private AltaRecordatorioGeneral currentDialog = null;
     private Bundle args;
+
+    private static final String BASE_URL = "http://10.0.2.2/pruebaphp";
 
 
 
@@ -118,8 +123,12 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
                                 layoutExpandible.setVisibility(View.VISIBLE);
 
 
-                                if(r.getImagenUrl()!=null)
-                                {
+                                if (r.getImagenUrl() != null) {
+
+                                    Glide.with(this)
+                                            .load(BASE_URL + "/" + r.getImagenUrl())
+                                            .into(imgRec);
+
                                     imgRec.setVisibility(View.VISIBLE);
                                 }
 
@@ -165,12 +174,15 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
 
     public void editarRecordatorio(Recordatorio r)
     {
-        ModificacionRecordatorioGeneral dialog = new ModificacionRecordatorioGeneral();
+        ModificacionNotaExterno dialog = new ModificacionNotaExterno();
         dialog.setOnRecordatorioGuardadoListener(this);
+
+        Log.d("EDITAR REC GRAL","ID: "+r.getId()+" ID REMOTO: "+r.getIdRemoto()+" ID PACIENTE: "+r.getPacienteId());
 
         Bundle args = new Bundle();
         args.putInt("id", r.getId());
         args.putInt("idRemoto", r.getIdRemoto());
+        args.putInt("idPaciente", r.getPacienteId());
         args.putString("titulo", r.getTitulo());
         args.putString("descripcion", r.getDescripcion());
         args.putString("imagen", r.getImagenUrl());

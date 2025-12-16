@@ -29,23 +29,28 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.util.FileUtil;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ModificacionRecordatorioExterno extends DialogFragment {
-    private Uri imagenSeleccionadaUri;
+
     private ImageView imgPreview;
 
     private OnRecordatorioGuardadoListener listener;
 
     private boolean imagenGuardada = false;
+
+    private static final String BASE_URL = "http://10.0.2.2/pruebaphp";
+    private String imagenSeleccionadaBase64;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -57,10 +62,14 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
                     Handler handler = new Handler(Looper.getMainLooper());
 
                     executor.execute(()->{
-                        Uri localUri = fu.copiarImagenLocal(uri,requireContext());
+                        try {
+                            imagenSeleccionadaBase64 = fu.uriToBase64(requireContext(),uri);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
 
                         handler.post(()->{
-                            setImagenSeleccionada(localUri);
+                            setImagenSeleccionada(uri);
 
                         });
                         executor.close();
@@ -147,7 +156,9 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
             viejaImagen = args.getString("imagen");
             if (viejaImagen != null && !viejaImagen.isEmpty()) {
                 Log.e("EN IF",viejaImagen);
-                imgPreview.setImageURI(Uri.parse(viejaImagen));
+                Glide.with(this)
+                        .load(BASE_URL + "/" + viejaImagen)
+                        .into(imgPreview);
                 imgPreview.setVisibility(View.VISIBLE);
             }
         }else
@@ -211,13 +222,9 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
 
                 r.setTono(tonoUri.toString());
 
-                if (imagenSeleccionadaUri != null) {
+                if (imagenSeleccionadaBase64 != null) {
 
-                    if (viejaImagen != null && !viejaImagen.equals(imagenSeleccionadaUri.toString())) {
-                        FileUtil fu = new FileUtil();
-                        fu.borrarImagenAnterior(viejaImagen);
-                    }
-                    r.setImagenUrl(imagenSeleccionadaUri.toString());
+                    r.setImagenUrl(imagenSeleccionadaBase64);
                     Log.e("URI EN R:","ruta: "+r.getImagenUrl());
                 }else {
                     r.setImagenUrl(viejaImagen);
@@ -242,16 +249,6 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
                         dialog.dismiss();
                     });
                 });
-
-                /*
-                *  if(neg.update(r, requireContext())>0)
-                {
-                    imagenGuardada = true;
-                    Toast.makeText(requireContext(),"Modificado con exito!",Toast.LENGTH_SHORT).show();
-                    if (listener != null) listener.onRecordatorioGuardado();
-                }
-                dialog.dismiss();
-                * */
 
             } else {
                 editTitulo.setError("Ingrese un título");
@@ -278,15 +275,6 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
 
 
     public void setImagenSeleccionada(Uri uri) {
-
-        FileUtil fu = new FileUtil();
-        if(imagenSeleccionadaUri!=null)
-        {
-            fu.borrarImagenAnterior(imagenSeleccionadaUri.toString());
-        }
-
-        imagenSeleccionadaUri = uri;
-        Log.e("URI en SET:",imagenSeleccionadaUri.toString());
         imgPreview.setVisibility(View.VISIBLE);
         imgPreview.setImageURI(uri);
     }
@@ -294,12 +282,6 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        FileUtil fu = new FileUtil();
-        if(imagenSeleccionadaUri!=null && !imagenGuardada)
-        {
-            fu.borrarImagenAnterior(imagenSeleccionadaUri.toString());
-        }
-
         Log.d("EN DISMIS","SE EJECUTO");
 
     }
