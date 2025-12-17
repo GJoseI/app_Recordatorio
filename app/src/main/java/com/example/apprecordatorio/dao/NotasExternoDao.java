@@ -8,6 +8,7 @@ import com.example.apprecordatorio.interfaces.INotaExterno;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,6 +39,7 @@ public class NotasExternoDao implements INotaExterno {
         params.put("imagen", r.getImagenUrl());
         params.put("id_paciente", String.valueOf(r.getPacienteId()));
         params.put("baja_logica", r.isBajaLogica() ? "1" : "0");
+        params.put("updated_at", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(r.getUpdatedAt()));
         //params.put("id", String.valueOf(r.getId()));
 
         try
@@ -159,6 +161,7 @@ public class NotasExternoDao implements INotaExterno {
         params.put("descripcion", r.getDescripcion());
         params.put("imagen", r.getImagenUrl());
         params.put("baja_logica", r.isBajaLogica() ? "1" : "0");
+        params.put("updated_at", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(r.getUpdatedAt()));
 
         try
         {
@@ -184,6 +187,7 @@ public class NotasExternoDao implements INotaExterno {
         HashMap<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(r.getIdRemoto()));
         params.put("id_paciente", String.valueOf(r.getPacienteId()));
+        params.put("updated_at", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(r.getUpdatedAt()));
 
         try {
             String response = HttpUtils.post(url, params);

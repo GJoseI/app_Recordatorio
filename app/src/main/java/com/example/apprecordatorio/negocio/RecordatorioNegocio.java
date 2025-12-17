@@ -1,6 +1,7 @@
 package com.example.apprecordatorio.negocio;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.apprecordatorio.dao.RecordatorioDao;
@@ -8,10 +9,16 @@ import com.example.apprecordatorio.dao.RecordatorioExternoDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.util.AlarmaUtil;
+import com.example.apprecordatorio.util.FileUtil;
 
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RecordatorioNegocio {
 
@@ -21,6 +28,7 @@ public class RecordatorioNegocio {
 
     private PacienteNegocio pneg;
 
+    private FileUtil fu;
 
 
     public ArrayList<Alarma>readAllFromPaciente(int id )
@@ -34,6 +42,7 @@ public class RecordatorioNegocio {
         au = new AlarmaUtil();
         pneg = new PacienteNegocio(context);
         daoEx = new RecordatorioExternoDao();
+        fu = new FileUtil();
     }
     public List<Alarma> readAll()
     {
@@ -54,13 +63,11 @@ public class RecordatorioNegocio {
             resultado = dao.add(r);
             if(resultado>0) au.programarAlarmas(context, r);
         }else {
-                r.setPacienteId(p.getId());
                 resultado = dao.add(r);
                 if(resultado>0)
                 {
                     r.setId((int)resultado);
                     au.programarAlarmas(context, r);
-                    //if(daoEx.add(r)<=0)resultado=-1;
                 }
         }
 
@@ -97,29 +104,21 @@ public class RecordatorioNegocio {
     }
     public int delete(Alarma r,Context context)
     {
-        String nombre = "";
         int resultado = 0;
-        Paciente p= pneg.read();
 
-        if (p==null)
-        {
-            resultado = dao.delete(r);
-            if(resultado>0)au.cancelarAlarmas(context,r);
 
-        }else
-        {
+
             resultado = dao.delete(r);
-            if(resultado>0) {
-                au.cancelarAlarmas(context, r);
-                r.setPacienteId(p.getId());
-                //if (!daoEx.delete(r)) resultado = -1;
+            if(resultado>0)
+            {
+                if(r.getImagenUrl()!=null)
+                {
+                    fu.borrarImagenAnterior(r.getImagenUrl());
+                }
+                au.cancelarAlarmas(context,r);
             }
-            nombre = p.getNombre();
-        }
 
 
-
-        Log.e("NEG delete","RESULTADO: "+resultado+"PACIENTE: "+nombre);
         return resultado;
     }
 
@@ -169,6 +168,7 @@ public class RecordatorioNegocio {
         //int id = daoEx.getLastId(a.getPacienteId());
         //a.setId(id+
         Log.d("RNEG","ID PACIENTE "+a.getPacienteId());
+         a.setUpdatedAt(System.currentTimeMillis());
         return (daoEx.add(a)>0);
     }
     public List<Alarma> readAllExterno(int idPaciente)
@@ -177,10 +177,12 @@ public class RecordatorioNegocio {
     }
     public boolean updateExterno(Alarma a)
     {
+        a.setUpdatedAt(System.currentTimeMillis());
         return daoEx.update(a);
     }
     public boolean deleteExterno(Alarma a)
     {
+        a.setUpdatedAt(System.currentTimeMillis());
         return daoEx.delete(a);
     }
 

@@ -154,7 +154,7 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
             }
 
             viejaImagen = args.getString("imagen");
-            if (viejaImagen != null && !viejaImagen.isEmpty()) {
+            if (viejaImagen != null && !viejaImagen.isEmpty() && !viejaImagen.equals("null")) {
                 Log.e("EN IF",viejaImagen);
                 Glide.with(this)
                         .load(BASE_URL + "/" + viejaImagen)

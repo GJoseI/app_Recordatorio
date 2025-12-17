@@ -207,7 +207,8 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
                             "&sabado=" + (a.isSabado() ? 1 : 0) +
                             "&baja_logica=0" +
                             "&hora=" + a.getHora() +
-                            "&minuto=" + a.getMinuto();
+                            "&minuto=" + a.getMinuto() +
+                                    "&updated_at=" + URLEncoder.encode(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(a.getUpdatedAt()), "UTF-8");
 
             OutputStream os = conn.getOutputStream();
             os.write(data.getBytes());
@@ -300,9 +301,9 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             if (a.getImagenUrl() == null) a.setImagenUrl("");
 
             Log.d("ALARMA DAO","ID REMOTO"+a.getIdRemoto());
-            Log.d("ALARMA DAO","ID REMOTO"+ String.valueOf(a.getIdRemoto()));
+            Log.d("ALARMA DAO","ID REMOTO"+ a.getIdRemoto());
 
-            // Armamos el mapa de parámetros
+
             Map<String, String> params = new HashMap<>();
             params.put("id", String.valueOf(a.getIdRemoto()));
             params.put("id_paciente", String.valueOf(a.getPacienteId()));
@@ -321,6 +322,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             params.put("baja_logica", a.isBajaLogica() ? "1" : "0");
             params.put("hora", String.valueOf(a.getHora()));
             params.put("minuto", String.valueOf(a.getMinuto()));
+            params.put("updated_at",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(a.getUpdatedAt()));
 
 
             String json = HttpUtils.post(BASE_URL + "updateAlarma.php", params);
@@ -349,7 +351,8 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
             String data =
                     "id=" + a.getIdRemoto() +
-                            "&id_paciente=" + a.getPacienteId();
+                            "&id_paciente=" + a.getPacienteId() +
+                            "&updated_at=" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(a.getUpdatedAt());
 
             OutputStream os = conn.getOutputStream();
             os.write(data.getBytes());

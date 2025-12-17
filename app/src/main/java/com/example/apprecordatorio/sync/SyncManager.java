@@ -1,6 +1,7 @@
 package com.example.apprecordatorio.sync;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.apprecordatorio.dao.NotasExternoDao;
@@ -13,7 +14,9 @@ import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.entidades.Seguimiento;
 import com.example.apprecordatorio.util.AlarmaUtil;
+import com.example.apprecordatorio.util.FileUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 public class SyncManager {
@@ -30,6 +33,8 @@ public class SyncManager {
     private final SeguimientoExternoDao seguimientoEx;
     private final SeguimientoDao seguimientoLocal;
 
+    private final FileUtil fu;
+
     public SyncManager(Context ctx) {
 
         this.context = ctx;
@@ -44,6 +49,7 @@ public class SyncManager {
 
         this.seguimientoEx = new SeguimientoExternoDao();
         this.seguimientoLocal = new SeguimientoDao(context);
+        this.fu = new FileUtil();
 
     }
 
@@ -78,6 +84,16 @@ public class SyncManager {
 
             if (r.getIdRemoto() == 0) {
 
+                if(r.getImagenUrl()!= null && !r.getImagenUrl().isEmpty() && !r.getImagenUrl().equals("null"))
+                {
+                    try {
+
+                        r.setImagenUrl(fu.uriToBase64(context, Uri.parse(r.getImagenUrl())));
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
                 int newId = notasEx.add(r);
                 Log.d("sync up notas", "new id remoto "+newId);
@@ -89,6 +105,20 @@ public class SyncManager {
             } else {
 
                 Log.d("sync up notas", "updateando "+r.getId()+" con id remoto"+r.getIdRemoto());
+
+                if(r.getImagenUrl()!= null && !r.getImagenUrl().isEmpty() && !r.getImagenUrl().equals("null"))
+                {
+                    try {
+
+                        Log.d("sync up notas", "convirtiendo imagen a base64"+r.getImagenUrl());
+                        String base64 = fu.uriToBase64(context, Uri.parse(r.getImagenUrl()));
+                        Log.d("sync up notas", "base64 length "+base64.length());
+                        r.setImagenUrl(base64);
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
                 ok = notasEx.update(r);
             }
@@ -103,6 +133,7 @@ public class SyncManager {
     public void syncUpAlarmas(int idPaciente) {
         List<Alarma> pendientes = alarmasLocal.getAllPendingSync();
 
+        Log.d("SYNC UP","lista de alarmas pendientes");
         for (Alarma a : pendientes) {
 
             Log.d("SYNC UP","Alarma"+a.getId()+" id remoto"+a.getIdRemoto());
@@ -111,6 +142,18 @@ public class SyncManager {
             a.setPacienteId(idPaciente);
             if (a.getIdRemoto() == 0) {
 
+
+                if(a.getImagenUrl()!= null && !a.getImagenUrl().isEmpty() && !a.getImagenUrl().equals("null"))
+                {
+                    try {
+
+                        a.setImagenUrl(fu.uriToBase64(context, Uri.parse(a.getImagenUrl())));
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
                 int newId = alarmasEx.add(a);
                 ok = newId > 0;
                 if (ok) {
@@ -118,6 +161,17 @@ public class SyncManager {
                     alarmasLocal.updateIdRemoto(a);
                 }
             } else {
+
+                if(a.getImagenUrl()!= null && !a.getImagenUrl().isEmpty() && !a.getImagenUrl().equals("null"))
+                {
+                    try {
+
+                        a.setImagenUrl(fu.uriToBase64(context, Uri.parse(a.getImagenUrl())));
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
                 ok = alarmasEx.update(a);
 
@@ -142,10 +196,35 @@ public class SyncManager {
             if (local == null) {
                 Log.d("sync notas","local dio null");
 
+                if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
+                {
+                    Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                    remoto.setImagenUrl(uriLocal.toString());
+                }
+
                 notasLocal.addFromSync(remoto);
 
             } else {
                 if (remoto.getUpdatedAt() > local.getUpdatedAt()) {
+
+                    if(!remoto.isBajaLogica())
+                    {
+                        if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
+                        {
+                            fu.borrarImagenAnterior(local.getImagenUrl());
+                            Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                            if(uriLocal!=null)
+                            {
+                                remoto.setImagenUrl(uriLocal.toString());
+                            }
+                        }
+                    }else
+                    {
+                        if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
+                        {
+                            fu.borrarImagenAnterior(local.getImagenUrl());
+                        }
+                    }
                     notasLocal.updateFromSync(remoto);
                 }
 
@@ -164,6 +243,14 @@ public class SyncManager {
 
             if (local == null) {
                 Log.d("sync","local dio null");
+                if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
+                {
+                    Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                    if(uriLocal!=null)
+                    {
+                        remoto.setImagenUrl(uriLocal.toString());
+                    }
+                }
                 long id = alarmasLocal.addFromSync(remoto);
                 remoto.setId((int)id);
                 alarmaUtil.programarAlarmas(context,remoto);
@@ -172,13 +259,29 @@ public class SyncManager {
                 Log.d("sync alarmas","alarma "+remoto.getIdRemoto());
                 Log.d("sync alarmas","remoto: "+remoto.getUpdatedAt()+" local: "+local.getUpdatedAt());
                 if (remoto.getUpdatedAt() > local.getUpdatedAt()) {
+                    Log.d("sync alarmas","actualizando alarma");
                     remoto.setId(local.getId());
                     alarmaUtil.cancelarAlarmas(context, remoto);
-                    alarmasLocal.updateFromSync(remoto);
 
                     if (!remoto.isBajaLogica()) {
+
+                        if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
+                        {
+                            fu.borrarImagenAnterior(local.getImagenUrl());
+                            Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                            remoto.setImagenUrl(uriLocal.toString());
+                        }
+
                         alarmaUtil.programarAlarmas(context, remoto);
+                    }else
+                    {
+                        if(remoto.getImagenUrl()!= null)
+                        {
+                            fu.borrarImagenAnterior(local.getImagenUrl());
+                        }
                     }
+                    alarmasLocal.updateFromSync(remoto);
+
                 }
             }
         }
@@ -186,12 +289,16 @@ public class SyncManager {
 
     /** Sincronización completa */
     public void syncTodo(int idPaciente) {
+
         syncDownNotas(idPaciente);
         syncDownAlarmas(idPaciente);
+
 
         syncUpNotas(idPaciente);
         syncUpAlarmas(idPaciente);
         syncUpSeguimiento();
+
+
 
 
     }
