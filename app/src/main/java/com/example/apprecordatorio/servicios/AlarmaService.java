@@ -67,7 +67,7 @@ public class AlarmaService extends Service {
 
         isRunning = true;
 
-        // ---- MANEJO DE STOP ----
+
 
 
         Log.d("ALARM SERVICE","SE EJECUTO ALARMA SERVICE");

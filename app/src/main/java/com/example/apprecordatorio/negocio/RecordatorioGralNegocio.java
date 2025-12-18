@@ -58,16 +58,22 @@ public class RecordatorioGralNegocio {
     public int delete(Recordatorio r)
     {
         Paciente p =  pneg.read();
+        int resultado = 0;
         if(p!=null)
         {
             r.setPacienteId(p.getId());
         }
-
-        if(r.getImagenUrl()!= null)
+        String imagen;
+        imagen= r.getImagenUrl();
+        resultado = dao.delete(r);
+        if(resultado>0)
         {
-            fu.borrarImagenAnterior(r.getImagenUrl());
+            if(imagen!= null)
+            {
+                fu.borrarImagenAnterior(r.getImagenUrl());
+            }
         }
-        return dao.delete(r);
+        return resultado;
     }
 
     public boolean addEx(Recordatorio r)

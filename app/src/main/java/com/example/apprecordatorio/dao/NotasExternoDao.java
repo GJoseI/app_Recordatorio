@@ -2,6 +2,7 @@ package com.example.apprecordatorio.dao;
 
 import android.util.Log;
 
+import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.INotaExterno;
 
@@ -17,9 +18,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
+import com.example.apprecordatorio.retrofit.ApiClient;
+import com.example.apprecordatorio.retrofit.ApiResponse;
+import com.example.apprecordatorio.retrofit.ApiService;
+import com.example.apprecordatorio.retrofit.NotasResponse;
+import com.example.apprecordatorio.util.BaseUrl;
 import com.example.apprecordatorio.util.HttpUtils;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class NotasExternoDao implements INotaExterno {
 
@@ -27,9 +37,11 @@ public class NotasExternoDao implements INotaExterno {
 
     private final String BASE_URL = "http://10.0.2.2/pruebaphp/";
 
+    //private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
+
     @Override
     public int add(Recordatorio r) {
-        String url = BASE_URL + "addNota.php";
+        String url = BASE_URL+ "addNota.php";
         if(r.getDescripcion()==null)r.setDescripcion("");
         if(r.getImagenUrl()==null)r.setImagenUrl("");
 
@@ -55,6 +67,9 @@ public class NotasExternoDao implements INotaExterno {
             return 0;
         }
     }
+
+
+
     @Override
     public ArrayList<Recordatorio> readAllFrom(int idPaciente) {
         String url = BASE_URL + "readAllNotasFrom.php";
@@ -145,6 +160,117 @@ public class NotasExternoDao implements INotaExterno {
         }
 
     }
+/*
+ @Override
+    public int add(Recordatorio r) {
+
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<ApiResponse> call =
+                    api.addNota(r.getPacienteId(),
+                            r.getTitulo(),
+                            r.getDescripcion() != null ? r.getDescripcion() : "",
+                            r.getImagenUrl() != null ? r.getImagenUrl() : "",
+                            r.isBajaLogica() ? 1 : 0,
+                            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(r.getUpdatedAt())
+                    );
+
+            Response<ApiResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "ID: " + response.body().getId());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return response.body().getId();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+    @Override
+    public List<Recordatorio> readAllFrom(int idPaciente)
+    {
+        List<Recordatorio> lista =null;
+        try
+        {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<NotasResponse> call = api.readAllNotasFrom(idPaciente);
+            Response<NotasResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "Notas: " + response.body().getNotas());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return response.body().getNotas();
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Recordatorio> readAllSync(int idPaciente)
+    {
+        List<Recordatorio> lista =null;
+        try
+        {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<NotasResponse> call = api.readAllNotasSync(idPaciente);
+            Response<NotasResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "Notas: " + response.body().getNotas());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return response.body().getNotas();
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+*/
 
     public boolean update(Recordatorio r) {
         String url = BASE_URL + "updateNota.php";

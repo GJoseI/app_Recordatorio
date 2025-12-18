@@ -200,6 +200,7 @@ public class RecordatorioGralDao {
           ContentValues cv = new ContentValues();
           cv.put("baja_logica", 1);
           cv.put("updated_at", System.currentTimeMillis());
+          cv.put("imagen", "");
           cv.put("pending_changes", 1);
 
           resultado = db.update(
@@ -215,7 +216,7 @@ public class RecordatorioGralDao {
           if (db != null) db.close();
       }
 
-      return resultado; // devuelve 1 si se marcó, 0 si no existía
+      return resultado;
   }
 
 

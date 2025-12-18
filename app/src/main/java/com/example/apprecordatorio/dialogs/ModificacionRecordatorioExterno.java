@@ -50,6 +50,7 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
     private boolean imagenGuardada = false;
 
     private static final String BASE_URL = "http://10.0.2.2/pruebaphp";
+    //private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
     private String imagenSeleccionadaBase64;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =

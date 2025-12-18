@@ -85,6 +85,7 @@ public class AlarmaActivity extends AppCompatActivity {
                 int idremoto = rdao.getIdRemoto(idAlarma);
                 a.setIdRemoto(idremoto);
                 Log.d("sync up seg","id alarma remota en alarma activity"+idremoto);
+                Log.d("sync up seg","id paciente en activity"+pacienteId);
                 s.setAlarma(a);
                 s.setAtendida(true);
                 long timestamp = System.currentTimeMillis();

@@ -4,6 +4,10 @@ import android.util.Log;
 
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.interfaces.IPacienteExterno;
+import com.example.apprecordatorio.retrofit.ApiClient;
+import com.example.apprecordatorio.retrofit.ApiResponse;
+import com.example.apprecordatorio.retrofit.ApiService;
+import com.example.apprecordatorio.util.HttpUtils;
 
 import org.json.JSONObject;
 
@@ -19,10 +23,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class PacienteExternoDao implements IPacienteExterno {
 
     private Conexion con;
+
+   // private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
+
+    private final String  BASE_URL = "http://10.0.2.2/pruebaphp/";
 
     @Override
     public ArrayList<Paciente> readAll() {
@@ -55,75 +68,22 @@ public class PacienteExternoDao implements IPacienteExterno {
         return lista;
     }
 
-/*
     @Override
     public int add(Paciente p) {
-        int r = 0;
-        int newId = 0;
-        Connection c = null;
-
-        try {
-            con = new Conexion();
-            c = con.abrirConexion();
-
-            String sql = "INSERT INTO paciente (nombre) VALUES (?)";
-            PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            ps.setString(1, p.getNombre());
-
-            r = ps.executeUpdate();
-
-            if (r > 0) {
-                // Recuperar ID autogenerado
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                     newId = rs.getInt(1);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try { con.cerrar(); } catch (Exception ignored) {}
-            }
-        }
-
-        return newId;
-    }
-*/
-    @Override
-    public int add(Paciente p)
-    {
         int newId = 0;
 
         try {
-           // URL url = new URL("https://tu-dominio.onrender.com/add_paciente.php");
-            URL url = new URL("http://10.0.2.2/pruebaphp/addPaciente.php");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
+            String url = BASE_URL + "addPaciente.php";
 
-            String data = "nombre=" + URLEncoder.encode(p.getNombre(), "UTF-8");
 
-            OutputStream os = conn.getOutputStream();
-            os.write(data.getBytes());
-            os.flush();
-            os.close();
+            Map<String, String> params = new HashMap<>();
+            params.put("nombre", p.getNombre());
+            String response = HttpUtils.post(url, params);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
+            Log.d("RESPUESTA_PHP", response);
 
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-            br.close();
-
-            Log.d("RESPUESTA_PHP", sb.toString());
-            // leer JSON
-            JSONObject json = new JSONObject(sb.toString());
+            // Parseo del JSON
+            JSONObject json = new JSONObject(response);
 
             if (json.getBoolean("success")) {
                 newId = json.getInt("id");
@@ -132,11 +92,48 @@ public class PacienteExternoDao implements IPacienteExterno {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d("NEW ID ","NUEVO ID:"+newId);
 
+        Log.d("NEW_ID", "NUEVO ID: " + newId);
         return newId;
     }
 
+    /*
+    @Override
+    public int add(Paciente p) {
+
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<ApiResponse> call =
+                    api.addPaciente(p.getNombre());
+
+            Response<ApiResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "ID: " + response.body().getId());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return response.body().getId();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+*/
     @Override
     public boolean update(Paciente p) {
         int r = 0;
@@ -204,7 +201,7 @@ public class PacienteExternoDao implements IPacienteExterno {
         Paciente paciente = null;
 
         try {
-            URL url = new URL("http://10.0.2.2/pruebaphp/getPaciente.php?id=" + id);
+            URL url = new URL(BASE_URL+"getPaciente.php?id=" + id);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
 

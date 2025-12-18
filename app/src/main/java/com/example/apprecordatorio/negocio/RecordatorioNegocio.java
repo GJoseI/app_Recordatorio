@@ -31,7 +31,7 @@ public class RecordatorioNegocio {
     private FileUtil fu;
 
 
-    public ArrayList<Alarma>readAllFromPaciente(int id )
+    public List<Alarma>readAllFromPaciente(int id )
     {
         return daoEx.readAllFromPaciente(id);
     }
@@ -108,10 +108,12 @@ public class RecordatorioNegocio {
 
 
 
+
+            String img = r.getImagenUrl();
             resultado = dao.delete(r);
             if(resultado>0)
             {
-                if(r.getImagenUrl()!=null)
+                if(img!=null)
                 {
                     fu.borrarImagenAnterior(r.getImagenUrl());
                 }

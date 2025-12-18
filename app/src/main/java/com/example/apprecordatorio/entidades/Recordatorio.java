@@ -2,18 +2,19 @@ package com.example.apprecordatorio.entidades;
 
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.LocalDate;
 
     public class Recordatorio {
         private int id;
-
         private int idRemoto;
         private boolean pendingChanges;
         private long updatedAt;
         private String imagenUrl;
+
         private int pacienteId;
         private String descripcion;
-
         private boolean bajaLogica;
         private String titulo;
 

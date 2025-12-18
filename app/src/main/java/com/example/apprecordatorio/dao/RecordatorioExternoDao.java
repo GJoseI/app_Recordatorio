@@ -4,7 +4,13 @@ import android.util.Log;
 
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Paciente;
+import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.IRecordatorioExterno;
+import com.example.apprecordatorio.retrofit.AlarmasResponse;
+import com.example.apprecordatorio.retrofit.ApiClient;
+import com.example.apprecordatorio.retrofit.ApiResponse;
+import com.example.apprecordatorio.retrofit.ApiService;
+import com.example.apprecordatorio.retrofit.NotasResponse;
 import com.example.apprecordatorio.util.HttpUtils;
 
 import org.json.JSONArray;
@@ -25,18 +31,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class RecordatorioExternoDao implements IRecordatorioExterno {
 
     private Conexion con;
 
     private final String BASE_URL = "http://10.0.2.2/pruebaphp/";
+   // private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
     public RecordatorioExternoDao ()
     {
 
     }
+
 
     @Override
     public ArrayList<Alarma> readAllFromPaciente(int idPaciente) {
@@ -231,9 +243,9 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
 
             JSONObject json = new JSONObject(sb.toString());
 
-            /*if (json.getBoolean("success")) {
+            if (json.getBoolean("success")) {
                 result = 1; // se agregó OK
-            }*/
+            }
             return json.getInt("id");
 
         } catch (Exception e) {
@@ -243,7 +255,129 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         return result;
     }
 
+/*
+    @Override
+    public int add(Alarma r) {
 
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<ApiResponse> call =
+                    api.addAlarma(r.getPacienteId(),
+                            r.getTitulo(),
+                            r.getDescripcion() != null ? r.getDescripcion() : "",
+                            r.getTono(),
+                            r.getImagenUrl() != null ? r.getImagenUrl() : "",
+                            r.isEstado()?1:0,
+                            r.isDomingo() ? 1 : 0,
+                            r.isLunes() ? 1 : 0,
+                            r.isMartes() ? 1 : 0,
+                            r.isMiercoles() ? 1 : 0,
+                            r.isJueves() ? 1 : 0,
+                            r.isViernes() ? 1 : 0,
+                            r.isSabado() ? 1 : 0,
+                            r.isBajaLogica() ? 1 : 0,
+                            r.getHora(),
+                            r.getMinuto(),
+                            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(r.getUpdatedAt())
+                    );
+
+            Response<ApiResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "ID: " + response.body().getId());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return response.body().getId();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public List<Alarma> readAllFromPaciente(int idPaciente)
+    {
+        List<Alarma> lista =null;
+        try
+        {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<AlarmasResponse> call = api.readAllAlarmasFrom(idPaciente);
+            Response<AlarmasResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "Notas: " + response.body().getAlarmas());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return response.body().getAlarmas();
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+    public List<Alarma> readAllSync(int idPaciente)
+    {
+        List<Alarma> lista =null;
+        try
+        {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<AlarmasResponse> call = api.readAllAlarmasSync(idPaciente);
+            Response<AlarmasResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "Notas: " + response.body().getAlarmas());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return response.body().getAlarmas();
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+*/
     @Override
     public Alarma readOneFrom(int id, int idPaciente) {
         Alarma a = null;
@@ -295,6 +429,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         return a;
     }
 
+
     public boolean update(Alarma a) {
         try {
             if (a.getDescripcion() == null) a.setDescripcion("");
@@ -339,9 +474,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
     }
 
 
-    //-------------------------------------------------------
-    // DELETE (BAJA LÓGICA)
-    //-------------------------------------------------------
+
     public boolean delete(Alarma a) {
         try {
             URL url = new URL(BASE_URL + "deleteAlarma.php");

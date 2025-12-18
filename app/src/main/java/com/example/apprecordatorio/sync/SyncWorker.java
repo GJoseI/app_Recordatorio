@@ -19,13 +19,12 @@ public class SyncWorker extends Worker {
     public Result doWork() {
 
         try {
-            // Obtengo el ID del paciente pasado al Worker
             int idPaciente = getInputData().getInt("idPaciente", -1);
             if (idPaciente == -1) {
                 return Result.failure();
             }
 
-            // Ejecutar sincronización
+
             SyncManager sm = new SyncManager(getApplicationContext());
             sm.syncTodo(idPaciente);
 

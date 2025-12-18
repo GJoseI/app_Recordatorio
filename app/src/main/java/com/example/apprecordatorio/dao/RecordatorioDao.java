@@ -256,6 +256,7 @@ public class RecordatorioDao {
             ContentValues cv = new ContentValues();
             cv.put("baja_logica", 1);
             cv.put("updated_at",System.currentTimeMillis());
+            cv.put("imagen","null");
             cv.put("pending_changes",1);
 
             resultado = db.update(

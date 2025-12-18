@@ -25,6 +25,11 @@ public class HttpUtils {
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
+            conn.setInstanceFollowRedirects(true);
+            conn.setRequestProperty(
+                    "Content-Type",
+                    "application/x-www-form-urlencoded; charset=UTF-8"
+            );
 
             // Enviar parámetros POST
             OutputStream os = conn.getOutputStream();
@@ -62,6 +67,7 @@ public class HttpUtils {
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
             conn.setRequestMethod("GET");
+            conn.setInstanceFollowRedirects(true);
 
             InputStream is = conn.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));

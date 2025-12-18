@@ -20,6 +20,7 @@ import java.util.HashMap;
 public class SeguimientoExternoDao implements ISeguimientoExterno {
 
     private  String BASE_URL = "http://10.0.2.2/pruebaphp/";
+    //private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
     @Override
     public boolean add(Seguimiento s) {
         String url = BASE_URL + "addSeguimiento.php";
