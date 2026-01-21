@@ -31,7 +31,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.Entidades.Alarma;
-import com.example.apprecordatorio.Interfaces.OnRecordatorioGuardadoListener;
+import com.example.apprecordatorio.DAOInterfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.Negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.Util.FileUtil;
 

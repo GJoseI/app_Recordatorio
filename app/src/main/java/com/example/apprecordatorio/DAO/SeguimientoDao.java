@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.apprecordatorio.DAOInterfaces.ISeguimiento;
 import com.example.apprecordatorio.Entidades.Alarma;
 import com.example.apprecordatorio.Entidades.Seguimiento;
 import com.example.apprecordatorio.OpenHelper.SQLite_OpenHelper;
@@ -12,7 +13,7 @@ import com.example.apprecordatorio.OpenHelper.SQLite_OpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeguimientoDao {
+public class SeguimientoDao implements ISeguimiento {
 
 
     private SQLite_OpenHelper dbHelper;

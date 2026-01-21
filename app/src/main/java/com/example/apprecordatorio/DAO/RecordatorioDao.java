@@ -6,13 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.apprecordatorio.DAOInterfaces.IRecordatorio;
 import com.example.apprecordatorio.Entidades.Alarma;
 import com.example.apprecordatorio.OpenHelper.SQLite_OpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordatorioDao {
+public class RecordatorioDao implements IRecordatorio {
 
     private SQLite_OpenHelper dbHelper;
 
@@ -336,7 +337,6 @@ public class RecordatorioDao {
 
             values.put("estado", 0);
             int r =db.update("recordatorios", values, "id = ?", new String[]{String.valueOf(a.getId())});
-
         return ( r > 0);
     }
 

@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.Dialogs.ModificacionRecordatorioExterno;
 import com.example.apprecordatorio.Entidades.Alarma;
-import com.example.apprecordatorio.Interfaces.OnRecordatorioGuardadoListener;
+import com.example.apprecordatorio.DAOInterfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.Negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.Util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;

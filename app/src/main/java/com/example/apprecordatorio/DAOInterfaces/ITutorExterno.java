@@ -1,4 +1,4 @@
-package com.example.apprecordatorio.Interfaces;
+package com.example.apprecordatorio.DAOInterfaces;
 
 import com.example.apprecordatorio.Entidades.Tutor;
 

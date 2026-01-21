@@ -3,7 +3,7 @@ package com.example.apprecordatorio.DAO;
 import android.util.Log;
 
 import com.example.apprecordatorio.Entidades.Alarma;
-import com.example.apprecordatorio.Interfaces.IRecordatorioExterno;
+import com.example.apprecordatorio.DAOInterfaces.IRecordatorioExterno;
 import com.example.apprecordatorio.Util.HttpUtils;
 
 import org.json.JSONArray;

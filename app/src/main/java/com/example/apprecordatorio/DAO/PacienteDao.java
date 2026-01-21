@@ -6,10 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 
+import com.example.apprecordatorio.DAOInterfaces.IPaciente;
 import com.example.apprecordatorio.Entidades.Paciente;
 import com.example.apprecordatorio.OpenHelper.SQLite_OpenHelper;
 
-public class PacienteDao {
+public class PacienteDao implements IPaciente {
     private SQLite_OpenHelper dbHelper;
 
     public PacienteDao(Context context)

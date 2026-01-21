@@ -3,7 +3,7 @@ package com.example.apprecordatorio.DAO;
 import android.util.Log;
 
 import com.example.apprecordatorio.Entidades.Paciente;
-import com.example.apprecordatorio.Interfaces.IPacienteExterno;
+import com.example.apprecordatorio.DAOInterfaces.IPacienteExterno;
 import com.example.apprecordatorio.Util.HttpUtils;
 
 import org.json.JSONObject;

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.apprecordatorio.Entidades.Alarma;
 import com.example.apprecordatorio.Entidades.Seguimiento;
-import com.example.apprecordatorio.Interfaces.ISeguimientoExterno;
+import com.example.apprecordatorio.DAOInterfaces.ISeguimientoExterno;
 import com.example.apprecordatorio.Util.HttpUtils;
 
 import org.json.JSONArray;

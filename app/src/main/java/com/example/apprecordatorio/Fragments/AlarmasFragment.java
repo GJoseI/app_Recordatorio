@@ -26,7 +26,7 @@ import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.Dialogs.AltaRecordatorio;
 import com.example.apprecordatorio.Dialogs.ModificacionRecordatorio;
 import com.example.apprecordatorio.Entidades.Alarma;
-import com.example.apprecordatorio.Interfaces.OnRecordatorioGuardadoListener;
+import com.example.apprecordatorio.DAOInterfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.Negocio.RecordatorioNegocio;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

@@ -25,7 +25,7 @@ import androidx.fragment.app.DialogFragment;
 import com.bumptech.glide.Glide;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.Entidades.Recordatorio;
-import com.example.apprecordatorio.Interfaces.OnRecordatorioGuardadoListener;
+import com.example.apprecordatorio.DAOInterfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.Negocio.RecordatorioGralNegocio;
 import com.example.apprecordatorio.Util.FileUtil;
 

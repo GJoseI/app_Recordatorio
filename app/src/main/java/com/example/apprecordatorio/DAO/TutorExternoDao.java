@@ -2,7 +2,7 @@ package com.example.apprecordatorio.DAO;
 
 import com.example.apprecordatorio.Entidades.Paciente;
 import com.example.apprecordatorio.Entidades.Tutor;
-import com.example.apprecordatorio.Interfaces.ITutorExterno;
+import com.example.apprecordatorio.DAOInterfaces.ITutorExterno;
 import com.example.apprecordatorio.Util.HttpUtils;
 
 import org.json.JSONObject;
