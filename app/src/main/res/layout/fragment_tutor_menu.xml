@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.TutorMenuFragment">
+    tools:context=".Fragments.TutorMenuFragment">
 
     <TextView
         android:id="@+id/tvTitulo"

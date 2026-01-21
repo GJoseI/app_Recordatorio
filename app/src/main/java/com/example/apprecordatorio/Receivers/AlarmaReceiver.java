@@ -7,10 +7,9 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
-import com.example.apprecordatorio.activities.AlarmaActivity;
-import com.example.apprecordatorio.entidades.Alarma;
-import com.example.apprecordatorio.servicios.AlarmaService;
-import com.example.apprecordatorio.util.AlarmaUtil;
+import com.example.apprecordatorio.Entidades.Alarma;
+import com.example.apprecordatorio.Servicios.AlarmaService;
+import com.example.apprecordatorio.Util.AlarmaUtil;
 
 import java.util.Objects;
 

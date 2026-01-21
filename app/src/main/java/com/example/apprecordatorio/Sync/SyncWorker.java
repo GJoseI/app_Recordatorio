@@ -1,0 +1,36 @@
+package com.example.apprecordatorio.Sync;
+
+import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
+
+public class SyncWorker extends Worker {
+
+    public SyncWorker(@NonNull Context context, @NonNull WorkerParameters params) {
+        super(context, params);
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+
+        try {
+            int idPaciente = getInputData().getInt("idPaciente", -1);
+            if (idPaciente == -1) {
+                return Result.failure();
+            }
+
+
+            SyncManager sm = new SyncManager(getApplicationContext());
+            sm.syncTodo(idPaciente);
+
+            return Result.success();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.retry();
+        }
+    }
+}

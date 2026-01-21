@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.apprecordatorio.fragments.AlarmasFragment;
-import com.example.apprecordatorio.fragments.GeneralesFragment;
-import com.example.apprecordatorio.fragments.TutorFragment;
+import com.example.apprecordatorio.Fragments.AlarmasFragment;
+import com.example.apprecordatorio.Fragments.GeneralesFragment;
+import com.example.apprecordatorio.Fragments.TutorFragment;
 
 public class MyViewPageAdapter extends FragmentStateAdapter {
     public MyViewPageAdapter(@NonNull FragmentActivity fragmentActivity) {

@@ -24,7 +24,7 @@
         android:theme="@style/Theme.AppRecordatorio"
         tools:targetApi="31">
         <activity
-            android:name=".activities.AlarmaActivity"
+            android:name=".Activities.AlarmaActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:showWhenLocked="true"
@@ -32,10 +32,10 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.Oscuro"/>
         <activity
-            android:name=".activities.ResumenActivity"
+            android:name=".Activities.ResumenActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".Activities.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Oscuro">
             <intent-filter>
@@ -49,7 +49,7 @@
             android:name=".Receivers.AlarmaReceiver"
             android:exported="true" />
         <service
-            android:name=".servicios.AlarmaService"
+            android:name=".Servicios.AlarmaService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback"
             android:stopWithTask="false"/>

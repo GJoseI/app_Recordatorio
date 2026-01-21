@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.apprecordatorio.R;
-import com.example.apprecordatorio.entidades.Recordatorio;
+import com.example.apprecordatorio.Entidades.Recordatorio;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
