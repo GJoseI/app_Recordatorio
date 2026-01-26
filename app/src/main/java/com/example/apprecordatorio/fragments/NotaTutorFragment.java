@@ -28,6 +28,7 @@ import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
+import com.example.apprecordatorio.util.BaseUrl;
 import com.example.apprecordatorio.util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,7 +47,7 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
     private AltaRecordatorioGeneral currentDialog = null;
     private Bundle args;
 
-    private static final String BASE_URL = "http://10.0.2.2/pruebaphp";
+    private static final String BASE_URL = BaseUrl.BASE_URL;
 
 
 
@@ -126,7 +127,7 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
                                 if (r.getImagenUrl() != null) {
 
                                     Glide.with(this)
-                                            .load(BASE_URL + "/" + r.getImagenUrl())
+                                            .load(BASE_URL + r.getImagenUrl())
                                             .into(imgRec);
 
                                     imgRec.setVisibility(View.VISIBLE);

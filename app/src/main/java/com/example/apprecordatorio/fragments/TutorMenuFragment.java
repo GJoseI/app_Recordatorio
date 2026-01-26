@@ -83,17 +83,31 @@ public class TutorMenuFragment extends Fragment {
 
 
         TutorExternoDao tutorExternoDao = new TutorExternoDao();
-        Tutor tutor = tutorExternoDao.login(args.getString("user"), args.getString("pass"));
-        if(tutor!=null) {
+
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+
             PacienteExternoDao pacienteExternoDao = new PacienteExternoDao();
-            if (tutor.getP().getId() > 0) {
-                Paciente paciente = pacienteExternoDao.readOne(tutor.getP().getId());
-                tvSiguiendo.setText("Siguiendo a: " + paciente.getNombre());
-                vincular.setVisibility(View.GONE);
+            if (args.getInt("codSeguimiento") > 0) {
+
+                Paciente paciente = pacienteExternoDao.readOne(args.getInt("codSeguimiento"));
+                mainHandler.post(()-> {
+
+                    tvSiguiendo.setText("Siguiendo a: " + paciente.getNombre());
+                    vincular.setVisibility(View.GONE);
+                });
+
             }
-        }else{
-            Log.d("tutor menu frag", "tutor esta vacio");
-        }
+        });
+        executor.shutdown();
+
+
+
+
+
 
         vincular.setOnClickListener(v ->{
             Bundle args2 = new Bundle();
@@ -117,13 +131,13 @@ public class TutorMenuFragment extends Fragment {
 
                         if (checkearTodoBien()) {
 
-                            ExecutorService executor = Executors.newSingleThreadExecutor();
-                            Handler mainHandler = new Handler(Looper.getMainLooper());
+                            ExecutorService executor2 = Executors.newSingleThreadExecutor();
+                            Handler mainHandler2 = new Handler(Looper.getMainLooper());
 
-                            executor.execute(() -> {
+                            executor2.execute(() -> {
                                 boolean ok = tutorExternoDao.desvincular(args.getInt("id"));
 
-                                mainHandler.post(() -> {
+                                mainHandler2.post(() -> {
                                     if (ok) {
                                         Toast.makeText(requireContext(), "Desvinculado con éxito", Toast.LENGTH_SHORT).show();
 
@@ -146,7 +160,7 @@ public class TutorMenuFragment extends Fragment {
                                 });
                             });
 
-                            executor.shutdown();
+                            executor2.shutdown();
                         }
 
                     })

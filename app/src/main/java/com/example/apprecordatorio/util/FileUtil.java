@@ -16,7 +16,7 @@ import java.nio.file.StandardCopyOption;
 
 public class FileUtil {
 
-    private final String URL_BASE = "http://10.0.2.2/pruebaphp/";
+    private final String URL_BASE = BaseUrl.BASE_URL;
 
     public Uri copiarImagenLocal(Uri sourceUri, Context context) {
         try (InputStream in = context.getContentResolver().openInputStream(sourceUri)) {

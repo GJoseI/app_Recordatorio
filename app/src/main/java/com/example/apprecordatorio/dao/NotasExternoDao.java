@@ -159,6 +159,7 @@ public class NotasExternoDao  {
 
     public ArrayList<Recordatorio> readAllFrom(int idPaciente) {
 
+        Log.d("NOTA EXTERNO","readAllFrom idPaciente: "+idPaciente);
         ArrayList<Recordatorio> lista = new ArrayList<>();
 
         try {
@@ -174,11 +175,13 @@ public class NotasExternoDao  {
             if (response.isSuccessful()
                     && response.body() != null
                     && response.body().isSuccess()) {
-
+                Log.d("NOTA EXTERNO","response success"+ response.body().toString());
                 List<NotaDto> notas = response.body().getNotas();
 
                 if (notas != null) {
                     for (NotaDto o : notas) {
+
+                        Log.d("NOTA EXTERNO","id: "+o.getId()+" titulo: "+o.getTitulo()+" ts: "+o.getUpdated_at());
 
                         Recordatorio r = new Recordatorio();
                         r.setIdRemoto(o.getId());
