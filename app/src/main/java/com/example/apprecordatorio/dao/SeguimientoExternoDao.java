@@ -4,7 +4,13 @@ import android.util.Log;
 
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Seguimiento;
+import com.example.apprecordatorio.entidades.SeguimientoDto;
 import com.example.apprecordatorio.interfaces.ISeguimientoExterno;
+import com.example.apprecordatorio.retrofit.ApiClient;
+import com.example.apprecordatorio.retrofit.ApiResponse;
+import com.example.apprecordatorio.retrofit.ApiService;
+import com.example.apprecordatorio.retrofit.SeguimientosResponse;
+import com.example.apprecordatorio.util.BaseUrl;
 import com.example.apprecordatorio.util.HttpUtils;
 
 import org.json.JSONArray;
@@ -17,13 +23,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import retrofit2.Call;
+import retrofit2.Response;
+
 public class SeguimientoExternoDao implements ISeguimientoExterno {
 
-    private  String BASE_URL = "http://10.0.2.2/pruebaphp/";
-    //private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
-    @Override
+    /*@Override
     public boolean add(Seguimiento s) {
-        String url = BASE_URL + "addSeguimiento.php";
+        String url = BaseUrl.BASE_URL + "addSeguimiento.php";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("atendida", s.isAtendida() ? "1" : "0");
@@ -39,13 +46,45 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
         } catch (Exception e) {
             return false;
         }
-    }
+    }*/
     @Override
+    public boolean add(Seguimiento s) {
+
+        try {
+            ApiService api = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            int atendida = s.isAtendida() ? 1 : 0;
+
+            Call<ApiResponse> call = api.addSeguimiento(
+                    atendida,
+                    s.getAlarma().getIdRemoto(),
+                    s.getAlarma().getPacienteId(),
+                    String.valueOf(s.getTimestamp())
+            );
+
+            Response<ApiResponse> response = call.execute();
+
+            if (response.isSuccessful() && response.body() != null) {
+                ApiResponse body = response.body();
+
+
+                return body.isSuccess();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+   /* @Override
     public ArrayList<Seguimiento> readAllFromPaciente(int id) {
 
         ArrayList<Seguimiento> lista = new ArrayList<>();
 
-        String url = BASE_URL + "readAllSeguimientoFrom.php?id_paciente=" + id;
+        String url = BaseUrl.BASE_URL + "readAllSeguimientoFrom.php?id_paciente=" + id;
         String json = HttpUtils.get(url);
 
         try {
@@ -70,6 +109,56 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                 Alarma a = new Alarma();
                 a.setIdRemoto(o.getInt("id_alarma"));
                 a.setPacienteId(o.getInt("id_paciente"));
+                s.setAlarma(a);
+
+                lista.add(s);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }*/
+
+    @Override
+    public ArrayList<Seguimiento> readAllFromPaciente(int idPaciente) {
+
+        ArrayList<Seguimiento> lista = new ArrayList<>();
+
+        try {
+            ApiService api = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<SeguimientosResponse> call =
+                    api.readAllSeguimientoFrom(idPaciente);
+
+            Response<SeguimientosResponse> response = call.execute();
+
+            if (!response.isSuccessful() || response.body() == null) {
+                Log.e("DAO SEG", "Request falló");
+                return lista;
+            }
+
+            SeguimientosResponse body = response.body();
+
+            if (!body.isSuccess()) {
+                Log.e("DAO SEG", "Success = false");
+                return lista;
+            }
+
+            for (SeguimientoDto dto : body.getSeguimientos()) {
+
+                Seguimiento s = new Seguimiento();
+                s.setId(dto.getId());
+                s.setAtendida(dto.isAtendida());
+                s.setTimestamp(dto.getFechaHora());
+
+                Alarma a = new Alarma();
+                a.setIdRemoto(dto.getIdAlarma());
+                a.setPacienteId(dto.getIdPaciente());
+
                 s.setAlarma(a);
 
                 lista.add(s);
