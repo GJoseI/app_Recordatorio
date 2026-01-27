@@ -78,7 +78,6 @@ public class NotasExternoDao  {
                             r.getTitulo(),
                             r.getDescripcion(),
                             r.getImagenUrl(),
-                            r.isBajaLogica(),
                             updatedAt
                     );
 

@@ -110,7 +110,6 @@ public interface ApiService {
             @Field("titulo") String titulo,
             @Field("descripcion") String descripcion,
             @Field("imagen") String imagen,
-            @Field("baja_logica") boolean bajaLogica,
             @Field("updated_at") String updatedAt
     );
 
