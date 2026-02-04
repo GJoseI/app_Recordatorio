@@ -34,6 +34,7 @@ import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioNegocio;
+import com.example.apprecordatorio.util.BaseUrl;
 import com.example.apprecordatorio.util.FileUtil;
 
 import java.io.IOException;
@@ -49,8 +50,7 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
 
     private boolean imagenGuardada = false;
 
-    private static final String BASE_URL = "http://10.0.2.2/pruebaphp";
-    //private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
+    private static final String BASE_URL = BaseUrl.BASE_URL;
     private String imagenSeleccionadaBase64;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =

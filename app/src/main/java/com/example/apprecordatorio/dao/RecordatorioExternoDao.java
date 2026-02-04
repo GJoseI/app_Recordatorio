@@ -3,6 +3,7 @@ package com.example.apprecordatorio.dao;
 import android.util.Log;
 
 import com.example.apprecordatorio.entidades.Alarma;
+import com.example.apprecordatorio.entidades.AlarmaDto;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.IRecordatorioExterno;
@@ -11,6 +12,8 @@ import com.example.apprecordatorio.retrofit.ApiClient;
 import com.example.apprecordatorio.retrofit.ApiResponse;
 import com.example.apprecordatorio.retrofit.ApiService;
 import com.example.apprecordatorio.retrofit.NotasResponse;
+import com.example.apprecordatorio.retrofit.RecordatorioResponse;
+import com.example.apprecordatorio.util.BaseUrl;
 import com.example.apprecordatorio.util.HttpUtils;
 
 import org.json.JSONArray;
@@ -38,20 +41,126 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class RecordatorioExternoDao implements IRecordatorioExterno {
+public class RecordatorioExternoDao  {
 
-    private Conexion con;
-
-    private final String BASE_URL = "http://10.0.2.2/pruebaphp/";
-   // private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
     public RecordatorioExternoDao ()
     {
 
     }
 
 
-    @Override
     public ArrayList<Alarma> readAllFromPaciente(int idPaciente) {
+
+        ArrayList<Alarma> list = new ArrayList<>();
+
+        try {
+            ApiService service = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<AlarmasResponse> call =
+                    service.readAllAlarmasFrom(idPaciente);
+
+            Response<AlarmasResponse> response = call.execute();
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                for (AlarmaDto o : response.body().getAlarmas()) {
+
+                    Alarma a = new Alarma();
+
+                    a.setIdRemoto(o.getId());
+                    a.setPacienteId(o.getId_paciente());
+                    a.setTitulo(o.getTitulo());
+                    a.setDescripcion(o.getDescripcion());
+                    a.setTono(o.getTono());
+                    a.setImagenUrl(o.getImagen());
+                    a.setEstado(o.getEstado() == 1);
+
+                    a.setDomingo(o.getDomingo() == 1);
+                    a.setLunes(o.getLunes() == 1);
+                    a.setMartes(o.getMartes() == 1);
+                    a.setMiercoles(o.getMiercoles() == 1);
+                    a.setJueves(o.getJueves() == 1);
+                    a.setViernes(o.getViernes() == 1);
+                    a.setSabado(o.getSabado() == 1);
+
+                    a.setBajaLogica(o.getBaja_logica() == 1);
+                    a.setHora(o.getHora());
+                    a.setMinuto(o.getMinuto());
+
+                    long ts = parseTimestamp(o.getUpdated_at());
+                    a.setUpdatedAt(ts);
+
+                    list.add(a);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public ArrayList<Alarma> readAllSync (int idPaciente) {
+
+        ArrayList<Alarma> list = new ArrayList<>();
+
+        try {
+            ApiService service = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<AlarmasResponse> call =
+                    service.readAllAlarmasSync(idPaciente);
+
+            Response<AlarmasResponse> response = call.execute();
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                for (AlarmaDto o : response.body().getAlarmas()) {
+
+                    Alarma a = new Alarma();
+
+                    a.setIdRemoto(o.getId());
+                    a.setPacienteId(o.getId_paciente());
+                    a.setTitulo(o.getTitulo());
+                    a.setDescripcion(o.getDescripcion());
+                    a.setTono(o.getTono());
+                    a.setImagenUrl(o.getImagen());
+                    a.setEstado(o.getEstado() == 1);
+
+                    a.setDomingo(o.getDomingo() == 1);
+                    a.setLunes(o.getLunes() == 1);
+                    a.setMartes(o.getMartes() == 1);
+                    a.setMiercoles(o.getMiercoles() == 1);
+                    a.setJueves(o.getJueves() == 1);
+                    a.setViernes(o.getViernes() == 1);
+                    a.setSabado(o.getSabado() == 1);
+
+                    a.setBajaLogica(o.getBaja_logica() == 1);
+                    a.setHora(o.getHora());
+                    a.setMinuto(o.getMinuto());
+
+                    long ts = parseTimestamp(o.getUpdated_at());
+                    a.setUpdatedAt(ts);
+
+                    list.add(a);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+  /*  public ArrayList<Alarma> readAllFromPaciente2(int idPaciente) {
 
         ArrayList<Alarma> list = new ArrayList<>();
 
@@ -61,7 +170,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             params.put("id_paciente", String.valueOf(idPaciente));
 
 
-            String response = HttpUtils.post(BASE_URL + "readAllAlarmas.php", params);
+            String response = HttpUtils.post(BaseUrl.BASE_URL + "readAllAlarmas.php", params);
 
 
             JSONObject json = new JSONObject(response);
@@ -110,12 +219,12 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         return list;
     }
 
-    public ArrayList<Alarma> readAllSync (int idPaciente) {
+    public ArrayList<Alarma> readAllSync2 (int idPaciente) {
 
         ArrayList<Alarma> list = new ArrayList<>();
 
         try {
-            URL url = new URL(BASE_URL+"readAllAlarmasSync.php");
+            URL url = new URL(BaseUrl.BASE_URL+"readAllAlarmasSync.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
@@ -181,13 +290,57 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         }
 
         return list;
-    }
-    @Override
+    }*/
+
     public int add(Alarma a) {
+
+        try {
+            ApiService service = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            String updatedAt = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss",
+                    Locale.getDefault()
+            ).format(a.getUpdatedAt());
+
+            Call<RecordatorioResponse> call = service.addAlarma(
+                    a.getPacienteId(),
+                    a.getTitulo(),
+                    a.getDescripcion() != null ? a.getDescripcion() : "",
+                    a.getTono(),
+                    a.getImagenUrl() != null ? a.getImagenUrl() : "",
+                    a.isEstado() ? 1 : 0,
+                    a.isDomingo() ? 1 : 0,
+                    a.isLunes() ? 1 : 0,
+                    a.isMartes() ? 1 : 0,
+                    a.isMiercoles() ? 1 : 0,
+                    a.isJueves() ? 1 : 0,
+                    a.isViernes() ? 1 : 0,
+                    a.isSabado() ? 1 : 0,
+                    a.getHora(),
+                    a.getMinuto(),
+                    updatedAt
+            );
+
+            Response<RecordatorioResponse> response = call.execute();
+
+            if (response.isSuccessful() && response.body() != null) {
+                if (response.body().isSuccess()) {
+                    return response.body().getId();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+    public int add2(Alarma a) {
         int result = 0;
 
         try {
-            URL url = new URL(BASE_URL+"addAlarma.php");
+            URL url = new URL(BaseUrl.BASE_URL+"addAlarma.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
@@ -255,137 +408,15 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         return result;
     }
 
-/*
-    @Override
-    public int add(Alarma r) {
 
-        try {
-            ApiService api = ApiClient.getClient()
-                    .create(ApiService.class);
 
-            Call<ApiResponse> call =
-                    api.addAlarma(r.getPacienteId(),
-                            r.getTitulo(),
-                            r.getDescripcion() != null ? r.getDescripcion() : "",
-                            r.getTono(),
-                            r.getImagenUrl() != null ? r.getImagenUrl() : "",
-                            r.isEstado()?1:0,
-                            r.isDomingo() ? 1 : 0,
-                            r.isLunes() ? 1 : 0,
-                            r.isMartes() ? 1 : 0,
-                            r.isMiercoles() ? 1 : 0,
-                            r.isJueves() ? 1 : 0,
-                            r.isViernes() ? 1 : 0,
-                            r.isSabado() ? 1 : 0,
-                            r.isBajaLogica() ? 1 : 0,
-                            r.getHora(),
-                            r.getMinuto(),
-                            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(r.getUpdatedAt())
-                    );
-
-            Response<ApiResponse> response = call.execute();
-
-            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
-            Log.d("API_DEBUG", "BODY: " + response.body());
-            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
-
-            if (response.body() != null) {
-                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
-                Log.d("API_DEBUG", "ID: " + response.body().getId());
-                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
-            }
-
-            if (response.isSuccessful()
-                    && response.body() != null
-                    && response.body().isSuccess()) {
-
-                return response.body().getId();
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return 0;
-    }
-
-    @Override
-    public List<Alarma> readAllFromPaciente(int idPaciente)
-    {
-        List<Alarma> lista =null;
-        try
-        {
-            ApiService api = ApiClient.getClient()
-                    .create(ApiService.class);
-
-            Call<AlarmasResponse> call = api.readAllAlarmasFrom(idPaciente);
-            Response<AlarmasResponse> response = call.execute();
-
-            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
-            Log.d("API_DEBUG", "BODY: " + response.body());
-            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
-
-            if (response.body() != null) {
-                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
-                Log.d("API_DEBUG", "Notas: " + response.body().getAlarmas());
-                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
-            }
-
-            if (response.isSuccessful()
-                    && response.body() != null
-                    && response.body().isSuccess()) {
-
-                return response.body().getAlarmas();
-            }
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return lista;
-    }
-
-    public List<Alarma> readAllSync(int idPaciente)
-    {
-        List<Alarma> lista =null;
-        try
-        {
-            ApiService api = ApiClient.getClient()
-                    .create(ApiService.class);
-
-            Call<AlarmasResponse> call = api.readAllAlarmasSync(idPaciente);
-            Response<AlarmasResponse> response = call.execute();
-
-            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
-            Log.d("API_DEBUG", "BODY: " + response.body());
-            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
-
-            if (response.body() != null) {
-                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
-                Log.d("API_DEBUG", "Notas: " + response.body().getAlarmas());
-                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
-            }
-
-            if (response.isSuccessful()
-                    && response.body() != null
-                    && response.body().isSuccess()) {
-
-                return response.body().getAlarmas();
-            }
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return lista;
-    }
-*/
-    @Override
     public Alarma readOneFrom(int id, int idPaciente) {
         Alarma a = null;
 
         Log.d("ID R EX","ID: "+id);
 
         try {
-            URL url = new URL(BASE_URL+"readOneAlarmaFrom.php?id=" + id + "&id_paciente=" + idPaciente);
+            URL url = new URL(BaseUrl.BASE_URL+"readOneAlarmaFrom.php?id=" + id + "&id_paciente=" + idPaciente);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -429,8 +460,56 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         return a;
     }
 
-
     public boolean update(Alarma a) {
+
+        try {
+            if (a.getDescripcion() == null) a.setDescripcion("");
+            if (a.getImagenUrl() == null) a.setImagenUrl("");
+
+            ApiService service = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<ApiResponse> call =
+                    service.updateAlarma(
+                            a.getIdRemoto(),
+                            a.getPacienteId(),
+                            a.getTitulo(),
+                            a.getDescripcion(),
+                            a.getTono(),
+                            a.getImagenUrl(),
+
+                            a.isEstado() ? 1 : 0,
+                            a.isDomingo() ? 1 : 0,
+                            a.isLunes() ? 1 : 0,
+                            a.isMartes() ? 1 : 0,
+                            a.isMiercoles() ? 1 : 0,
+                            a.isJueves() ? 1 : 0,
+                            a.isViernes() ? 1 : 0,
+                            a.isSabado() ? 1 : 0,
+
+                            a.isBajaLogica() ? 1 : 0,
+                            a.getHora(),
+                            a.getMinuto(),
+                            new SimpleDateFormat(
+                                    "yyyy-MM-dd HH:mm:ss",
+                                    Locale.getDefault()
+                            ).format(a.getUpdatedAt())
+                    );
+
+            Response<ApiResponse> response = call.execute();
+
+            return response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean update2(Alarma a) {
         try {
             if (a.getDescripcion() == null) a.setDescripcion("");
             if (a.getImagenUrl() == null) a.setImagenUrl("");
@@ -460,7 +539,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
             params.put("updated_at",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(a.getUpdatedAt()));
 
 
-            String json = HttpUtils.post(BASE_URL + "updateAlarma.php", params);
+            String json = HttpUtils.post(BaseUrl.BASE_URL + "updateAlarma.php", params);
 
             Log.d("ALARMA DAO",json);
 
@@ -474,10 +553,40 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
     }
 
 
-
     public boolean delete(Alarma a) {
+
         try {
-            URL url = new URL(BASE_URL + "deleteAlarma.php");
+            ApiService api = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            String updatedAt = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss",
+                    Locale.getDefault()
+            ).format(a.getUpdatedAt());
+
+            Call<ApiResponse> call = api.deleteAlarma(
+                    a.getIdRemoto(),
+                    a.getPacienteId(),
+                    updatedAt
+            );
+
+            Response<ApiResponse> response = call.execute();
+
+            if (response.isSuccessful() && response.body() != null) {
+                return response.body().isSuccess();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean delete2(Alarma a) {
+        try {
+            URL url = new URL(BaseUrl.BASE_URL + "deleteAlarma.php");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
@@ -503,7 +612,7 @@ public class RecordatorioExternoDao implements IRecordatorioExterno {
         }
     }
     public int getLastId(int idPaciente) {
-        String url = BASE_URL + "getLastAlarmaId.php";
+        String url = BaseUrl.BASE_URL + "getLastAlarmaId.php";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("id_paciente", String.valueOf(idPaciente));

@@ -2,18 +2,12 @@ package com.example.apprecordatorio.dao;
 
 import android.util.Log;
 
-import com.example.apprecordatorio.entidades.Paciente;
+import com.example.apprecordatorio.entidades.NotaDto;
 import com.example.apprecordatorio.entidades.Recordatorio;
-import com.example.apprecordatorio.interfaces.INotaExterno;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,23 +19,19 @@ import com.example.apprecordatorio.retrofit.ApiClient;
 import com.example.apprecordatorio.retrofit.ApiResponse;
 import com.example.apprecordatorio.retrofit.ApiService;
 import com.example.apprecordatorio.retrofit.NotasResponse;
+import com.example.apprecordatorio.retrofit.RecordatorioResponse;
 import com.example.apprecordatorio.util.BaseUrl;
 import com.example.apprecordatorio.util.HttpUtils;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class NotasExternoDao implements INotaExterno {
+public class NotasExternoDao  {
 
-    //private Conexion con;
 
-    private final String BASE_URL = "http://10.0.2.2/pruebaphp/";
 
-    //private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
-
-    @Override
-    public int add(Recordatorio r) {
-        String url = BASE_URL+ "addNota.php";
+    public int add2(Recordatorio r) {
+        String url = BaseUrl.BASE_URL+ "addNota.php";
         if(r.getDescripcion()==null)r.setDescripcion("");
         if(r.getImagenUrl()==null)r.setImagenUrl("");
 
@@ -68,11 +58,60 @@ public class NotasExternoDao implements INotaExterno {
         }
     }
 
+    public int add(Recordatorio r) {
+
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            if (r.getDescripcion() == null) r.setDescripcion("");
+            if (r.getImagenUrl() == null) r.setImagenUrl("");
+
+            String updatedAt = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss",
+                    Locale.getDefault()
+            ).format(r.getUpdatedAt());
+
+            Call<RecordatorioResponse> call =
+                    api.addNota(
+                            r.getPacienteId(),
+                            r.getTitulo(),
+                            r.getDescripcion(),
+                            r.getImagenUrl(),
+                            updatedAt
+                    );
+
+            Response<RecordatorioResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+
+            if (!response.isSuccessful() || response.body() == null) {
+                Log.e("API_DEBUG", "Respuesta inválida");
+                return 0;
+            }
+
+            RecordatorioResponse body = response.body();
+
+            if (!body.isSuccess()) {
+                Log.e("API_DEBUG", "ERROR: " + body.getError());
+                return 0;
+            }
+
+            Log.d("API_DEBUG", "Nota creada con ID: " + body.getId());
+            return body.getId();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
 
-    @Override
-    public ArrayList<Recordatorio> readAllFrom(int idPaciente) {
-        String url = BASE_URL + "readAllNotasFrom.php";
+
+
+
+    public ArrayList<Recordatorio> readAllFrom2(int idPaciente) {
+        String url = BaseUrl.BASE_URL + "readAllNotasFrom.php";
 
 
         HashMap<String, String> params = new HashMap<>();
@@ -117,9 +156,104 @@ public class NotasExternoDao implements INotaExterno {
 
     }
 
+    public ArrayList<Recordatorio> readAllFrom(int idPaciente) {
 
-    public ArrayList<Recordatorio> readAllSync (int idPaciente) {
-        String url = BASE_URL + "readAllNotasSync.php";
+        Log.d("NOTA EXTERNO","readAllFrom idPaciente: "+idPaciente);
+        ArrayList<Recordatorio> lista = new ArrayList<>();
+
+        try {
+            ApiService service = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<NotasResponse> call =
+                    service.readAllNotasFrom(idPaciente);
+
+            Response<NotasResponse> response = call.execute();
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+                Log.d("NOTA EXTERNO","response success"+ response.body().toString());
+                List<NotaDto> notas = response.body().getNotas();
+
+                if (notas != null) {
+                    for (NotaDto o : notas) {
+
+                        Log.d("NOTA EXTERNO","id: "+o.getId()+" titulo: "+o.getTitulo()+" ts: "+o.getUpdated_at());
+
+                        Recordatorio r = new Recordatorio();
+                        r.setIdRemoto(o.getId());
+                        r.setTitulo(o.getTitulo());
+                        r.setDescripcion(o.getDescripcion());
+                        r.setImagenUrl(o.getImagen());
+                        r.setPacienteId(o.getId_paciente());
+                        r.setBajaLogica(o.isBaja_logica());
+
+                        long ts = parseTimestamp(o.getUpdated_at());
+                        r.setUpdatedAt(ts);
+
+                        lista.add(r);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+    public ArrayList<Recordatorio> readAllSync(int idPaciente) {
+
+        ArrayList<Recordatorio> lista = new ArrayList<>();
+
+        try {
+            ApiService service = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<NotasResponse> call =
+                    service.readAllNotasSync(idPaciente);
+
+            Response<NotasResponse> response = call.execute();
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                List<NotaDto> notas = response.body().getNotas();
+
+                if (notas != null) {
+                    for (NotaDto o : notas) {
+
+                        Recordatorio r = new Recordatorio();
+                        r.setIdRemoto(o.getId());
+                        r.setTitulo(o.getTitulo());
+                        r.setDescripcion(o.getDescripcion());
+                        r.setImagenUrl(o.getImagen());
+                        r.setPacienteId(o.getId_paciente());
+                        r.setBajaLogica(o.isBaja_logica());
+
+                        long ts = parseTimestamp(o.getUpdated_at());
+                        r.setUpdatedAt(ts);
+
+                        lista.add(r);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+
+
+    public ArrayList<Recordatorio> readAllSync2 (int idPaciente) {
+        String url = BaseUrl.BASE_URL + "readAllNotasSync.php";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("id_paciente", String.valueOf(idPaciente));
@@ -273,7 +407,45 @@ public class NotasExternoDao implements INotaExterno {
 */
 
     public boolean update(Recordatorio r) {
-        String url = BASE_URL + "updateNota.php";
+
+        try {
+            if (r.getDescripcion() == null) r.setDescripcion("");
+            if (r.getImagenUrl() == null) r.setImagenUrl("");
+
+            ApiService service = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<ApiResponse> call = service.updateNota(
+                    r.getIdRemoto(),
+                    r.getPacienteId(),
+                    r.getTitulo(),
+                    r.getDescripcion(),
+                    r.getImagenUrl(),
+                    r.isBajaLogica() ? 1 : 0,
+                    new SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss",
+                            Locale.getDefault()
+                    ).format(r.getUpdatedAt())
+            );
+
+            Response<ApiResponse> response = call.execute();
+
+            if (response.isSuccessful()
+                    && response.body() != null) {
+
+                return response.body().isSuccess();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean update2(Recordatorio r) {
+        String url = BaseUrl.BASE_URL + "updateNota.php";
 
         Log.d("sync up notas","id remoto: "+r.getIdRemoto()+" paciente id"+r.getPacienteId());
 
@@ -306,9 +478,9 @@ public class NotasExternoDao implements INotaExterno {
 
     }
 
-    @Override
-    public boolean delete(Recordatorio r) {
-        String url = BASE_URL + "deleteNota.php";
+
+    public boolean delete2(Recordatorio r) {
+        String url = BaseUrl.BASE_URL + "deleteNota.php";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(r.getIdRemoto()));
@@ -327,10 +499,40 @@ public class NotasExternoDao implements INotaExterno {
         }
 
     }
+    public boolean delete(Recordatorio r) {
 
-    @Override
+        try {
+            ApiService service = ApiClient
+                    .getClient()
+                    .create(ApiService.class);
+
+            Call<ApiResponse> call = service.deleteNota(
+                    r.getIdRemoto(),
+                    r.getPacienteId(),
+                    new SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss",
+                            Locale.getDefault()
+                    ).format(r.getUpdatedAt())
+            );
+
+            Response<ApiResponse> response = call.execute();
+
+            if (response.isSuccessful()
+                    && response.body() != null) {
+
+                return response.body().isSuccess();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
     public Recordatorio readOne(int id, int idPaciente) {
-        String url = BASE_URL + "readOneNota.php";
+        String url = BaseUrl.BASE_URL + "readOneNota.php";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(id));
@@ -367,7 +569,7 @@ public class NotasExternoDao implements INotaExterno {
     }
 
     public int getLastId(int idPaciente) {
-        String url = BASE_URL + "getLastNotaId.php";
+        String url = BaseUrl.BASE_URL + "getLastNotaId.php";
 
         HashMap<String, String> params = new HashMap<>();
         params.put("id_paciente", String.valueOf(idPaciente));

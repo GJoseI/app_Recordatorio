@@ -1,6 +1,7 @@
 package com.example.apprecordatorio.retrofit;
 
 import com.example.apprecordatorio.entidades.Alarma;
+import com.example.apprecordatorio.entidades.NotaDto;
 import com.example.apprecordatorio.entidades.Recordatorio;
 
 import java.util.List;
@@ -8,14 +9,14 @@ import java.util.List;
 public class NotasResponse {
 
     private boolean success;
-    private List<Recordatorio> notas;
+    private List<NotaDto> notas;
     private String error;
 
     public boolean isSuccess() {
         return success;
     }
 
-    public List<Recordatorio> getNotas() {
+    public List<NotaDto> getNotas() {
         return notas;
     }
 

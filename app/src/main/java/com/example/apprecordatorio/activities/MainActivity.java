@@ -143,12 +143,12 @@ public class MainActivity extends AppCompatActivity {
                 //sync.syncTodo(p.getId());
 
 
-                // 1. Parámetros para el worker
+
                 Data inputData = new Data.Builder()
                         .putInt("idPaciente", p.getId())
                         .build();
 
-                // 2. Constraints: solo ejecutar con internet
+
                 Constraints constraints = new Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build();
@@ -164,13 +164,13 @@ public class MainActivity extends AppCompatActivity {
                 if(NetworkUtils.hayConexion(this))
                 {
                     SyncManager sync = new SyncManager(this);
-                    sync.syncTodo(p.getId());
+                   // sync.syncTodo(p.getId());
                 }
 
-                // 3. Crear trabajo periódico
+
                 PeriodicWorkRequest syncWork = new PeriodicWorkRequest.Builder(
                         SyncWorker.class,
-                        15, TimeUnit.MINUTES // mínimo en Android
+                        15, TimeUnit.MINUTES
                 )
                         .setInputData(inputData)
                         .setConstraints(constraints)
