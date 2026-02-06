@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.example.apprecordatorio.dao.TutorExternoDao;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Tutor;
 import com.example.apprecordatorio.negocio.PacienteNegocio;
+import com.example.apprecordatorio.util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.concurrent.ExecutorService;
@@ -61,7 +63,7 @@ public class TutorFragment extends Fragment {
             input.setHint("Nombre");
 
             new MaterialAlertDialogBuilder(requireContext(), R.style.Theme_Oscuro_Dialog)
-                    .setTitle("Ingresa tu nombre")
+                    .setTitle("Ingresa un nombre")
                     .setMessage("Nombre de la persona a seguir:")
                     .setView(input)
                     .setPositiveButton("Aceptar", (dialog, which) -> {
@@ -81,6 +83,7 @@ public class TutorFragment extends Fragment {
                                 long insertado = neg.add(p);
                                 Paciente pLeido = null;
 
+                                Log.d("AVER", "Insertado ID: " + insertado);
                                 if (insertado>0) {
                                     pLeido = neg.read();
                                     neg.ponerIdPacienteEnAlarmas(requireContext());
@@ -133,35 +136,56 @@ public class TutorFragment extends Fragment {
         });
 
         iniciar.setOnClickListener(v -> {
-            /// Funcion para corroborar datos ingresados
+
             String user = etUser.getText().toString();
             String pass = etPass.getText().toString();
-            TutorExternoDao tutorExternoDao = new TutorExternoDao();
+            if(user.isEmpty()|| pass.isEmpty())
+            {
+                Toast.makeText(requireContext(),"Complete todos los campos", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                if(!NetworkUtils.hayConexion(requireContext()))
+                {
+                    Toast.makeText(requireContext(),"revise su conexion a internet", Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    /// Funcion para corroborar datos ingresados
 
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Handler mainHandler = new Handler(Looper.getMainLooper());
-            executor.execute(() ->{
-                Tutor tutor = tutorExternoDao.obtenerTutor(user, pass, null);
-                PacienteExternoDao pdao = new PacienteExternoDao();
-                Paciente p = pdao.readOne(tutor.getP().getId());
-                tutor.setP(p);
-                mainHandler.post(() ->{
-                    if(tutor !=  null){
-                        Bundle args = new Bundle();
-                        args.putString("user", user);
-                        args.putString("pass", pass);
-                        args.putInt("id",tutor.getId());
-                        args.putString("email", tutor.getEmail());
-                        args.putInt("codSeguimiento",tutor.getP().getId());
-                        args.putString("nombrePaciente",tutor.getP().getNombre());
-                        Fragment fragment = new TutorMenuFragment();
-                        fragment.setArguments(args);
-                        ((MainActivity) requireActivity()).mostrarFragmento(fragment);
-                    }else{
-                        Toast.makeText(this.getContext(),"Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            });
+                    TutorExternoDao tutorExternoDao = new TutorExternoDao();
+
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
+                    executor.execute(() ->{
+                        Tutor tutor = tutorExternoDao.login(user, pass);
+                        PacienteExternoDao pdao = new PacienteExternoDao();
+
+                        if(tutor!=null)
+                        {
+                            if(tutor.getP().getId()>0)
+                            {
+                                tutor.setP(pdao.readOne(tutor.getP().getId()));
+                            }
+                        }
+                        mainHandler.post(() ->{
+                            if(tutor !=  null){
+                                Bundle args = new Bundle();
+                                args.putString("user", user);
+                                args.putString("pass", pass);
+                                args.putInt("id",tutor.getId());
+                                args.putString("email", tutor.getEmail());
+                                args.putInt("codSeguimiento",tutor.getP().getId());
+                                args.putString("nombrePaciente",tutor.getP().getNombre());
+                                Fragment fragment = new TutorMenuFragment();
+                                fragment.setArguments(args);
+                                ((MainActivity) requireActivity()).mostrarFragmento(fragment);
+                            }else{
+                                Toast.makeText(this.getContext(),"Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    });
+                }
+            }
         });
     }
 }

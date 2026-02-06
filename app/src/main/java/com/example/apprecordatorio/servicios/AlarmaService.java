@@ -27,30 +27,48 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.AlarmaActivity;
+import com.example.apprecordatorio.dao.RecordatorioDao;
+import com.example.apprecordatorio.dao.SeguimientoDao;
 import com.example.apprecordatorio.dao.SeguimientoExternoDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Seguimiento;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AlarmaService extends Service {
     private MediaPlayer mediaPlayer;
 
+    private static boolean isRunning = false;
     private Handler handler = new Handler();
     private Runnable timeoutRunnable;
     private boolean atendida = false;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        // ---- MANEJO DE STOP ----
         if (intent != null && "STOP_ALARM".equals(intent.getAction())) {
             atendida = true;
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
             handler.removeCallbacks(timeoutRunnable);
             stopSelf();
             return START_NOT_STICKY;
         }
+
+        if (isRunning) {
+            Log.w("ALARM SERVICE", "Service ya en ejecución, ignorando nuevo start");
+            return START_NOT_STICKY;
+        }
+
+        isRunning = true;
+
+
+
 
         Log.d("ALARM SERVICE","SE EJECUTO ALARMA SERVICE");
 
@@ -118,6 +136,7 @@ public class AlarmaService extends Service {
 
     @Override
     public void onDestroy() {
+        isRunning = false;
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -141,14 +160,22 @@ public class AlarmaService extends Service {
 
                 executor.execute(() -> {
                     if(pacienteId != -1) {
-                        SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                        //SeguimientoExternoDao dao = new SeguimientoExternoDao();
+                        SeguimientoDao dao = new SeguimientoDao(this);
+                        RecordatorioDao rdao = new RecordatorioDao(this);
                         Seguimiento s = new Seguimiento();
                         Alarma a = new Alarma();
                         a.setPacienteId(pacienteId);
-                        a.setId(idAlarma);
+                        int idremoto = rdao.getIdRemoto(idAlarma);
+                        a.setIdRemoto(idremoto);
                         s.setAlarma(a);
+                        long timestamp = System.currentTimeMillis();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String mysqlTimestamp = sdf.format(new Date(timestamp));
+                        s.setTimestamp(mysqlTimestamp);
                         s.setAtendida(false);
-                        dao.add(s);
+                       long ok = dao.add(s);
+                       Log.d("ALARM SERVICE","Seguimiento agregado en timeout: "+ok);
                     }
                 });
 

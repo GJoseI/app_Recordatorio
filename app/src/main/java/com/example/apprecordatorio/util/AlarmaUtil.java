@@ -29,6 +29,7 @@ public class AlarmaUtil {
 
     public void programarAlarma(Context context, Alarma r, int diaSemana) {
 
+
         // Chequear permiso antes de programar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             context.createAttributionContext("com.example.apprecordatorio");
@@ -41,6 +42,7 @@ public class AlarmaUtil {
                 return; // salimos sin programar hasta que el usuario lo habilite
             }
         }
+
 
         Log.d("PROG ALARM","PROGRAMANDO ALARMA PARA DIA:"+diaSemana+" "+r.getHora()+" "+r.getMinuto());
         Calendar calendar = Calendar.getInstance();

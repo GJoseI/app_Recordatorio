@@ -7,7 +7,7 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    android:backgroundTint="@color/fondoElementoOscuro">
+    android:backgroundTint="@color/fondoElementoSeleccionado">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:id="@+id/txtTituloRecSeg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/letraGris"
+                android:textColor="@color/letraBlanca"
                 android:text="Nuevo Recordatorio"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -37,7 +37,7 @@
                 android:id="@+id/txtEstadoRecSeg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/letraGris"
+                android:textColor="@color/letraBlanca"
                 android:text="Atendida"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5/11/2025"
-                    android:textColor="@color/letraGris"
+                    android:textColor="@color/letraBlanca"
                     android:textSize="16sp" />
                 <TextView
                     android:padding="2dp"
@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:text="19:00"
                     android:visibility="gone"
-                    android:textColor="@color/letraGris"
+                    android:textColor="@color/letraBlanca"
                     android:textSize="16sp" />
 
 

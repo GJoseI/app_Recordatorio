@@ -42,6 +42,7 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
     private Uri imagenSeleccionadaUri;
     private ImageView imgPreview;
 
+    private boolean imagenGuardada = false;
     private OnRecordatorioGuardadoListener listener;
 
 
@@ -154,6 +155,7 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
                     mainHandler.post(() -> {
 
                         if (insertado>0) {
+                            imagenGuardada = true;
                             Toast.makeText(requireContext(),"Actualizado con exito!",Toast.LENGTH_SHORT).show();
                             if (listener != null) listener.onRecordatorioGuardado();
                         } else {
@@ -214,7 +216,7 @@ public class ModificacionRecordatorioGeneral extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         FileUtil fu = new FileUtil();
-        if(imagenSeleccionadaUri!=null)
+        if(imagenSeleccionadaUri!=null && !imagenGuardada)
         {
             fu.borrarImagenAnterior(imagenSeleccionadaUri.toString());
         }

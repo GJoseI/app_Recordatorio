@@ -5,17 +5,281 @@ import android.util.Log;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Tutor;
 import com.example.apprecordatorio.interfaces.ITutorExterno;
+import com.example.apprecordatorio.retrofit.ApiClient;
+import com.example.apprecordatorio.retrofit.ApiResponse;
+import com.example.apprecordatorio.retrofit.ApiService;
+import com.example.apprecordatorio.retrofit.TutorLoginResponse;
+import com.example.apprecordatorio.retrofit.VincularResponse;
+import com.example.apprecordatorio.util.BaseUrl;
+import com.example.apprecordatorio.util.HttpUtils;
+
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class TutorExternoDao implements ITutorExterno {
+import retrofit2.Call;
+import retrofit2.Response;
 
-    private Conexion con;
+public class TutorExternoDao  {
 
+   // private Conexion con;
+
+
+
+    //private final String BASE_URL = "http://marvelous-vision-production-c97b.up.railway.app/";
+
+    public boolean add2(Tutor t) {
+        String url = BaseUrl.BASE_URL + "addTutor.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("nombre_usuario", t.getUsername());
+        params.put("email", t.getEmail());
+        params.put("password", t.getPassword());
+
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+            return json.optBoolean("success", false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean add(Tutor p) {
+        Log.d("API_DEBUG", "en dao add paciente");
+
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<ApiResponse> call =
+                    api.addTutor(p.getUsername(),
+                            p.getEmail(),
+                            p.getPassword());
+
+            Response<ApiResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "ID: " + response.body().getId());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+    public Tutor login(String username, String password) {
+        Log.d("API_DEBUG", "en dao add paciente");
+
+        Tutor t = null;
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<TutorLoginResponse> call =
+                    api.loginTutor(username,
+                            password);
+
+            Response<TutorLoginResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+            Log.d("API_DEBUG", "BODY: " + response.body());
+            Log.d("API_DEBUG", "ERROR BODY: " + response.errorBody());
+
+            if (response.body() != null) {
+                Log.d("API_DEBUG", "SUCCESS: " + response.body().isSuccess());
+                Log.d("API_DEBUG", "ID: " + response.body().getId());
+                Log.d("API_DEBUG", "ERROR: " + response.body().getError());
+            }
+
+            if (response.isSuccessful()
+                    && response.body() != null
+                    && response.body().isSuccess()) {
+
+                t = new Tutor();
+                t.setId(response.body().getId());
+                t.setUsername(response.body().getNombre_usuario());
+                t.setEmail(response.body().getEmail());
+                int idPaciente = response.body().getId_paciente();
+                Paciente paciente = new Paciente();
+                paciente.setId(idPaciente);
+                t.setP(paciente);
+
+                return t;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public Tutor login2(String username, String password) {
+        String url = BaseUrl.BASE_URL + "loginTutor.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("nombre_usuario", username);
+        params.put("password", password);
+
+        Tutor t;
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+
+            if (json.optBoolean("success")) {
+                t = new Tutor();
+                t.setId(json.getInt("id"));
+                t.setUsername(json.getString("nombre_usuario"));
+                t.setEmail(json.getString("email"));
+                int idPaciente = json.optInt("id_paciente", 0);
+                //if(idPaciente>0)
+                //{
+                    Paciente paciente = new Paciente();
+                    paciente.setId(idPaciente);
+                    t.setP(paciente);
+                //}
+                return t;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public boolean vincular2(Tutor t) {
+        String url = BaseUrl.BASE_URL + "vincularTutor.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_tutor", String.valueOf(t.getId()));
+        params.put("id_paciente", String.valueOf(t.getP().getId()));
+
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+            return json.optBoolean("success", false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean vincular(Tutor t) {
+
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<VincularResponse> call =
+                    api.vincularTutor(
+                            t.getId(),
+                            t.getP().getId()
+                    );
+
+            Response<VincularResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+
+            if (!response.isSuccessful() || response.body() == null) {
+                Log.e("API_DEBUG", "Respuesta inválida");
+                return false;
+            }
+
+            VincularResponse body = response.body();
+
+            if (!body.isSuccess()) {
+                Log.e("API_DEBUG", "ERROR: " + body.getError());
+                return false;
+            }
+
+            Log.d("API_DEBUG", "Tutor vinculado correctamente");
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean desvincular(int idTutor) {
+
+        try {
+            ApiService api = ApiClient.getClient()
+                    .create(ApiService.class);
+
+            Call<VincularResponse> call =
+                    api.desvincularTutor(idTutor);
+
+            Response<VincularResponse> response = call.execute();
+
+            Log.d("API_DEBUG", "HTTP CODE: " + response.code());
+
+            if (!response.isSuccessful() || response.body() == null) {
+                Log.e("API_DEBUG", "Respuesta inválida");
+                return false;
+            }
+
+            VincularResponse body = response.body();
+
+            if (!body.isSuccess()) {
+                Log.e("API_DEBUG", "ERROR: " + body.getError());
+                return false;
+            }
+
+            Log.d("API_DEBUG", "Tutor desvinculado correctamente");
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean desvincular2(int idTutor) {
+        String url = BaseUrl.BASE_URL + "desvincular.php";
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_tutor", String.valueOf(idTutor));
+
+        String response = HttpUtils.post(url, params);
+
+        try {
+            JSONObject json = new JSONObject(response);
+            return json.getBoolean("success");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    /*
     @Override
     public boolean add(Tutor t) {
         int res = 0;
@@ -128,6 +392,35 @@ public class TutorExternoDao implements ITutorExterno {
     }
 
 
+    public boolean vincular(Tutor t) {
+        int res = 0;
+
+        try {
+            con = new Conexion();
+            Connection c = con.abrirConexion();
+
+            String sql = "UPDATE tutor SET id_paciente=? WHERE id=?";
+
+            PreparedStatement ps = c.prepareStatement(sql);
+
+
+            ps.setInt(1, t.getP().getId());
+            ps.setInt(2, t.getId());
+
+            res = ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (con != null) {
+                try { con.cerrar(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+
+        return res > 0;
+    }
+
+
 
     @Override
     public Tutor readOne(int id) {
@@ -215,4 +508,6 @@ public class TutorExternoDao implements ITutorExterno {
         }
         return null;
     }
+    */
+
 }

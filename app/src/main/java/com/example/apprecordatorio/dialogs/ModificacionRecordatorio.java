@@ -145,7 +145,7 @@ public class ModificacionRecordatorio extends DialogFragment {
             }
 
             viejaImagen = args.getString("imagen");
-            if (viejaImagen != null && !viejaImagen.isEmpty()) {
+            if (viejaImagen != null && !viejaImagen.isEmpty()&& !viejaImagen.equals("null")) {
                 Log.e("EN IF",viejaImagen);
                 imgPreview.setImageURI(Uri.parse(viejaImagen));
                 imgPreview.setVisibility(View.VISIBLE);

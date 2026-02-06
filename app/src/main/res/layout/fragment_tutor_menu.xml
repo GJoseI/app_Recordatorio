@@ -81,7 +81,22 @@
             android:layout_marginBottom="88dp"
             android:backgroundTint="@color/fondoElementoSeleccionado"
             android:text="Ver Alarmas"
-            android:visibility="gone"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/btnGenerarCodigo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAgregarRec" />
+
+        <Button
+            android:id="@+id/btnVerNotas"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="4dp"
+            android:layout_marginBottom="88dp"
+            android:backgroundTint="@color/fondoElementoSeleccionado"
+            android:text="Ver Notas"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/btnGenerarCodigo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -103,13 +118,12 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTitulo"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
+    <Button
         android:id="@+id/tvSiguiendo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:layout_marginTop="44dp"
-        android:background="@drawable/bg_edittext_redondeado"
         android:backgroundTint="@color/naranjita"
         android:gravity="center_vertical"
         android:text="TextView"

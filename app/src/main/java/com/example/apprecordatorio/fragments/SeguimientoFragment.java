@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.example.apprecordatorio.R;
 import com.example.apprecordatorio.activities.MainActivity;
 import com.example.apprecordatorio.dao.SeguimientoExternoDao;
+import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Seguimiento;
 import com.example.apprecordatorio.negocio.RecordatorioNegocio;
 import com.example.apprecordatorio.negocio.SeguimientoNegocio;
@@ -48,19 +50,6 @@ public class SeguimientoFragment extends Fragment {
         atras.setOnClickListener(v -> {
             ((MainActivity) requireActivity()).esconderFragmento();
         });
-        /*
-        // 3️⃣ Inflar las cards y agregarlas al contenedor
-        // Supongamos que tu layout de card es "item_card_recordatorio.xml"
-        for (int i = 0; i < 3; i++) {
-            View cardView = inflater.inflate(R.layout.item_seguimiento, container, false);
-
-            // Si tu card tiene textos o botones, los seteás acá:
-            TextView titulo = cardView.findViewById(R.id.txtTituloRecSeg);
-            titulo.setText("Recordatorio " + (i + 1));
-
-            container.addView(cardView);
-
-        }*/
         mostrarSeguimientos();
     }
 
@@ -71,6 +60,7 @@ public class SeguimientoFragment extends Fragment {
         if(args!=null)
         {
             int id = args.getInt("idPaciente");
+            Log.d("ID EN SEG","ID: "+id);
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -84,7 +74,17 @@ public class SeguimientoFragment extends Fragment {
 
                 for(Seguimiento a : lista)
                 {
-                    a.setAlarma(rneg.readOneFrom(a.getAlarma().getId(),a.getAlarma().getPacienteId()));
+                    Alarma alarma = rneg.readOneFrom(a.getAlarma().getIdRemoto(),a.getAlarma().getPacienteId());
+                    if(alarma!=null)
+                    {
+                        Log.d("SEG FRAG",alarma.toString());
+                        a.setAlarma(alarma);
+                        Log.d("LISTA:","Alarma:"+a.getId()+" "+a.getAlarma().getTitulo());
+                    }else{
+                        Log.e("SEG FRAG","LA ALARMA TRAIDA ES NULL");
+                        Log.e("SEG FRAG","WTF");
+                    }
+
                 }
 
                 mainHandler.post(() -> {
