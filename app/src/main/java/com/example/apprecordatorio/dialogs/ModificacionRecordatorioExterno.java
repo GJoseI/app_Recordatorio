@@ -2,6 +2,7 @@ package com.example.apprecordatorio.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -157,9 +158,12 @@ public class ModificacionRecordatorioExterno extends DialogFragment {
             viejaImagen = args.getString("imagen");
             if (viejaImagen != null && !viejaImagen.isEmpty() && !viejaImagen.equals("null")) {
                 Log.e("EN IF",viejaImagen);
-                Glide.with(this)
+               /* Glide.with(this)
                         .load(BASE_URL + "/" + viejaImagen)
-                        .into(imgPreview);
+                        .into(imgPreview);*/
+
+                Bitmap bitmap = FileUtil.base64ToBitmap(viejaImagen);
+                imgPreview.setImageBitmap(bitmap);
                 imgPreview.setVisibility(View.VISIBLE);
             }
         }else

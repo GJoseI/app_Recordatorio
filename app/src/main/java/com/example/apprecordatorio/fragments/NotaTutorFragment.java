@@ -1,5 +1,6 @@
 package com.example.apprecordatorio.fragments;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -29,6 +30,7 @@ import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
 import com.example.apprecordatorio.util.BaseUrl;
+import com.example.apprecordatorio.util.FileUtil;
 import com.example.apprecordatorio.util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -112,7 +114,11 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
                         if(imgUri!=null)
                         {
                             Log.e("URI:",imgUri);
-                            imgRec.setImageURI(Uri.parse(imgUri));
+                            //imgRec.setImageURI(Uri.parse(imgUri));
+
+                            Bitmap bitmap = FileUtil.base64ToBitmap(imgUri);
+                            imgRec.setImageBitmap(bitmap);
+
                         }
 
 
@@ -126,9 +132,9 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
 
                                 if (r.getImagenUrl() != null) {
 
-                                    Glide.with(this)
+                                  /*  Glide.with(this)
                                             .load(BASE_URL + r.getImagenUrl())
-                                            .into(imgRec);
+                                            .into(imgRec);*/
 
                                     imgRec.setVisibility(View.VISIBLE);
                                 }
