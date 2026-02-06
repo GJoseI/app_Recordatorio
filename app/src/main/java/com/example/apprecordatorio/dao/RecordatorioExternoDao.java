@@ -77,17 +77,17 @@ public class RecordatorioExternoDao  {
                     a.setDescripcion(o.getDescripcion());
                     a.setTono(o.getTono());
                     a.setImagenUrl(o.getImagen());
-                    a.setEstado(o.getEstado() == 1);
+                    a.setEstado(o.isEstado());
 
-                    a.setDomingo(o.getDomingo() == 1);
-                    a.setLunes(o.getLunes() == 1);
-                    a.setMartes(o.getMartes() == 1);
-                    a.setMiercoles(o.getMiercoles() == 1);
-                    a.setJueves(o.getJueves() == 1);
-                    a.setViernes(o.getViernes() == 1);
-                    a.setSabado(o.getSabado() == 1);
+                    a.setDomingo(o.isDomingo());
+                    a.setLunes(o.isLunes());
+                    a.setMartes(o.isMartes());
+                    a.setMiercoles(o.isMiercoles());
+                    a.setJueves(o.isJueves());
+                    a.setViernes(o.isViernes());
+                    a.setSabado(o.isSabado());
 
-                    a.setBajaLogica(o.getBaja_logica() == 1);
+                    a.setBajaLogica(o.isBaja_logica());
                     a.setHora(o.getHora());
                     a.setMinuto(o.getMinuto());
 
@@ -133,17 +133,17 @@ public class RecordatorioExternoDao  {
                     a.setDescripcion(o.getDescripcion());
                     a.setTono(o.getTono());
                     a.setImagenUrl(o.getImagen());
-                    a.setEstado(o.getEstado() == 1);
+                    a.setEstado(o.isEstado());
 
-                    a.setDomingo(o.getDomingo() == 1);
-                    a.setLunes(o.getLunes() == 1);
-                    a.setMartes(o.getMartes() == 1);
-                    a.setMiercoles(o.getMiercoles() == 1);
-                    a.setJueves(o.getJueves() == 1);
-                    a.setViernes(o.getViernes() == 1);
-                    a.setSabado(o.getSabado() == 1);
+                    a.setDomingo(o.isDomingo());
+                    a.setLunes(o.isLunes());
+                    a.setMartes(o.isMartes());
+                    a.setMiercoles(o.isMiercoles());
+                    a.setJueves(o.isJueves());
+                    a.setViernes(o.isViernes());
+                    a.setSabado(o.isSabado());
 
-                    a.setBajaLogica(o.getBaja_logica() == 1);
+                    a.setBajaLogica(o.isBaja_logica());
                     a.setHora(o.getHora());
                     a.setMinuto(o.getMinuto());
 
@@ -303,20 +303,36 @@ public class RecordatorioExternoDao  {
                     Locale.getDefault()
             ).format(a.getUpdatedAt());
 
+            Log.d("DAO ALARMA", "==== INICIO addAlarma ====");
+            Log.d("DAO ALARMA", "pacienteId: " + a.getPacienteId());
+            Log.d("DAO ALARMA", "titulo: " + a.getTitulo());
+            Log.d("DAO ALARMA", "descripcion: " + a.getDescripcion());
+            Log.d("DAO ALARMA", "tono: " + a.getTono());
+            Log.d("DAO ALARMA", "estado: " + a.isEstado());
+            Log.d("DAO ALARMA", "dias: D(" + a.isDomingo() +
+                    ") L(" + a.isLunes() +
+                    ") M(" + a.isMartes() +
+                    ") X(" + a.isMiercoles() +
+                    ") J(" + a.isJueves() +
+                    ") V(" + a.isViernes() +
+                    ") S(" + a.isSabado() + ")");
+            Log.d("DAO ALARMA", "hora: " + a.getHora() + ":" + a.getMinuto());
+            Log.d("DAO ALARMA", "updatedAt: " + updatedAt);
+
             Call<RecordatorioResponse> call = service.addAlarma(
                     a.getPacienteId(),
                     a.getTitulo(),
                     a.getDescripcion() != null ? a.getDescripcion() : "",
                     a.getTono(),
                     a.getImagenUrl() != null ? a.getImagenUrl() : "",
-                    a.isEstado() ? 1 : 0,
-                    a.isDomingo() ? 1 : 0,
-                    a.isLunes() ? 1 : 0,
-                    a.isMartes() ? 1 : 0,
-                    a.isMiercoles() ? 1 : 0,
-                    a.isJueves() ? 1 : 0,
-                    a.isViernes() ? 1 : 0,
-                    a.isSabado() ? 1 : 0,
+                    a.isEstado() ,
+                    a.isDomingo(),
+                    a.isLunes(),
+                    a.isMartes() ,
+                    a.isMiercoles(),
+                    a.isJueves(),
+                    a.isViernes(),
+                    a.isSabado(),
                     a.getHora(),
                     a.getMinuto(),
                     updatedAt
@@ -324,15 +340,35 @@ public class RecordatorioExternoDao  {
 
             Response<RecordatorioResponse> response = call.execute();
 
-            if (response.isSuccessful() && response.body() != null) {
-                if (response.body().isSuccess()) {
-                    return response.body().getId();
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    Log.d("DAO ALARMA", "Response body success: " + response.body().isSuccess());
+                    Log.d("DAO ALARMA", "Mensaje backend: " + response.body().getMessage());
+
+
+                    if (response.body().isSuccess()) {
+                        Log.d("DAO ALARMA", "ALARMA CREADA ID: " + response.body().getId());
+                        return response.body().getId();
+                    } else {
+                        Log.e("DAO ALARMA", "Backend respondió success=false");
+                        Log.d("DAO ALARMA", "Mensaje backend: " + response.body().getMessage());
+                        Log.d("DAO ALARMA", "params backend: " + response.body().getParams());
+                    }
+                } else {
+                    Log.e("DAO ALARMA", "Response body es NULL");
                 }
+            } else {
+                Log.e("DAO ALARMA", "Error HTTP: " + response.errorBody());
+                Log.d("DAO ALARMA", "Mensaje backend: " + response.body().getMessage());
+                Log.d("DAO ALARMA", "params backend: " + response.body().getParams());
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("DAO ALARMA", "EXCEPCION AL AGREGAR ALARMA", e);
+
         }
+
+
 
         return 0;
     }
@@ -479,16 +515,16 @@ public class RecordatorioExternoDao  {
                             a.getTono(),
                             a.getImagenUrl(),
 
-                            a.isEstado() ? 1 : 0,
-                            a.isDomingo() ? 1 : 0,
-                            a.isLunes() ? 1 : 0,
-                            a.isMartes() ? 1 : 0,
-                            a.isMiercoles() ? 1 : 0,
-                            a.isJueves() ? 1 : 0,
-                            a.isViernes() ? 1 : 0,
-                            a.isSabado() ? 1 : 0,
+                            a.isEstado() ,
+                            a.isDomingo() ,
+                            a.isLunes() ,
+                            a.isMartes() ,
+                            a.isMiercoles() ,
+                            a.isJueves() ,
+                            a.isViernes() ,
+                            a.isSabado() ,
 
-                            a.isBajaLogica() ? 1 : 0,
+                            a.isBajaLogica() ,
                             a.getHora(),
                             a.getMinuto(),
                             new SimpleDateFormat(
