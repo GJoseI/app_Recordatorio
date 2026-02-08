@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 if(NetworkUtils.hayConexion(this))
                 {
                     SyncManager sync = new SyncManager(this);
-                   // sync.syncTodo(p.getId());
+                    sync.syncTodo(p.getId());
                 }
 
 

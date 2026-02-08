@@ -198,8 +198,10 @@ public class SyncManager {
 
                 if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
                 {
-                    Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                    Uri uriLocal = fu.base64ToLocalFile(context,remoto.getImagenUrl());
+                            //fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
                     remoto.setImagenUrl(uriLocal.toString());
+
                 }
 
                 notasLocal.addFromSync(remoto);
@@ -212,7 +214,8 @@ public class SyncManager {
                         if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
                         {
                             fu.borrarImagenAnterior(local.getImagenUrl());
-                            Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                            //Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                            Uri uriLocal = fu.base64ToLocalFile(context,remoto.getImagenUrl());
                             if(uriLocal!=null)
                             {
                                 remoto.setImagenUrl(uriLocal.toString());
@@ -245,7 +248,8 @@ public class SyncManager {
                 Log.d("sync","local dio null");
                 if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
                 {
-                    Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                   // Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);.
+                    Uri uriLocal = fu.base64ToLocalFile(context,remoto.getImagenUrl());
                     if(uriLocal!=null)
                     {
                         remoto.setImagenUrl(uriLocal.toString());
@@ -268,7 +272,8 @@ public class SyncManager {
                         if(remoto.getImagenUrl()!= null && !remoto.getImagenUrl().isEmpty() && !remoto.getImagenUrl().equals("null"))
                         {
                             fu.borrarImagenAnterior(local.getImagenUrl());
-                            Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                            //Uri uriLocal = fu.descargarImagenDesdeUrl(remoto.getImagenUrl(),context);
+                            Uri uriLocal = fu.base64ToLocalFile(context,remoto.getImagenUrl());
                             remoto.setImagenUrl(uriLocal.toString());
                         }
 

@@ -7,17 +7,90 @@ public class AlarmaDto {
     private String descripcion;
     private String tono;
     private String imagen;
-    private int estado;
+    private boolean estado;
 
-    private int domingo;
-    private int lunes;
-    private int martes;
-    private int miercoles;
-    private int jueves;
-    private int viernes;
-    private int sabado;
+    private boolean domingo;
+    private boolean lunes;
+    private boolean martes;
+    private boolean miercoles;
 
-    private int baja_logica;
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public boolean isDomingo() {
+        return domingo;
+    }
+
+    public void setDomingo(boolean domingo) {
+        this.domingo = domingo;
+    }
+
+    public boolean isLunes() {
+        return lunes;
+    }
+
+    public void setLunes(boolean lunes) {
+        this.lunes = lunes;
+    }
+
+    public boolean isMartes() {
+        return martes;
+    }
+
+    public void setMartes(boolean martes) {
+        this.martes = martes;
+    }
+
+    public boolean isMiercoles() {
+        return miercoles;
+    }
+
+    public void setMiercoles(boolean miercoles) {
+        this.miercoles = miercoles;
+    }
+
+    public boolean isJueves() {
+        return jueves;
+    }
+
+    public void setJueves(boolean jueves) {
+        this.jueves = jueves;
+    }
+
+    public boolean isViernes() {
+        return viernes;
+    }
+
+    public void setViernes(boolean viernes) {
+        this.viernes = viernes;
+    }
+
+    public boolean isSabado() {
+        return sabado;
+    }
+
+    public void setSabado(boolean sabado) {
+        this.sabado = sabado;
+    }
+
+    public boolean isBaja_logica() {
+        return baja_logica;
+    }
+
+    public void setBaja_logica(boolean baja_logica) {
+        this.baja_logica = baja_logica;
+    }
+
+    private boolean jueves;
+    private boolean viernes;
+    private boolean sabado;
+
+    private boolean baja_logica;
     private int hora;
     private int minuto;
     private String updated_at;
@@ -70,77 +143,7 @@ public class AlarmaDto {
         this.imagen = imagen;
     }
 
-    public int getEstado() {
-        return estado;
-    }
 
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
-
-    public int getDomingo() {
-        return domingo;
-    }
-
-    public void setDomingo(int domingo) {
-        this.domingo = domingo;
-    }
-
-    public int getLunes() {
-        return lunes;
-    }
-
-    public void setLunes(int lunes) {
-        this.lunes = lunes;
-    }
-
-    public int getMartes() {
-        return martes;
-    }
-
-    public void setMartes(int martes) {
-        this.martes = martes;
-    }
-
-    public int getMiercoles() {
-        return miercoles;
-    }
-
-    public void setMiercoles(int miercoles) {
-        this.miercoles = miercoles;
-    }
-
-    public int getJueves() {
-        return jueves;
-    }
-
-    public void setJueves(int jueves) {
-        this.jueves = jueves;
-    }
-
-    public int getViernes() {
-        return viernes;
-    }
-
-    public void setViernes(int viernes) {
-        this.viernes = viernes;
-    }
-
-    public int getSabado() {
-        return sabado;
-    }
-
-    public void setSabado(int sabado) {
-        this.sabado = sabado;
-    }
-
-    public int getBaja_logica() {
-        return baja_logica;
-    }
-
-    public void setBaja_logica(int baja_logica) {
-        this.baja_logica = baja_logica;
-    }
 
     public int getHora() {
         return hora;
