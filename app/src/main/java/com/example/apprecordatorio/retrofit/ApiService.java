@@ -152,7 +152,7 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("addSeguimiento.php")
     Call<ApiResponse> addSeguimiento(
-            @Field("atendida") int atendida,
+            @Field("atendida") boolean atendida,
             @Field("id_alarma") int idAlarma,
             @Field("id_paciente") int idPaciente,
             @Field("fecha_hora") String fechaHora
