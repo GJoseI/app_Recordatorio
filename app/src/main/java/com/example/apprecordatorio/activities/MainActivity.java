@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager2.setCurrentItem(tab.getPosition());
                 esconderFragmento();
+                esconderFragmento(); //esto lo arregla pero no se si es sostenible
             }
 
             @Override
