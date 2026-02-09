@@ -150,15 +150,15 @@ public interface ApiService {
     );
 
     @FormUrlEncoded
-    @POST("addSeguimiento.php")
+    @POST("addSeguimiento")
     Call<ApiResponse> addSeguimiento(
-            @Field("atendida") int atendida,
+            @Field("atendida") boolean atendida,
             @Field("id_alarma") int idAlarma,
             @Field("id_paciente") int idPaciente,
             @Field("fecha_hora") String fechaHora
     );
     @FormUrlEncoded
-    @POST("readAllSeguimientoFrom.php")
+    @POST("readAllSeguimientoFrom")
     Call<SeguimientosResponse> readAllSeguimientoFrom(
             @Field("id_paciente") int idPaciente
     );

@@ -55,10 +55,10 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                     .getClient()
                     .create(ApiService.class);
 
-            int atendida = s.isAtendida() ? 1 : 0;
+
 
             Call<ApiResponse> call = api.addSeguimiento(
-                    atendida,
+                    s.isAtendida(),
                     s.getAlarma().getIdRemoto(),
                     s.getAlarma().getPacienteId(),
                     String.valueOf(s.getTimestamp())
@@ -155,9 +155,11 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                 s.setAtendida(dto.isAtendida());
                 s.setTimestamp(dto.getFechaHora());
 
+
                 Alarma a = new Alarma();
                 a.setIdRemoto(dto.getIdAlarma());
                 a.setPacienteId(dto.getIdPaciente());
+                a.setTitulo(dto.getTitulo());
 
                 s.setAlarma(a);
 

@@ -2,17 +2,27 @@ package com.example.apprecordatorio.entidades;
 
 public class SeguimientoDto {
     private int id;
-    private int atendida;
+    private boolean atendida;
     private int id_alarma;
     private int id_paciente;
     private String fecha_hora;
+
+    private String titulo;
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
     public int getId() {
         return id;
     }
 
     public boolean isAtendida() {
-        return atendida == 1;
+        return atendida;
     }
 
     public int getIdAlarma() {
