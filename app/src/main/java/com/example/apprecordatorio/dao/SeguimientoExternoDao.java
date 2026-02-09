@@ -155,9 +155,11 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                 s.setAtendida(dto.isAtendida());
                 s.setTimestamp(dto.getFechaHora());
 
+
                 Alarma a = new Alarma();
                 a.setIdRemoto(dto.getIdAlarma());
                 a.setPacienteId(dto.getIdPaciente());
+                a.setTitulo(dto.getTitulo());
 
                 s.setAlarma(a);
 
