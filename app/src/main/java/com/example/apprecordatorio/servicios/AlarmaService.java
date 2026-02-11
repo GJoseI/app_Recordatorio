@@ -100,7 +100,7 @@ public class AlarmaService extends Service {
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent fullScreenIntent = PendingIntent.getActivity(
-                this, 0, i, PendingIntent.FLAG_IMMUTABLE
+                this, idAlarma, i, PendingIntent.FLAG_IMMUTABLE
         );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "alarma_channel")
