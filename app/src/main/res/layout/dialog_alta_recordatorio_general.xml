@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/design_default_color_secondary_variant"
+        android:backgroundTint="@color/bondi_blue"
         android:text="Agregar imagen (opcional)" />
     <ImageView
         android:id="@+id/ivDialogRg"
@@ -57,7 +57,7 @@
             android:id="@+id/btnCancelarDialogRg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/material_dynamic_neutral30"
+            android:backgroundTint="@color/cancelar_gris"
             android:text="Cancelar"
            />
 

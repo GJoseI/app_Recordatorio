@@ -6,7 +6,7 @@
     android:background="@color/fondoOscuro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.CrearAlarmaActivity">
+    >
 
     <!-- Título superior -->
     <TextView
@@ -54,7 +54,7 @@
                 android:layout_marginTop="44dp"
                 android:amPmTextColor="@color/letraBlanca"
                 android:background="@color/fondoElementoOscuro"
-                android:headerBackground="@color/material_dynamic_neutral50"
+                android:headerBackground="@color/cancelar_gris"
                 android:textColor="@color/letraBlanca"
                 android:theme="@style/Theme.Oscuro"
                 android:timePickerMode="spinner" />
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                android:backgroundTint="@color/design_default_color_secondary_variant"
+                android:backgroundTint="@color/bondi_blue"
                 android:text="AGREGAR IMAGEN (OPCIONAL)" />
 
             <!-- Imagen opcional -->
@@ -204,7 +204,7 @@
                     android:id="@+id/btnCancelar"
                     android:layout_width="150dp"
                     android:layout_height="60dp"
-                    android:backgroundTint="@color/material_dynamic_neutral30"
+                    android:backgroundTint="@color/cancelar_gris"
                     android:text="@string/btnCancelar" />
 
                 <Button
