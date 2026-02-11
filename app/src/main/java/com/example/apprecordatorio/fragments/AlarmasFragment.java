@@ -75,7 +75,10 @@ public class AlarmasFragment extends Fragment implements OnRecordatorioGuardadoL
         AltaRecordatorio dialog = new AltaRecordatorio();
         dialog.setOnRecordatorioGuardadoListener(this);
        // currentDialog = dialog; // guarda una referencia
-        dialog.show(getChildFragmentManager(), "hola");
+        //dialog.show(getChildFragmentManager(), "hola");
+        if (isAdded() && !getParentFragmentManager().isStateSaved()) {
+            dialog.show(getParentFragmentManager(), "AltaRecordatorio");
+        }
     }
 
     @Override
