@@ -1,10 +1,10 @@
 package com.example.apprecordatorio.fragments;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -14,18 +14,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.apprecordatorio.R;
+import com.example.apprecordatorio.activities.MainActivity;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioGeneral;
 import com.example.apprecordatorio.dialogs.ModificacionNotaExterno;
-import com.example.apprecordatorio.dialogs.ModificacionRecordatorioExterno;
-import com.example.apprecordatorio.dialogs.ModificacionRecordatorioGeneral;
 import com.example.apprecordatorio.entidades.Recordatorio;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
 import com.example.apprecordatorio.negocio.RecordatorioGralNegocio;
@@ -33,7 +32,6 @@ import com.example.apprecordatorio.util.BaseUrl;
 import com.example.apprecordatorio.util.FileUtil;
 import com.example.apprecordatorio.util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -64,6 +62,16 @@ public class NotaTutorFragment extends Fragment implements OnRecordatorioGuardad
         cargarRecordatorios();
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Button atras = view.findViewById(R.id.btnAtrasNota);
+        atras.setOnClickListener(v -> {
+            ((MainActivity) requireActivity()).esconderFragmento();
+        });
     }
 
     private void cargarRecordatorios()

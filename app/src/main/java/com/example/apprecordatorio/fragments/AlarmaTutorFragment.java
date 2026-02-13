@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -20,8 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.apprecordatorio.R;
-import com.example.apprecordatorio.dialogs.AltaRecordatorio;
-import com.example.apprecordatorio.dialogs.ModificacionRecordatorio;
+import com.example.apprecordatorio.activities.MainActivity;
 import com.example.apprecordatorio.dialogs.ModificacionRecordatorioExterno;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.interfaces.OnRecordatorioGuardadoListener;
@@ -44,21 +44,20 @@ public class AlarmaTutorFragment extends Fragment implements OnRecordatorioGuard
 
     private Bundle args;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alarma_tutor, container, false);
-
         containerRecordatorios = view.findViewById(R.id.containerRecordatoriosAlarmas);
-
-
-
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Button atras = view.findViewById(R.id.btnAtrasAlarma);
+        atras.setOnClickListener(v -> {
+            ((MainActivity) requireActivity()).esconderFragmento();
+        });
 
         args = getArguments();
         cargarRecordatorios();

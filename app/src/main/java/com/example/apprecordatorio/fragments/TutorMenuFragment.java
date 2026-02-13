@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,12 +23,10 @@ import com.example.apprecordatorio.dao.TutorExternoDao;
 import com.example.apprecordatorio.dialogs.AltaNotaExterno;
 import com.example.apprecordatorio.dialogs.AltaRecordatorioExterno;
 import com.example.apprecordatorio.entidades.Paciente;
-import com.example.apprecordatorio.entidades.Tutor;
 import com.example.apprecordatorio.util.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.appcompat.app.AlertDialog;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -76,7 +72,7 @@ public class TutorMenuFragment extends Fragment {
         Bundle args = getArguments();
 
         Button seguimiento = view.findViewById(R.id.btnSeguimiento);
-        Button atras = view.findViewById(R.id.btnAtras);
+        Button cerrarSesion = view.findViewById(R.id.btnCerrarSesion);
         Button agregar = view.findViewById(R.id.btnAgregarRec);
         Button verAlarmas = view.findViewById(R.id.btnVerAlarmas);
         Button verNotas = view.findViewById(R.id.btnVerNotas);
@@ -182,7 +178,7 @@ public class TutorMenuFragment extends Fragment {
         });
 
 
-        atras.setOnClickListener(v -> {
+        cerrarSesion.setOnClickListener(v -> {
             ((MainActivity) requireActivity()).esconderFragmento();
         });
 
