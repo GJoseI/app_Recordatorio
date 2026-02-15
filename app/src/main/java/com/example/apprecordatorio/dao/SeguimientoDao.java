@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Recordatorio;
@@ -85,6 +86,10 @@ public class SeguimientoDao {
     }
 
     public long add(Seguimiento s) {
+
+        Log.d("SeguimientoDao","Agregando seguimiento para pacienteId: "+
+                s.getAlarma().getPacienteId()+" y alarmaId: "+s.getAlarma().getIdRemoto()+" atendida: "
+                +s.isAtendida()+" timestamp: "+s.getTimestamp());
         SQLiteDatabase db = null;
         long resultado = -1;
         try {

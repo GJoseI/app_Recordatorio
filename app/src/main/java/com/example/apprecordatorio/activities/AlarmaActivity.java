@@ -26,6 +26,7 @@ import com.example.apprecordatorio.dao.SeguimientoExternoDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Seguimiento;
 import com.example.apprecordatorio.servicios.AlarmaService;
+import com.example.apprecordatorio.util.FileUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,8 +53,11 @@ public class AlarmaActivity extends AppCompatActivity {
         txtMensaje.setText("¡" + titulo + "!");
 
         String imagenUri = getIntent().getStringExtra("imagen");
+        Log.d("ALARM ACTIVITY", "Imagen URI recibida: " + imagenUri);
         if (imagenUri != null) {
+            Log.d("ALARM ACTIVITY", "Mostrando imagen en la alarma");
             ImageView imagen = findViewById(R.id.ivAlarmaDisparada);
+            //imagen.setImageBitmap(FileUtil.base64ToBitmap(imagenUri));
             imagen.setImageURI(Uri.parse(imagenUri));
             imagen.setVisibility(View.VISIBLE);
         }

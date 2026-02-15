@@ -61,7 +61,16 @@ public class SyncManager {
         Log.d("sync up seg","en sync up seg");
         for(Seguimiento s : pendientes)
         {
-            Log.d("sync up seg","seguimiento"+s.getId()+" id remoto:"+s.getAlarma().getIdRemoto()+" id paciente "+s.getAlarma().getPacienteId());
+            Log.d("sync up seg","seguimiento"+s.getId()+
+                    " id remoto:"+s.getAlarma().getIdRemoto()+
+                    " id paciente "+s.getAlarma().getPacienteId()+"" +
+                    "atendida "+s.isAtendida()+
+                    " timestamp "+s.getTimestamp());
+
+            if (s.getAlarma().getIdRemoto() <= 0 || s.getAlarma().getPacienteId() <= 0) {
+                continue;
+            }
+
             if(seguimientoEx.add(s))
             {
                 Log.d("sync up seg","agrego");

@@ -70,7 +70,7 @@ public class AlarmaService extends Service {
 
 
 
-        Log.d("ALARM SERVICE","SE EJECUTO ALARMA SERVICE");
+        Log.d("ALARM SERVICE RECEIVER","SE EJECUTO ALARMA SERVICE");
 
         String titulo = intent.getStringExtra("titulo");
         String tono = intent.getStringExtra("tono");
@@ -78,6 +78,10 @@ public class AlarmaService extends Service {
         String imagen = intent.getStringExtra("imagen");
         int idAlarma = intent.getIntExtra("id",-1);
         int pacienteId = intent.getIntExtra("pacienteId",-1);
+
+        Log.d("ALARM SERVICE RECEIVER","Datos recibidos - titulo: "
+                +titulo+", descripcion: "+descripcion+", tono: "+tono+", imagen: "+imagen+
+                ", idAlarma: "+idAlarma+", pacienteId: "+pacienteId);
 
         // ---- NOTIFICACIÓN ----
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -151,15 +155,17 @@ public class AlarmaService extends Service {
 
         timeoutRunnable = () -> {
             if (!atendida) {
-                Log.d("ALARM SERVICE", "Tiempo agotado. Alarma NO ATENDIDA");
+                Log.d("ALARM SERVICE RECEIVER", "Tiempo agotado. Alarma NO ATENDIDA");
+                Log.d("ALARM SERVICE RECEIVER","PacienteId: "+pacienteId+", AlarmaId: "+idAlarma);
 
-                stopForeground(true);
-                stopSelf();
+
 
                 ExecutorService executor = Executors.newSingleThreadExecutor();
 
+                if(pacienteId != -1) {
                 executor.execute(() -> {
-                    if(pacienteId != -1) {
+
+                        Log.d("ALARM SERVICE","Agregando seguimiento por timeout para pacienteId: "+pacienteId+" y alarmaId: "+idAlarma);
                         //SeguimientoExternoDao dao = new SeguimientoExternoDao();
                         SeguimientoDao dao = new SeguimientoDao(this);
                         RecordatorioDao rdao = new RecordatorioDao(this);
@@ -176,10 +182,13 @@ public class AlarmaService extends Service {
                         s.setAtendida(false);
                        long ok = dao.add(s);
                        Log.d("ALARM SERVICE","Seguimiento agregado en timeout: "+ok);
-                    }
+
                 });
 
                 executor.shutdown();
+                }
+                stopForeground(true);
+                stopSelf();
             }
         };
 

@@ -55,26 +55,31 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                     .getClient()
                     .create(ApiService.class);
 
-
+            Log.d("SYNC SEG EX", "Enviando seguimiento:");
+            Log.d("SYNC SEG EX", "atendida: " + s.isAtendida());
+            Log.d("SYNC SEG EX", "id_alarma: " + s.getAlarma().getIdRemoto());
+            Log.d("SYNC SEG EX", "id_paciente: " + s.getAlarma().getPacienteId());
+            Log.d("SYNC SEG EX", "fecha_hora: " + s.getTimestamp());
 
             Call<ApiResponse> call = api.addSeguimiento(
                     s.isAtendida(),
                     s.getAlarma().getIdRemoto(),
                     s.getAlarma().getPacienteId(),
-                    String.valueOf(s.getTimestamp())
+                    s.getTimestamp()
             );
 
             Response<ApiResponse> response = call.execute();
 
-            if (response.isSuccessful() && response.body() != null) {
-                ApiResponse body = response.body();
+            Log.d("SYNC SEG EX", "HTTP code: " + response.code());
 
-
-                return body.isSuccess();
+            if (response.body() != null) {
+                Log.d("SYNC SEG EX", "Server success: " + response.body().isSuccess());
+                Log.d("SYNC SEG EX", "Server error: " + response.body().getError());
+                return response.body().isSuccess();
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("SYNC SEG EX", "Exception en sync", e);
         }
 
         return false;
@@ -155,6 +160,9 @@ public class SeguimientoExternoDao implements ISeguimientoExterno {
                 s.setAtendida(dto.isAtendida());
                 s.setTimestamp(dto.getFechaHora());
 
+                Log.d("DAO SEG", "Seguimiento ID: " + s.getId());
+                Log.d("DAO SEG", "Atendida: " + s.isAtendida());
+                Log.d("DAO SEG", "FechaHora: " + s.getTimestamp());
 
                 Alarma a = new Alarma();
                 a.setIdRemoto(dto.getIdAlarma());
