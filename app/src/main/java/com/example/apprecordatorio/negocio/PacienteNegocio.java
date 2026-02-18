@@ -1,6 +1,7 @@
 package com.example.apprecordatorio.negocio;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.example.apprecordatorio.dao.NotasExternoDao;
 import com.example.apprecordatorio.dao.PacienteDao;
@@ -11,7 +12,9 @@ import com.example.apprecordatorio.dao.RecordatorioGralDao;
 import com.example.apprecordatorio.entidades.Alarma;
 import com.example.apprecordatorio.entidades.Paciente;
 import com.example.apprecordatorio.entidades.Recordatorio;
+import com.example.apprecordatorio.util.FileUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 public class PacienteNegocio {
@@ -22,6 +25,8 @@ public class PacienteNegocio {
     private PacienteExternoDao daoEx;
     private  RecordatorioExternoDao daoExAlarma;
     private NotasExternoDao notasExDao;
+    private FileUtil fu;
+
 
     public  PacienteNegocio(Context context)
     {
@@ -31,6 +36,7 @@ public class PacienteNegocio {
         daoEx = new PacienteExternoDao();
         daoExAlarma = new RecordatorioExternoDao();
         notasExDao = new NotasExternoDao();
+        fu = new FileUtil();
     }
 
     public long add (Paciente p)
@@ -64,6 +70,16 @@ public class PacienteNegocio {
             {
                 a.setPacienteId(p.getId());
                 rneg.update(a,context);
+                if(a.getImagenUrl()!= null && !a.getImagenUrl().isEmpty() && !a.getImagenUrl().equals("null"))
+                {
+                    try {
+
+                        a.setImagenUrl(fu.uriToBase64(context, Uri.parse(a.getImagenUrl())));
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 int id = daoExAlarma.add(a);
                 a.setIdRemoto(id);
                 rd.updateIdRemoto(a);
@@ -72,6 +88,17 @@ public class PacienteNegocio {
             {
                 r.setPacienteId(p.getId());
                 gneg.update(r);
+                if(r.getImagenUrl()!= null && !r.getImagenUrl().isEmpty() && !r.getImagenUrl().equals("null"))
+                {
+                    try {
+
+                        r.setImagenUrl(fu.uriToBase64(context, Uri.parse(r.getImagenUrl())));
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
                 int id = notasExDao.add(r);
                 r.setIdRemoto(id);
                 nd.updateIdRemoto(r);
