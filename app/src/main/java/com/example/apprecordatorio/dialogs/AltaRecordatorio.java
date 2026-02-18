@@ -54,9 +54,11 @@ public class AltaRecordatorio extends DialogFragment {
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                Log.e("URI:",uri.toString());
-
                 try {
+                    if (uri == null) {
+                        Log.d("PICKER", "Selección cancelada");
+                        return;
+                    }
                     FileUtil fu = new FileUtil();
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Handler handler = new Handler(Looper.getMainLooper());

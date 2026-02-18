@@ -50,9 +50,10 @@ public class ModificacionRecordatorio extends DialogFragment {
 
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImageLauncher =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-                Log.e("URI:",uri.toString());
-
                 try {
+                    if (uri == null) {
+                        return;
+                    }
                     FileUtil fu = new FileUtil();
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Handler handler = new Handler(Looper.getMainLooper());
